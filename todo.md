@@ -1,2 +1,0 @@
-- Write unit test for the form rules
-- Fix multiple events validation

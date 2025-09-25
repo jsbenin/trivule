@@ -19,6 +19,26 @@ If you'd like to make changes to the code, we encourage you to propose a pull re
 ```
 
 4. Make any necessary changes and test them thoroughly. For example, you can add a new rule (see below for details).
+
+### Code Quality and Git Hooks
+
+This project uses [Husky](https://github.com/typicode/husky) to manage Git hooks that automatically run code quality checks:
+
+- **Pre-commit hook**: Runs before each commit to ensure code quality
+  - `npm run lint`: Checks code style and catches potential issues
+  - `npm test`: Runs all tests to ensure functionality
+- **Commit-msg hook**: Validates commit messages follow conventional commit format
+
+The hooks are automatically installed when you run `npm install`. If you need to bypass hooks during development (not recommended for final commits), you can use:
+```bash
+git commit --no-verify
+```
+
+To manually run the same checks that the hooks perform:
+```bash
+npm run lint  # Run ESLint
+npm test      # Run Jest tests
+```
 5. Commit your changes using the command `git commit -m "Clear description of changes"`.
 6. Transfer your changes to your forked repository.
 7. Open a pull request on our GitHub repository and provide a detailed description of the changes you've made.
