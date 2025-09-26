@@ -11,6 +11,7 @@ export interface ITrConfig {
     lang: string;
   };
   realTime?: boolean;
+  feedbackSelector?: CssSelector;
 }
 
 export type RuleParam = string | number | undefined;
@@ -233,7 +234,7 @@ export type TrivuleFormConfig = {
    */
   invalidClass?: string;
 
-  feedbackSelector?: string;
+  feedbackSelector?: CssSelector;
   realTime?: boolean;
   element?: ValidatableForm;
 };

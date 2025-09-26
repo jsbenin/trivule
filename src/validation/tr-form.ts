@@ -104,14 +104,15 @@ export class TrivuleForm {
       typeof containerOrConfig === 'string' ||
       containerOrConfig instanceof HTMLElement
     ) {
-      this.bind(containerOrConfig);
       this.setConfig(config);
+      this.bind(containerOrConfig);
     } else {
       config = config ?? containerOrConfig;
+
+      this.setConfig(config);
       if (config?.element) {
         this.bind(config.element);
       }
-      this.setConfig(config);
     }
   }
 
@@ -374,8 +375,6 @@ export class TrivuleForm {
     }
 
     TrLocal.LANG = lang ?? TrLocal.DEFAULT_LANG;
-
-    this.parameter.setFeedbackSelector(this.config.feedbackSelector);
   }
 
   /**
@@ -669,12 +668,12 @@ export class TrivuleForm {
    */
   addTrivuleInput(trInput: TrivuleInput) {
     const inputFeedback = trInput.getFeedbackElement();
+
     if (!inputFeedback) {
       const fds = this.parameter.getFeedbackSelector(trInput.getName());
+
       if (fds) {
-        trInput.setFeedbackElement(
-          getHTMLElementBySelector(fds, this.container),
-        );
+        trInput.setFeedbackElement(fds);
       }
     }
     const oldInput = this._trivuleInputs[trInput.getName()];
@@ -912,6 +911,9 @@ export class TrivuleForm {
 
     if (this.container instanceof HTMLElement) {
       this._formValidator = new FormValidator(this.container);
+
+      this.parameter.setFeedbackSelector(this.config.feedbackSelector);
+
       this._initTrivuleInputs();
       this.init();
       this._wasBound = true;
@@ -986,13 +988,15 @@ export class TrivuleForm {
 
     if (typeof param.realTime !== 'boolean') {
       param.realTime = this.config.realTime;
+    } else {
+      param.realTime = param.realTime ?? this.config.realTime;
     }
 
     param.validClass = param.validClass ?? this.config.validClass;
     param.invalidClass = param.invalidClass ?? this.config.invalidClass;
     param.autoValidate = param.autoValidate ?? this.config.auto;
     param.feedbackElement =
-      param.feedbackElement ?? this.config.feedbackSelector;
+      param.feedbackElement ?? this.parameter.feedbackSelector;
     param.selector = selector as ValidatableInput;
 
     this.addTrivuleInput(

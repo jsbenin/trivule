@@ -8,6 +8,7 @@ export class TrParameter {
       if (name.trim().length < 1) {
         return null;
       }
+
       return this.feedbackSelector.replace('{name}', name);
     }
     return this.feedbackSelector;

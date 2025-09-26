@@ -188,8 +188,16 @@ export abstract class AbstractInputralidator {
       feedbackElement = selector;
     } else {
       let parentElement = this.inputElement.parentElement;
-      selector = selector ?? this.param.feedbackElement;
-      selector = selector ?? this.parameter.getFeedbackSelector(this.name);
+      const inputFeedbackSelector = this.param.feedbackElement;
+
+      if (inputFeedbackSelector) {
+        this.parameter.setFeedbackSelector(inputFeedbackSelector);
+      }
+
+      selector ??= this.parameter.getFeedbackSelector(this.name);
+      if (!selector) {
+        return;
+      }
 
       do {
         feedbackElement = selector
