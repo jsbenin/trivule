@@ -212,7 +212,6 @@ TrRule.add('notSudo', (input) => {
 
 [Get Started with Trivule](https://www.trivule.com/docs)
 
-
 ## Usage Guide in a Framework
 
 Welcome to the Trivule installation and usage guide.
@@ -224,6 +223,7 @@ Install Trivule in your project. This guide uses Trivule version v1.3.0. If you 
 ```sh
 npm install trivule
 ```
+
 ### Imperative Approach
 
 The imperative approach requires explicit control over your project's lifecycle and component initialization.
@@ -285,11 +285,12 @@ Example:
 
 ```html
 <form id="yourFormId">
-  <input type="text" name="fieldName" data-tr-rules="required|min:2">
+  <input type="text" name="fieldName" data-tr-rules="required|min:2" />
 </form>
 ```
 
 ## Quick start
+
 - [Single Input Validation](/docs/input-validation.md)
 - [Form Validation](/docs/form-validation.md)
 

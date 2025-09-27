@@ -126,13 +126,17 @@ If your code relied on having separate Trivule instances with different configur
 // Initialize Trivule with configuration
 const trivule = Trivule.init({
   realTime: true,
-  feedbackSelector: '.error-message'
+  feedbackSelector: '.error-message',
 });
 
 // Add custom validation rules
-trivule.rule('customRule', (value) => {
-  return value.includes('custom');
-}, 'Value must contain "custom"');
+trivule.rule(
+  'customRule',
+  (value) => {
+    return value.includes('custom');
+  },
+  'Value must contain "custom"',
+);
 
 // Access forms
 const forms = trivule.forms();
@@ -144,7 +148,7 @@ const forms = trivule.forms();
 // React/Vue/Angular - same pattern
 useEffect(() => {
   const trivule = Trivule.init({
-    realTime: true
+    realTime: true,
   });
 
   // Use trivule instance

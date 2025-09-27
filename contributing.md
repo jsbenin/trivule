@@ -30,15 +30,18 @@ This project uses [Husky](https://github.com/typicode/husky) to manage Git hooks
 - **Commit-msg hook**: Validates commit messages follow conventional commit format
 
 The hooks are automatically installed when you run `npm install`. If you need to bypass hooks during development (not recommended for final commits), you can use:
+
 ```bash
 git commit --no-verify
 ```
 
 To manually run the same checks that the hooks perform:
+
 ```bash
 npm run lint  # Run ESLint
 npm test      # Run Jest tests
 ```
+
 5. Commit your changes using the command `git commit -m "Clear description of changes"`.
 6. Transfer your changes to your forked repository.
 7. Open a pull request on our GitHub repository and provide a detailed description of the changes you've made.
