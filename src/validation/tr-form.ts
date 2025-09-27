@@ -15,7 +15,7 @@ import { isBoolean, isNumber } from '../rules';
 import { FormValidator } from '../rules/form/form-validator';
 import {
   getHTMLElementBySelector,
-  tr_attr_get,
+  getAttrData,
   transformToArray,
 } from '../utils';
 import { TrBag } from './tr-bag';
@@ -187,7 +187,7 @@ export class TrivuleForm {
           this.submitButton.classList.remove(value);
         }
         //add class en disabled dataset
-        this._trDisabledClass = tr_attr_get(
+        this._trDisabledClass = getAttrData(
           this.submitButton,
           'disabled-class',
           this._trDisabledClass,
@@ -227,7 +227,7 @@ export class TrivuleForm {
           this.submitButton.classList.remove(value);
         }
         //add class en enabled dataset
-        this._trEnabledClass = tr_attr_get(
+        this._trEnabledClass = getAttrData(
           this.submitButton,
           'enabled-class',
           this._trEnabledClass,
@@ -355,12 +355,12 @@ export class TrivuleForm {
 
   protected setConfig(config?: TrivuleFormConfig) {
     let lang =
-      tr_attr_get<string | undefined>(document.querySelector('html'), 'lang') ||
+      getAttrData<string | undefined>(document.querySelector('html'), 'lang') ||
       document.querySelector('html')?.getAttribute('lang');
 
-    lang = tr_attr_get(this.container, 'lang', lang);
+    lang = getAttrData(this.container, 'lang', lang);
 
-    const auto = tr_attr_get<string>(this.container, 'auto');
+    const auto = getAttrData<string>(this.container, 'auto');
     if (auto) {
       this.config.auto = isBoolean(auto).passes;
     }

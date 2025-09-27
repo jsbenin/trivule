@@ -7,7 +7,7 @@ import {
   TrivuleInputParms,
   ValidatableInput,
 } from '../contracts';
-import { dataset_get, getHTMLElementBySelector, tr_attr_get } from '../utils';
+import { dataset_get, getHTMLElementBySelector, getAttrData } from '../utils';
 import { InputRule } from './utils/input-rule';
 import { TrParameter } from './utils/parameter';
 
@@ -106,7 +106,7 @@ export abstract class AbstractInputralidator {
    */
 
   protected _setEvent(events?: string[]) {
-    const ev = tr_attr_get<string | undefined>(
+    const ev = getAttrData<string | undefined>(
       this.inputElement,
       'events',
       undefined,
@@ -243,7 +243,7 @@ export abstract class AbstractInputralidator {
    * Get and set the ways error message will be displayed
    */
   private setShowMessage() {
-    this.showMessage = tr_attr_get(this.inputElement, 'show', 'first');
+    this.showMessage = getAttrData(this.inputElement, 'show', 'first');
     this.showMessage = this.showMessages.includes(this.showMessage)
       ? this.showMessage
       : 'first';
@@ -253,12 +253,12 @@ export abstract class AbstractInputralidator {
     this.invalidClass = this.param.invalidClass ?? this.invalidClass;
     this.validClass = this.param.validClass ?? this.validClass;
 
-    this.invalidClass = tr_attr_get(
+    this.invalidClass = getAttrData(
       this.inputElement,
       'invalid-class',
       this.invalidClass,
     );
-    this.validClass = tr_attr_get(
+    this.validClass = getAttrData(
       this.inputElement,
       'valid-class',
       this.validClass,
@@ -408,13 +408,13 @@ export abstract class AbstractInputralidator {
     this._setEvent(params?.events ?? this._events);
 
     //Set the validation rules
-    const rules: string | string[] | Rule[] | undefined = tr_attr_get(
+    const rules: string | string[] | Rule[] | undefined = getAttrData(
       this.inputElement,
       'rules',
       params?.rules,
     );
     if (rules) {
-      const elMessages = tr_attr_get<string>(
+      const elMessages = getAttrData<string>(
         this.inputElement,
         'messages',
         this.param.messages,

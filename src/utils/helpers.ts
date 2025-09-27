@@ -110,7 +110,7 @@ export function dataset_get<T = unknown>(
   ) as T;
 }
 
-export function tr_attr_get<T = unknown>(
+export function getAttrData<T = unknown>(
   element: HTMLElement | null | undefined,
   name: TrivuleAttribute,
   defaults: unknown = null,

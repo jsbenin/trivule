@@ -1,6 +1,10 @@
 import { CssSelector } from '../../contracts';
 
 export class TrParameter {
+  private static _instance: TrParameter | null = null;
+  private bag = {
+    attribute: 'data-tr',
+  };
   feedbackSelector: CssSelector | null = '[data-tr-feedback={name}]';
   inputSelector: CssSelector | null = '[name={name}]';
   getFeedbackSelector(name: string): CssSelector | null {
@@ -14,9 +18,15 @@ export class TrParameter {
     return this.feedbackSelector;
   }
 
-  setFeedbackSelector(selector?: CssSelector | null) {
+  setFeedbackSelector(
+    selector?: string | HTMLElement | null,
+    attrPrefix = 'data-tr',
+  ) {
     if (!selector) {
       return this;
+    }
+    if (typeof selector === 'string') {
+      selector = selector.replace('{attr}', attrPrefix);
     }
     this.feedbackSelector = selector;
     return this;
@@ -29,5 +39,20 @@ export class TrParameter {
       return this.inputSelector.replace('{name}', name);
     }
     return this.inputSelector;
+  }
+
+  get(key: keyof typeof this.bag) {
+    return this.bag[key];
+  }
+  set(key: keyof typeof this.bag, value: string) {
+    this.bag[key] = value;
+    return this;
+  }
+
+  static instance(): TrParameter {
+    if (!TrParameter._instance) {
+      TrParameter._instance = new TrParameter();
+    }
+    return TrParameter._instance;
   }
 }
