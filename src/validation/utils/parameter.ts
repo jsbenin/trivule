@@ -3,7 +3,7 @@ import { CssSelector } from '../../contracts';
 export class TrParameter {
   private static _instance: TrParameter | null = null;
   private bag = {
-    attribute: 'data-tr',
+    attribute: 'data-tr-',
   };
   feedbackSelector: CssSelector | null = '[data-tr-feedback={name}]';
   inputSelector: CssSelector | null = '[name={name}]';
@@ -18,15 +18,12 @@ export class TrParameter {
     return this.feedbackSelector;
   }
 
-  setFeedbackSelector(
-    selector?: string | HTMLElement | null,
-    attrPrefix = 'data-tr',
-  ) {
+  setFeedbackSelector(selector?: string | HTMLElement | null) {
     if (!selector) {
       return this;
     }
     if (typeof selector === 'string') {
-      selector = selector.replace('{attr}', attrPrefix);
+      selector = selector.replace('{attr}', this.get('attribute'));
     }
     this.feedbackSelector = selector;
     return this;

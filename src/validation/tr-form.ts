@@ -96,7 +96,7 @@ export class TrivuleForm {
     containerOrConfig?: ValidatableForm | TrivuleFormConfig,
     config?: TrivuleFormConfig,
   ) {
-    this.parameter = new TrParameter();
+    this.parameter = TrParameter.instance();
     //If the container is provided and is resolvable we bind it automatically
     //if the container is config, we check if element attribut exists and bind it
     //If config is provided we assign it

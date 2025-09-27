@@ -7,7 +7,7 @@ import {
   TrivuleInputParms,
   ValidatableInput,
 } from '../contracts';
-import { dataset_get, getHTMLElementBySelector, getAttrData } from '../utils';
+import { getHTMLElementBySelector, getAttrData } from '../utils';
 import { InputRule } from './utils/input-rule';
 import { TrParameter } from './utils/parameter';
 
@@ -333,7 +333,17 @@ export abstract class AbstractInputralidator {
     if (typeof param === 'object' && typeof param !== 'undefined') {
       this.param = { ...this.param, ...param };
     }
-    const json = dataset_get(this.inputElement, 'tr', null, true);
+    let json = null;
+    if (this.inputElement) {
+      const value = this.inputElement.getAttribute('data-tr');
+      if (value) {
+        try {
+          json = JSON.parse(value);
+        } catch (error) {
+          json = null;
+        }
+      }
+    }
     if (json) {
       this.param = Object.assign(this.param, json);
     }

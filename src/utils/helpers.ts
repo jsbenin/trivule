@@ -1,5 +1,6 @@
 import { CssSelector, Rule, RuleParam, TrivuleAttribute } from '../contracts';
 import { is_string, isFile } from '../rules';
+import { TrParameter } from '../validation/utils/parameter';
 
 /**
  * Parses a rule string and extracts the rule name and parameters.
@@ -87,16 +88,17 @@ export function isSubObject(
   return true;
 }
 
-export function dataset_get<T = unknown>(
+export function getAttrData<T = unknown>(
   element: HTMLElement | null | undefined,
-  name: string,
+  name: TrivuleAttribute,
   defaults: unknown = null,
   toJson = false,
 ): T {
   if (!element) {
     return defaults as T;
   }
-  let value = element.getAttribute(`data-${name}`);
+  const attributte = TrParameter.instance().get('attribute');
+  let value = element.getAttribute(`${attributte}${name}`);
   if (!!value && toJson) {
     try {
       value = JSON.parse(value);
@@ -108,15 +110,6 @@ export function dataset_get<T = unknown>(
   return (
     !!value || (is_string(value) && !!value?.length) ? value : defaults
   ) as T;
-}
-
-export function getAttrData<T = unknown>(
-  element: HTMLElement | null | undefined,
-  name: TrivuleAttribute,
-  defaults: unknown = null,
-  toJson = false,
-): T {
-  return dataset_get<T>(element, `tr-${name}`, defaults, toJson);
 }
 
 export function calculateFileSize(file: unknown): number {
