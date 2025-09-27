@@ -55,7 +55,7 @@ export const inInput: RuleCallBack = (input, params) => {
     throwEmptyArgsException('in');
   }
   if (params === '') {
-    throwEmptyArgsException('in'), 'The in rule parameter must be a string';
+    throw new Error('The in rule parameter must be a string');
   }
   const list = spliteParam(params as string);
   return {
