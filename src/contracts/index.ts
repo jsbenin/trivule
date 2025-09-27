@@ -85,7 +85,7 @@ export type RulesBag = {
 export type RulesMessages = {
   [key: string]: string;
 };
-import { TrivuleForm } from '../validation';
+import { Trivule, TrivuleForm } from '../validation';
 
 /**
  * Represents a CSS selector that can be either an HTMLElement or a string.
@@ -242,5 +242,36 @@ export type TrivuleFormConfig = {
 export type TrivuleHooks = 'before.init' | 'after.init' | 'destroy' | string;
 
 export type TrivuleFormHandler = (tr: TrivuleForm) => unknown;
+
+/**
+ * Service interface for extending Trivule functionality
+ */
+export interface TrivuleService {
+  /**
+   * Register service with Trivule instance
+   * @param trivule The Trivule instance
+   */
+  register(trivule: typeof Trivule): void;
+}
+
+/**
+ * Closure-based service function type
+ */
+export type TrivuleServiceFunction = (trivule: typeof Trivule) => void;
+
+export type TrivuleAttribute =
+  | 'rules'
+  | 'events'
+  | 'messages'
+  | 'invalid-class'
+  | 'valid-class'
+  | 'auto'
+  | 'feedback'
+  | 'submit'
+  | 'enabled-class'
+  | 'disabled-class'
+  | 'name'
+  | 'lang'
+  | 'show';
 
 export * from './rule';

@@ -1,4 +1,4 @@
-import { CssSelector, Rule, RuleParam } from '../contracts';
+import { CssSelector, Rule, RuleParam, TrivuleAttribute } from '../contracts';
 import { is_string, isFile } from '../rules';
 
 /**
@@ -112,7 +112,7 @@ export function dataset_get<T = unknown>(
 
 export function tr_attr_get<T = unknown>(
   element: HTMLElement | null | undefined,
-  name: string,
+  name: TrivuleAttribute,
   defaults: unknown = null,
   toJson = false,
 ): T {
