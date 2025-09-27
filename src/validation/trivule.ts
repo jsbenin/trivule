@@ -1,6 +1,7 @@
 import {
   ITrConfig,
   RuleCallBack,
+  TrivuleFormConfig,
   TrivuleInputParms,
   ValidatableForm,
 } from '../contracts';
@@ -95,7 +96,10 @@ export class Trivule {
   static Rule(ruleName: string, call: RuleCallBack, message?: string) {
     TrBag.rule(ruleName, call, message);
   }
-  form(selector: ValidatableForm, config: ITrConfig) {
+  form(
+    selector: ValidatableForm | TrivuleFormConfig,
+    config: TrivuleFormConfig,
+  ) {
     const trForm = new TrivuleForm(selector, config);
     trForm.init();
     return trForm;
