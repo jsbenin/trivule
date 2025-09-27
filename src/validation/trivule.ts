@@ -14,12 +14,16 @@ import { TrivuleInput } from './tr-input';
  * @param config Optional configuration object for Trivule.
  * Example:
  * ```
- * const trivule = new Trivule();
- * trivule.init();
+ * const trivule = Trivule.init();
  * ```
  * @author Claude Fassinou
  */
 export class Trivule {
+  /**
+   * Singleton instance
+   */
+  private static _instance: Trivule | null = null;
+
   /**
    * Forms to validate array
    */
@@ -29,19 +33,34 @@ export class Trivule {
    * Default configuration
    */
   protected config: ITrConfig = TrConfig;
+
   /**
-   * Select all the form in the document and apply TrivuleForm for them
-   * @param config
+   * Private constructor to prevent direct instantiation
    */
-  init(config?: ITrConfig) {
-    this.setConfig(config);
+  private constructor() {}
+
+  /**
+   * Static method to get or create the singleton instance
+   * @param config Optional configuration object for Trivule
+   * @returns The singleton Trivule instance
+   */
+  static init(config?: ITrConfig): Trivule {
+    if (!Trivule._instance) {
+      Trivule._instance = new Trivule();
+    }
+
+    Trivule._instance.setConfig(config);
+    Trivule._instance._trForms = [];
+
     document
       .querySelectorAll<HTMLFormElement>('form')
       .forEach((formElement) => {
-        const trForm = new TrivuleForm(formElement, this.config);
+        const trForm = new TrivuleForm(formElement, Trivule._instance!.config);
         trForm.init();
-        this._trForms.push(trForm);
+        Trivule._instance!._trForms.push(trForm);
       });
+
+    return Trivule._instance;
   }
   /**
    * Adds a new validation rule to Trivule's rule bag.
