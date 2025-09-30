@@ -344,19 +344,6 @@ export class TrivuleInput extends AbstractInputralidator {
     this.inputElement?.removeAttribute(attrName);
     return this;
   }
-  /**
-   * Retrieves the value of a native attribute from the Trivule input element.
-   *
-   * This method attempts to get the attribute value using the `getAttribute` method
-   * of the underlying `inputElement`. If the element doesn't have the attribute,
-   * it returns `undefined`.
-   *
-   * @param attrName The name of the attribute to retrieve.
-   * @returns The value of the attribute if it exists, otherwise `undefined`.
-   */
-  getNativeAttribute(attrName: string) {
-    return this.inputElement?.getAttribute(attrName);
-  }
 
   /**
    * Removes a specific validation rule from the Trivule input.
