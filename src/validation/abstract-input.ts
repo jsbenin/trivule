@@ -194,6 +194,7 @@ export abstract class AbstractInputralidator {
         this.parameter.setFeedbackSelector(inputFeedbackSelector);
       }
 
+      console.log(this.parameter);
       selector ??= this.parameter.getFeedbackSelector(this.name);
       if (!selector) {
         return;

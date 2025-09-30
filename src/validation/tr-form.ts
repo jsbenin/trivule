@@ -12,7 +12,6 @@ import {
 } from '../contracts';
 import { TrLocal } from '../locale/tr-local';
 import { isBoolean, isNumber } from '../rules';
-import { FormValidator } from '../rules/form/form-validator';
 import {
   getHTMLElementBySelector,
   getAttrData,
@@ -42,10 +41,7 @@ export class TrivuleForm {
    * This status indicates the current state of the form
    */
   private _passed = false;
-  /**
-   * Form validator instance
-   */
-  private _formValidator!: FormValidator;
+
   /***
    * Check that if passes event can be emitted
    */
@@ -910,8 +906,6 @@ export class TrivuleForm {
     }
 
     if (this.container instanceof HTMLElement) {
-      this._formValidator = new FormValidator(this.container);
-
       this.parameter.setFeedbackSelector(this.config.feedbackSelector);
 
       this._initTrivuleInputs();

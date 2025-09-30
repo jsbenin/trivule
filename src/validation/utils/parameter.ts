@@ -5,6 +5,11 @@ export class TrParameter {
   private bag = {
     attribute: 'data-tr-',
   };
+  /**
+   * The attribute that will be used to display the error message
+   * {attr} will be replaced by the value of attribute property
+   * {name} will be replaced by the input name
+   */
   feedbackSelector: CssSelector | null = '[data-tr-feedback={name}]';
   inputSelector: CssSelector | null = '[name={name}]';
   getFeedbackSelector(name: string): CssSelector | null {
@@ -22,9 +27,7 @@ export class TrParameter {
     if (!selector) {
       return this;
     }
-    if (typeof selector === 'string') {
-      selector = selector.replace('{attr}', this.get('attribute'));
-    }
+
     this.feedbackSelector = selector;
     return this;
   }

@@ -1,11 +1,11 @@
 import { isNumber } from '../number';
 import { is_string } from '../string';
-import { CountryPhoneValidatorInterface } from './country-phone-validator.interface';
+
 /**
  * This takes care of validating telephone numbers using a convention  validateCountryCode
  * @author Claude Fassinou
  */
-export class CountryPhoneValidator implements CountryPhoneValidatorInterface {
+export class CountryPhoneValidator {
   protected _value: string;
   protected code?: string;
   protected attribute: string | null;

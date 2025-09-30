@@ -12,6 +12,7 @@ export interface ITrConfig {
   };
   realTime?: boolean;
   feedbackSelector?: CssSelector;
+  attributePrefix?: string;
 }
 
 export type RuleParam = string | number | undefined;
