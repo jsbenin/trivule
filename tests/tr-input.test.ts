@@ -268,18 +268,6 @@ describe('TrivuleInput', () => {
     });
   });
 
-  describe('Test remove, set, has, get nativeAttribute', () => {
-    const input = document.createElement('input');
-    input.setAttribute('data-tr-rules', 'required');
-    const trivuleInput = new TrivuleInput(input);
-
-    test('should remove the attribute', () => {
-      trivuleInput.removeNativeAttribute('data-tr-rules');
-      expect(input.hasAttribute('data-tr-rules')).toBe(false);
-      expect(trivuleInput.hasNativeAttribute('data-tr-rules')).toBe(false);
-    });
-  });
-
   describe('setEvents', () => {
     let input = document.createElement('input');
     input.setAttribute('data-tr-rules', 'required');

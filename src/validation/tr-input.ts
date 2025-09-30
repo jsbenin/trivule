@@ -357,14 +357,6 @@ export class TrivuleInput extends AbstractInputralidator {
   getNativeAttribute(attrName: string) {
     return this.inputElement?.getAttribute(attrName);
   }
-  /**
-   * Checks if the Trivule input element has a specific native attribute.
-   * @param attrName The name of the attribute to check.
-   * @returns `true` if the attribute exists, `false` otherwise.
-   */
-  hasNativeAttribute(attrName: string): boolean {
-    return this.inputElement?.hasAttribute(attrName) ?? false;
-  }
 
   /**
    * Removes a specific validation rule from the Trivule input.
