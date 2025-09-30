@@ -365,20 +365,7 @@ export class TrivuleInput extends AbstractInputralidator {
   hasNativeAttribute(attrName: string): boolean {
     return this.inputElement?.hasAttribute(attrName) ?? false;
   }
-  /**
-   * Sets the value of a native attribute on the Trivule input element.
-   *
-   * This method uses the `setAttribute` method of the underlying `inputElement`
-   * to set the value of the specified attribute.
-   *
-   * @param attrName The name of the attribute to set.
-   * @param value The value to assign to the attribute.
-   * @returns This Trivule input instance for method chaining.
-   */
-  setNativeAttribute(attrName: string, value: string): this {
-    this.inputElement?.setAttribute(attrName, value);
-    return this;
-  }
+
   /**
    * Removes a specific validation rule from the Trivule input.
    * @param rule The name of the rule to be removed.

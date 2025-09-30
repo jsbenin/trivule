@@ -278,15 +278,6 @@ describe('TrivuleInput', () => {
       expect(input.hasAttribute('data-tr-rules')).toBe(false);
       expect(trivuleInput.hasNativeAttribute('data-tr-rules')).toBe(false);
     });
-    test('should set the attribute', () => {
-      trivuleInput.setNativeAttribute('data-tr-rules', 'test');
-      expect(input.hasAttribute('data-tr-rules')).toBe(true);
-      expect(trivuleInput.hasNativeAttribute('data-tr-rules')).toBe(true);
-    });
-    test('should get the attribute', () => {
-      trivuleInput.setNativeAttribute('data-tr-rules', 'test');
-      expect(trivuleInput.getNativeAttribute('data-tr-rules')).toBe('test');
-    });
   });
 
   describe('setEvents', () => {
