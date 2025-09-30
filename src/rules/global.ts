@@ -7,7 +7,7 @@ import {
   stringBetween,
   fileBetween,
 } from '.';
-import { RuleCallBack } from '../contracts';
+import { RuleCallBack } from '../types';
 import {
   calculateFileSize,
   convertFileSize,

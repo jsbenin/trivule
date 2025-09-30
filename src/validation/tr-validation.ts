@@ -1,5 +1,5 @@
 import { InputRule } from './utils/input-rule';
-import { InputValueType, InputType, Rule, RulesMessages } from '../contracts';
+import { InputValueType, InputType, Rule, RulesMessages } from '../types';
 
 import { RuleExecuted } from '.';
 import { TrMessages } from '../messages';

@@ -35,3 +35,5 @@ export {
   TrRule,
   TrMessage,
 };
+
+export * from './types';

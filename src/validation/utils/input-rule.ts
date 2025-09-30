@@ -1,4 +1,4 @@
-import { Rule, RuleCallBack, RuleParam, RuleType } from '../../contracts';
+import { Rule, RuleCallBack, RuleParam, RuleType } from '../../types';
 import { getRule } from '../../utils';
 import { TrMessage, TrRule } from '../tr-bag';
 

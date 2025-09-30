@@ -1,4 +1,4 @@
-import { Rule, RuleParam, RulesMessages } from '../contracts';
+import { Rule, RuleParam, RulesMessages } from '../types';
 import { TrLocal } from '../locale/tr-local';
 import { spliteParam } from '../utils';
 

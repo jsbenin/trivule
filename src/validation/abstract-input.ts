@@ -6,7 +6,7 @@ import {
   Rule,
   TrivuleInputParms,
   ValidatableInput,
-} from '../contracts';
+} from '../types';
 import { getHTMLElementBySelector, getAttrData } from '../utils';
 import { InputRule } from './utils/input-rule';
 import { TrParameter } from './utils/parameter';

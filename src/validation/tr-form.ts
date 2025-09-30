@@ -9,7 +9,7 @@ import {
   ITrivuleInputCallback,
   ValidatableInput,
   CssSelector,
-} from '../contracts';
+} from '../types';
 import { TrLocal } from '../locale/tr-local';
 import { isBoolean, isNumber } from '../rules';
 import {
