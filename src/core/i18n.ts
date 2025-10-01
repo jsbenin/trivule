@@ -2,7 +2,7 @@ import { Rule, RuleParam, RulesMessages } from '../contracts';
 import { TrLocal } from '../locale/tr-local';
 import { spliteParam } from '../utils';
 
-export class TrMessages {
+export class I18nResolver {
   protected messages!: RulesMessages;
 
   constructor(local?: string) {
@@ -36,12 +36,12 @@ export class TrMessages {
     message: string,
     oParams: RuleParam,
   ): string {
-    const args = TrMessages._createParamObject(
+    const args = I18nResolver._createParamObject(
       spliteParam(oParams?.toString() ?? ''),
     );
 
     args['field'] = attribute;
-    message = TrMessages._replace(message, args);
+    message = I18nResolver._replace(message, args);
 
     return message;
   }
@@ -84,3 +84,6 @@ export class TrMessages {
     return args;
   }
 }
+
+// Backward compatibility
+export { I18nResolver as TrMessages };

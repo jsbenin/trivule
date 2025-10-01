@@ -1,4 +1,4 @@
-import { TrMessages } from '../../src/messages';
+import { I18nResolver as TrMessages } from '../../src/core/i18n';
 
 describe('TrMessages', () => {
   it('should get messages for valid rules', () => {
