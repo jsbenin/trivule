@@ -11,7 +11,7 @@ import {
   ValidatableInput,
 } from '../contracts';
 import { AbstractInputralidator } from './abstract-input';
-import { TrBag } from './tr-bag';
+import { TrBag } from './bag';
 import { TrParameter } from './utils/parameter';
 import { RuleExecuted } from './utils/rule-executed';
 

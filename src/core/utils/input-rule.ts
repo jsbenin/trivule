@@ -1,6 +1,6 @@
 import { Rule, RuleCallBack, RuleParam, RuleType } from '../../contracts';
 import { getRule } from '../../utils';
-import { TrMessage, TrRule } from '../tr-bag';
+import { TrMessage, TrRule } from '../bag';
 
 export class InputRule {
   items: RuleType[] = [];

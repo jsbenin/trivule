@@ -1,4 +1,4 @@
-import { InputRule } from '../../../src/validation/utils/input-rule';
+import { InputRule } from '../../../src/core/utils/input-rule';
 
 describe('InputRule', () => {
   let inputRule: InputRule;

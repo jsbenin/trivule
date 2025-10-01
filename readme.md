@@ -341,7 +341,7 @@ The directory structure of the Trivule project is organized as follows:
 - `src/messages`: contains message generation files based on validation rules.
 - `src/rules`: contains various validation rules available in Trivule.
 - `src/utils`: contains utility files for Trivule.
-- `src/validation`: contains the validation logic of Trivule.
+- `src/core`: contains the core logic of Trivule.
 - `dist`: contains the bundle files.
 - `types`: contains TypeScript declarations.
 
