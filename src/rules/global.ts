@@ -15,7 +15,7 @@ import {
   spliteParam,
   throwEmptyArgsException,
 } from '../utils';
-import { ArgumentParser } from '../validation/utils/argument-parser';
+import { ArgumentParser } from '../core/utils/argument-parser';
 import { dateBetween } from './date';
 /**
  * Checks if the input is required.

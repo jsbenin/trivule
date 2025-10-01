@@ -1,4 +1,3 @@
-import { TrValidation } from '.';
 import {
   CssSelector,
   InputValueType,
@@ -10,6 +9,7 @@ import {
 import { getHTMLElementBySelector, getAttrData } from '../utils';
 import { InputRule } from './utils/input-rule';
 import { TrParameter } from './utils/parameter';
+import { TrValidation } from './validate';
 
 export abstract class AbstractInputralidator {
   protected __wasInit = false;

@@ -1,7 +1,7 @@
-import { TrRule, TrMessage } from './validation/tr-bag';
+import { TrRule, TrMessage } from './core/bag';
 import { TrLocal } from './locale/tr-local';
 import { TrConfig } from './tr.config';
-import { Trivule, TrBag, TrivuleForm, TrivuleInput } from './validation';
+import { Trivule, TrBag, TrivuleForm, TrivuleInput } from './core';
 
 declare global {
   interface Window {

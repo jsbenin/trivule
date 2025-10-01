@@ -1,4 +1,4 @@
-import { dateBetween } from './../rules/date';
+import { dateBetween } from '../rules/date';
 import { endWithString, stringBetween } from '../rules/string';
 import { fileBetween, isMimes, minFileSize } from '../rules/file';
 import { Rule, RuleCallBack, RulesBag, RulesMessages } from '../contracts';

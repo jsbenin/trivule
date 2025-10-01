@@ -1,4 +1,4 @@
-import { TrValidation } from '../src/validation';
+import { TrValidation } from '../src/core/validate';
 import { InputRule } from '../src/messages';
 
 describe('TrValidation', () => {

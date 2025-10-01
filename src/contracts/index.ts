@@ -86,7 +86,7 @@ export type RulesBag = {
 export type RulesMessages = {
   [key: string]: string;
 };
-import { Trivule, TrivuleForm } from '../validation';
+import { Trivule, TrivuleForm } from '../core';
 
 /**
  * Represents a CSS selector that can be either an HTMLElement or a string.

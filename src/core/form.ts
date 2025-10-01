@@ -17,8 +17,8 @@ import {
   getAttrData,
   transformToArray,
 } from '../utils';
-import { TrBag } from './tr-bag';
-import { TrivuleInput } from './tr-input';
+import { TrBag } from './bag';
+import { TrivuleInput } from './input';
 import { TrParameter } from './utils/parameter';
 
 /**

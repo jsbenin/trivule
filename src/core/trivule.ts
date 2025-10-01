@@ -6,9 +6,9 @@ import {
   ValidatableForm,
 } from '../contracts';
 import { TrConfig } from '../tr.config';
-import { TrBag } from './tr-bag';
-import { TrivuleForm } from './tr-form';
-import { TrivuleInput } from './tr-input';
+import { TrBag } from './bag';
+import { TrivuleForm } from './form';
+import { TrivuleInput } from './input';
 /**
  *
  * Initializes Trivule and applies form validation to all forms in the document.
