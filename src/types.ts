@@ -104,13 +104,6 @@ export type ValidationState = {
 export interface ITrivuleInput {
   getMessageAttributeName(): string;
   hasRule(rule: Rule | string): boolean;
-  prependRule(ule: {
-    rule: string;
-    message?: string | null;
-    param?: RuleParam;
-    validate?: RuleCallBack;
-    local?: string;
-  }): this;
 
   getRules(): RuleType[];
 }

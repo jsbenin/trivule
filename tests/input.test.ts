@@ -133,8 +133,8 @@ describe('TrivuleInput', () => {
       inputElement.value = 'test'; // Set the input value
       const validator = new TrivuleInput(inputElement);
       jest
-        .spyOn(validator as any, 'setralidationClass')
-        .mockImplementation(() => {}); // Mock setralidationClass to prevent side effects
+        .spyOn(validator as any, 'setValidationClass')
+        .mockImplementation(() => {}); // Mock setValidationClass to prevent side effects
       jest
         .spyOn(validator as any, 'emitChangeEvent')
         .mockImplementation(() => {}); // Mock emitChangeEvent to prevent side effects
@@ -151,8 +151,8 @@ describe('TrivuleInput', () => {
       inputElement.value = ''; // Set the input value to empty
       const validator = new TrivuleInput(inputElement);
       jest
-        .spyOn(validator as any, 'setralidationClass')
-        .mockImplementation(() => {}); // Mock setralidationClass to prevent side effects
+        .spyOn(validator as any, 'setValidationClass')
+        .mockImplementation(() => {}); // Mock setValidationClass to prevent side effects
       jest
         .spyOn(validator as any, 'emitChangeEvent')
         .mockImplementation(() => {}); // Mock emitChangeEvent to prevent side effects
@@ -178,8 +178,8 @@ describe('TrivuleInput', () => {
       });
 
       jest
-        .spyOn(validator as any, 'setralidationClass')
-        .mockImplementation(() => {}); // Mock setralidationClass to prevent side effects
+        .spyOn(validator as any, 'setValidationClass')
+        .mockImplementation(() => {}); // Mock setValidationClass to prevent side effects
       jest
         .spyOn(validator as any, 'emitChangeEvent')
         .mockImplementation(() => {}); // Mock emitChangeEvent to prevent side effects
@@ -203,8 +203,8 @@ describe('TrivuleInput', () => {
       const validator = new TrivuleInput(inputElement);
 
       jest
-        .spyOn(validator as any, 'setralidationClass')
-        .mockImplementation(() => {}); // Mock setralidationClass to prevent side effects
+        .spyOn(validator as any, 'setValidationClass')
+        .mockImplementation(() => {}); // Mock setValidationClass to prevent side effects
       jest
         .spyOn(validator as any, 'emitChangeEvent')
         .mockImplementation(() => {}); // Mock emitChangeEvent to prevent side effects
@@ -251,7 +251,7 @@ describe('TrivuleInput', () => {
       rules: 'required',
     });
     test('should set the message', () => {
-      trivuleInput.$rules.assignMessage('required', 'test');
+      trivuleInput.$rules.set('required', 'test');
       expect(trivuleInput.$rules.getMessage('required')).toBe('test');
     });
   });

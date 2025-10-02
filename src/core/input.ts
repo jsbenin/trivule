@@ -7,7 +7,6 @@ import {
   ITrivuleInputCallback,
   Rule,
   RuleCallBack,
-  RuleParam,
   TrivuleHooks,
   TrivuleInputParms,
   ValidatableInput,
@@ -224,7 +223,7 @@ export class TrivuleInput {
    */
   validate() {
     this.valid();
-    this.setralidationClass();
+    this.setValidationClass();
     this.errors = this.validator.getErrors();
     if (this.emitOnValidate) {
       this.emitChangeEvent();
@@ -394,60 +393,7 @@ export class TrivuleInput {
   filledErrors(errors?: string[]) {
     this.errors = errors ?? this.validator.getErrors();
   }
-  /**
-   * Removes an attribute from the Trivule input element.
-   * @param attrName The name of the attribute to remove.
-   * @returns This Trivule input instance.
-   * @example
-   * const trivuleInput = new TrivuleInput();
-   * trivuleInput.removeNativeAttribute("data-custom"); // Removes the custom attribute "data-custom"
-   */
-  removeNativeAttribute(attrName: string): this {
-    this.inputElement?.removeAttribute(attrName);
-    return this;
-  }
 
-  /**
-   * Removes a specific validation rule from the Trivule input.
-   * @param rule The name of the rule to be removed.
-   * @returns This Trivule input instance.
-   * @example
-   * const trivuleInput = new TrivuleInput();
-   * trivuleInput.removeRule("required"); // Removes the "required" validation rule from the Trivule input
-   */
-  removeRule(rule: string): this {
-    this.rules.remove(rule);
-    return this;
-  }
-
-  /**
-   * Removes multiple validation rules from the Trivule input.
-   * @param rules An array of rule names.
-   * @returns This Trivule input instance.
-   * @example
-   * const trivuleInput = new TrivuleInput();
-   * trivuleInput.removeRules(["required", "minlength"]); // Removes the "required" and "minlength" validation rules from the Trivule input
-   */
-  removeRules(rules: string[]): this {
-    if (Array.isArray(rules)) {
-      rules.forEach((rule) => this.removeRule(rule));
-    }
-    return this;
-  }
-
-  /**
-   * Replaces an existing validation rule with a new one.
-   * @param oldRule The rule to be replaced.
-   * @param newRule The new rule to replace the old one
-   * @returns This Trivule input instance.
-   * @example
-   * const trivuleInput = new TrivuleInput();
-   * trivuleInput.replaceRule("required", "minlength"); // Replaces the "required" rule with the "minlength" rule
-   */
-  replaceRule(oldRule: string, newRule: string): this {
-    this.$rules.replace(oldRule, newRule);
-    return this;
-  }
   /**
    * Sets the CSS class to be applied when the input is considered invalid.
    * @param className The CSS class name to set.
@@ -521,38 +467,7 @@ export class TrivuleInput {
     this._type = type as InputType;
     return this;
   }
-  /**
-   * Sets a callback function to execute before running a rule on the Trivule input.
-   * @param rule The rule name for which the callback is set.
-   * @param callback The callback function to execute.
-   * @returns This Trivule input instance.
-   * @example
-   * const trivuleInput = new TrivuleInput();
-   * trivuleInput.beforeRunRule("required", (input) => { console.log("Before rule:", input); }); // Sets a callback to execute before running the "required" rule
-   */
-  beforeRunRule(
-    rule: string,
-    callback: ITrivuleInputCallback<ITrivuleInput>,
-  ): this {
-    this.addHook(`before.run.${rule}`, callback);
-    return this;
-  }
-  /**
-   * Sets a callback function to execute after running a rule on the Trivule input.
-   * @param rule The rule name for which the callback is set.
-   * @param callback The callback function to execute.
-   * @returns This Trivule input instance.
-   * @example
-   * const trivuleInput = new TrivuleInput();
-   * trivuleInput.afterRunRule("required", (input) => { console.log("After rule:", input); }); // Sets a callback to execute after running the "required" rule
-   */
-  afterRunRule(
-    rule: string,
-    callback: ITrivuleInputCallback<ITrivuleInput>,
-  ): this {
-    this.addHook(`after.run.${rule}`, callback);
-    return this;
-  }
+
   /**
    * Sets a callback function to execute before initializing the Trivule input.
    * @param callback The callback function to execute.
@@ -642,21 +557,7 @@ export class TrivuleInput {
   getRealTimeState() {
     return this.realTime;
   }
-  /**
-   * Pushes an additional validation rule to the existing rules for this Trivule input instance.
-   * @param rule The rule to add to.
-   * @returns This Trivule input instance.
-   */
-  pushRule(rule: {
-    rule: string;
-    message?: string | null;
-    param?: RuleParam;
-    validate?: RuleCallBack;
-    local?: string;
-  }): this {
-    this.appendRule(rule);
-    return this;
-  }
+
   /**
    * Checks if the Trivule input has a specific validation rule.
    *
@@ -671,80 +572,7 @@ export class TrivuleInput {
   hasRule(rule: string): boolean {
     return this.rules.has(rule);
   }
-  /**
-   * Appends a validation rule to the Trivule input.
-   *
-   * @param rule An object containing the validation rule definition.
-   *
-   * @property {string} rule.rule - The name of the validation rule.
-   * @property {string | null} [rule.message] - An optional custom message to display for the rule violation.
-   * @property {RuleParam} [rule.param] - An optional object containing additional parameters for the rule.
-   * @property {RuleCallBack} [rule.validate] - An optional custom validation function for the rule.
-   * @property {string} [rule.local] - An optional locale key to use for message translation.
-   *
-   * @returns This Trivule input instance.
-   *
-   * @example
-   * ```typescript
-   * trivuleInput.appendRule({
-   *   rule: 'required',
-   *   message: 'This field is required',
-   * });
-   * ```
-   */
-  appendRule(rule: {
-    rule: string;
-    message?: string | null;
-    param?: RuleParam;
-    validate?: RuleCallBack;
-    local?: string;
-  }): this {
-    this.rules.append(
-      rule.rule,
-      rule.message,
-      rule.param,
-      rule.validate,
-      rule.local,
-    );
-    return this;
-  }
-  /**
-   * Prepends a validation rule to the Trivule input.
-   *
-   * @param rule An object containing the validation rule definition.
-   *
-   * @property {string} rule.rule - The name of the validation rule.
-   * @property {string | null} [rule.message] - An optional custom message to display for the rule violation.
-   * @property {RuleParam} [rule.param] - An optional object containing additional parameters for the rule.
-   * @property {RuleCallBack} [rule.validate] - An optional custom validation function for the rule.
-   * @property {string} [rule.local] - An optional locale key to use for message translation.
-   *
-   * @returns This Trivule input instance.
-   *
-   * @example
-   * ```typescript
-   * trivuleInput.prependRule({
-   *   rule: 'required',
-   *   message: 'This field is required',
-   * });
-   * ```
-   */
-  prependRule(rule: {
-    rule: string;
-    message?: string | null;
-    param?: RuleParam;
-    validate?: RuleCallBack;
-    local?: string;
-  }): this {
-    this.$rules.prepend(
-      rule.rule,
-      rule.message,
-      rule.param,
-      rule.validate,
-      rule.local,
-    );
-    return this;
-  }
+
   /**
    * Enables real-time validation for the Trivule input. This means that validation will be performed on any event specified in the `events` property (e.g., 'change', 'blur', 'input') as the user interacts with the input.
    *
@@ -960,7 +788,7 @@ export class TrivuleInput {
     );
   }
 
-  protected setralidationClass() {
+  protected setValidationClass() {
     const isValid = this._passed;
     const removeClass = (cls: string) => {
       if (cls.length > 0) {
