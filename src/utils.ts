@@ -1,6 +1,6 @@
-import { CssSelector, Rule, RuleParam, TrivuleAttribute } from '../types';
-import { is_string, isFile } from '../rules';
-import { TrParameter } from '../core/utils/parameter';
+import { CssSelector, Rule, RuleParam, TrivuleAttribute } from './types';
+import { is_string, isFile } from './rules';
+import { TrParameter } from './core/utils/parameter';
 
 /**
  * Parses a rule string and extracts the rule name and parameters.

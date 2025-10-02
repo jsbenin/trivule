@@ -1,4 +1,4 @@
-import { getAttrData } from '../src/utils/helpers';
+import { getAttrData } from '../src/utils';
 
 describe('getAttrData function', () => {
   test('should return defaults if element is null or undefined', () => {
