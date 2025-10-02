@@ -1,4 +1,4 @@
-import { CssSelector } from '../../contracts';
+import { CssSelector } from '../../types';
 
 export class TrParameter {
   private static _instance: TrParameter | null = null;

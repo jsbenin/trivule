@@ -1,4 +1,4 @@
-import { ITrConfig } from './contracts';
+import { ITrConfig } from './types';
 import { TrLocal } from './locale/tr-local';
 /**
  * Trivule default configuration file

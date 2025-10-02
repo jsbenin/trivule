@@ -1,4 +1,63 @@
-import { Rule } from './rule';
+/**
+ * List of Trivule rules grouped by Rule type
+ */
+export type Rule =
+  | 'required'
+  | 'email'
+  | 'maxlength'
+  | 'minlength'
+  | 'min'
+  | 'max'
+  | 'string'
+  | 'between'
+  | 'startWith'
+  | 'endWith'
+  | 'contains'
+  | 'in'
+  | 'integer'
+  | 'int'
+  | 'number'
+  | 'len'
+  | 'length'
+  | 'numeric'
+  | 'maxFileSize'
+  | 'minFileSize'
+  | 'size'
+  | 'file'
+  | 'boolean'
+  | 'startWithUpper'
+  | 'nullable'
+  | 'startWithLower'
+  | 'password'
+  | 'date'
+  | 'before'
+  | 'after'
+  | 'phone'
+  | 'url'
+  | 'time'
+  | 'startWithString'
+  | 'endWithString'
+  | 'hasLetter'
+  | 'excludes'
+  | 'regex'
+  | 'lower'
+  | 'upper'
+  | 'stringBetween'
+  | 'modulo'
+  | 'mod'
+  | 'only'
+  | 'mimes'
+  | 'digit'
+  | 'minDigit'
+  | 'maxDigit'
+  | 'lessThan'
+  | 'greaterThan'
+  | 'gthan'
+  | 'lthan'
+  | 'fileBetween'
+  | 'dateBetween'
+  | 'numberBetween';
+
 export type ITrivuleInputCallback<P> = (param: P) => void;
 
 /**
@@ -86,7 +145,6 @@ export type RulesBag = {
 export type RulesMessages = {
   [key: string]: string;
 };
-import { Trivule, TrivuleForm } from '../core';
 
 /**
  * Represents a CSS selector that can be either an HTMLElement or a string.
@@ -242,23 +300,29 @@ export type TrivuleFormConfig = {
 
 export type TrivuleHooks = 'before.init' | 'after.init' | 'destroy' | string;
 
-export type TrivuleFormHandler = (tr: TrivuleForm) => unknown;
+/**
+ * Handler function for TrivuleForm lifecycle events
+ * @template T - The TrivuleForm type (generic to avoid circular dependency)
+ */
+export type TrivuleFormHandler<T = unknown> = (tr: T) => unknown;
 
 /**
  * Service interface for extending Trivule functionality
+ * @template T - The Trivule class type (generic to avoid circular dependency)
  */
-export interface TrivuleService {
+export interface TrivuleService<T = unknown> {
   /**
    * Register service with Trivule instance
-   * @param trivule The Trivule instance
+   * @param trivule The Trivule class
    */
-  register(trivule: typeof Trivule): void;
+  register(trivule: T): void;
 }
 
 /**
  * Closure-based service function type
+ * @template T - The Trivule class type (generic to avoid circular dependency)
  */
-export type TrivuleServiceFunction = (trivule: typeof Trivule) => void;
+export type TrivuleServiceFunction<T = unknown> = (trivule: T) => void;
 
 export type TrivuleAttribute =
   | 'rules'
@@ -274,5 +338,3 @@ export type TrivuleAttribute =
   | 'name'
   | 'lang'
   | 'show';
-
-export * from './rule';

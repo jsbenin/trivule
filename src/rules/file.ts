@@ -1,4 +1,4 @@
-import { RuleCallBack } from '../contracts';
+import { RuleCallBack } from '../types';
 import {
   convertFileSize,
   explodeFileParam,

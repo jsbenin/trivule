@@ -1,4 +1,4 @@
-import { CssSelector, Rule, RuleParam, TrivuleAttribute } from '../contracts';
+import { CssSelector, Rule, RuleParam, TrivuleAttribute } from '../types';
 import { is_string, isFile } from '../rules';
 import { TrParameter } from '../core/utils/parameter';
 

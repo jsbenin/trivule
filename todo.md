@@ -43,5 +43,5 @@ Implementation Plan
   7. Type Definitions & Exports
 
   - Export TrivulePlugin interface from main index
-  - Add plugin-related types to contracts
+  - Add plugin-related types to types
   - Update documentation examples

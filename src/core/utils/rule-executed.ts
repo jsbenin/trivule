@@ -1,4 +1,4 @@
-import { InputValueType, Rule, RuleParam } from '../../contracts';
+import { InputValueType, Rule, RuleParam } from '../../types';
 
 export class RuleExecuted {
   /**

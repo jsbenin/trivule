@@ -4,7 +4,7 @@ import {
   TrivuleFormConfig,
   TrivuleInputParms,
   ValidatableForm,
-} from '../contracts';
+} from '../types';
 import { TrConfig } from '../tr.config';
 import { TrBag } from './bag';
 import { TrivuleForm } from './form';
