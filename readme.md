@@ -23,10 +23,6 @@ trivuleForm.make({
 
 trivuleForm
   .get('email')
-  .appendRule({
-    rule: 'endWith:@gmail.com',
-  })
-  .removeRule('maxlength');
 ```
 
 - **Streamlined Validation**: Implement complex validation rules without the hassle. Trivule simplifies your workflow, allowing you to focus on building better user experiences.
