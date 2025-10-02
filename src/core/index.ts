@@ -1,4 +1,3 @@
-export * from './abstract-input';
 export * from './input';
 export * from './form';
 export * from './trivule';
