@@ -336,7 +336,7 @@ This command will generate the `index.mjs` and `index.umd.js` files in the `./di
 The directory structure of the Trivule project is organized as follows:
 
 - `src`: contains the main code of Trivule.
-- `src/contracts`: contains interfaces and types used in Trivule.
+- `src/types`: contains interfaces and types used in Trivule.
 - `src/locale`: contains internationalization files for different supported languages.
 - `src/messages`: contains message generation files based on validation rules.
 - `src/rules`: contains various validation rules available in Trivule.

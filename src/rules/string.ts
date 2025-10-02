@@ -1,5 +1,5 @@
 import { isNumber } from '.';
-import { RuleCallBack } from '../contracts';
+import { RuleCallBack } from '../types';
 import { spliteParam, throwEmptyArgsException } from '../utils';
 import { ArgumentParser } from '../core/utils/argument-parser';
 /**

@@ -11,7 +11,7 @@ import {
   TrivuleHooks,
   TrivuleInputParms,
   ValidatableInput,
-} from '../contracts';
+} from '../types';
 import { getHTMLElementBySelector, getAttrData } from '../utils';
 import { TrBag } from './bag';
 import { InputRule } from './utils/input-rule';

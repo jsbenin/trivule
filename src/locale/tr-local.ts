@@ -1,4 +1,4 @@
-import { Rule, RulesMessages } from '../contracts';
+import { Rule, RulesMessages } from '../types';
 import { is_string } from '../rules';
 import { en_messages } from './lang/en';
 
