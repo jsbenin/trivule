@@ -56,7 +56,9 @@ export type Rule =
   | 'lthan'
   | 'fileBetween'
   | 'dateBetween'
-  | 'numberBetween';
+  | 'numberBetween'
+  | 'equals'
+  | 'notEquals';
 
 export type ITrivuleInputCallback<P> = (param: P) => void;
 
