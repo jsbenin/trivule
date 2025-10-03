@@ -10,6 +10,8 @@ export type Rule =
   | 'max'
   | 'string'
   | 'between'
+  | 'equals'
+  | 'notEquals'
   | 'startWith'
   | 'endWith'
   | 'contains'

@@ -8,6 +8,8 @@ import {
   minDigitRule,
   maxDigitRule,
   digitRule,
+  equals,
+  notEquals,
 } from '../../src/rules';
 
 describe('required', () => {
@@ -25,6 +27,44 @@ describe('required', () => {
 
   it('should return true for non-empty string input', () => {
     expect(required('hello').passes).toBe(true);
+  });
+});
+
+describe('equals', () => {
+  it('should return true when input equals the provided string param', () => {
+    expect(equals('admin', 'admin').passes).toBe(true);
+  });
+
+  it('should return true when input numeric equals the provided numeric string param', () => {
+    expect(equals(50, '50').passes).toBe(true);
+  });
+
+  it('should return false when values are different', () => {
+    expect(equals('user', 'admin').passes).toBe(false);
+    expect(equals(49, 50).passes).toBe(false);
+  });
+
+  it('should throw an error when parameter is missing or invalid', () => {
+    expect(() => equals('x')).toThrow();
+  });
+});
+
+describe('notEquals', () => {
+  it('should return true when values are different', () => {
+    expect(notEquals('user', 'admin').passes).toBe(true);
+    expect(notEquals(49, 50).passes).toBe(true);
+  });
+
+  it('should return false when input equals the provided string param', () => {
+    expect(notEquals('admin', 'admin').passes).toBe(false);
+  });
+
+  it('should return false when input numeric equals the provided numeric string param', () => {
+    expect(notEquals(50, '50').passes).toBe(false);
+  });
+
+  it('should throw an error when parameter is missing or invalid', () => {
+    expect(() => notEquals('x')).toThrow();
   });
 });
 
