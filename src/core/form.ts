@@ -9,7 +9,7 @@ import {
   ITrivuleInputCallback,
   ValidatableInput,
   CssSelector,
-} from '../contracts';
+} from '../types';
 import { TrLocal } from '../locale/tr-local';
 import { isBoolean, isNumber } from '../rules';
 import {
@@ -17,8 +17,8 @@ import {
   getAttrData,
   transformToArray,
 } from '../utils';
-import { TrBag } from './tr-bag';
-import { TrivuleInput } from './tr-input';
+import { TrBag } from './bag';
+import { TrivuleInput } from './input';
 import { TrParameter } from './utils/parameter';
 
 /**
@@ -35,7 +35,10 @@ import { TrParameter } from './utils/parameter';
 export class TrivuleForm {
   private _eventCallbacks: Record<string, EventCallback[]> = {};
   private _registerInputs: Record<string | number, TrivuleInputParms> = {};
-  private _lifeCycleCallbacks: Record<string, TrivuleFormHandler[]> = {};
+  private _lifeCycleCallbacks: Record<
+    string,
+    TrivuleFormHandler<TrivuleForm>[]
+  > = {};
   private __calledCount = 0;
   /**
    * This status indicates the current state of the form
@@ -84,7 +87,7 @@ export class TrivuleForm {
 
   parameter!: TrParameter;
 
-  private _onUpdateCallbacks: TrivuleFormHandler[] = [];
+  private _onUpdateCallbacks: TrivuleFormHandler<TrivuleForm>[] = [];
 
   private _wasInit = false;
   private _wasBound = false;
@@ -411,7 +414,7 @@ export class TrivuleForm {
    * });
    * ```
    */
-  onFails(fn: TrivuleFormHandler): void {
+  onFails(fn: TrivuleFormHandler<TrivuleForm>): void {
     this.on('tr.form.fails', (e) => {
       this.__call(fn, (e as CustomEvent).detail);
     });
@@ -428,7 +431,7 @@ export class TrivuleForm {
    * });
    * ```
    */
-  onPasses(fn: TrivuleFormHandler): void {
+  onPasses(fn: TrivuleFormHandler<TrivuleForm>): void {
     this.on('tr.form.passes', (e) => {
       this.__call(fn, (e as CustomEvent).detail);
     });
@@ -445,7 +448,7 @@ export class TrivuleForm {
    * });
    * ```
    */
-  onValidate(fn: TrivuleFormHandler): void {
+  onValidate(fn: TrivuleFormHandler<TrivuleForm>): void {
     this.on('tr.form.validate', (e) => {
       this.__call(fn, (e as CustomEvent).detail);
     });
@@ -604,11 +607,11 @@ export class TrivuleForm {
   }
 
   /**
-   *  The onInit(fn: TrivuleFormHandler) method registers a callback function to be executed
+   *  The onInit(fn: TrivuleFormHandler<TrivuleForm>) method registers a callback function to be executed
    *  when the Trivule form is initialized. It listens for the 'tr.form.init'
    * @param fn
    */
-  onInit(fn: TrivuleFormHandler) {
+  onInit(fn: TrivuleFormHandler<TrivuleForm>) {
     this.on('tr.form.init', (event: Event) => {
       if (event instanceof CustomEvent) {
         this.__call(fn, event.detail);
@@ -620,7 +623,7 @@ export class TrivuleForm {
    * When any input value is updated
    * @param fn
    */
-  onUpdate(fn: TrivuleFormHandler) {
+  onUpdate(fn: TrivuleFormHandler<TrivuleForm>) {
     this._onUpdateCallbacks.push(fn);
   }
 
@@ -1009,7 +1012,7 @@ export class TrivuleForm {
    *   console.log('Form binding is about to start.');
    * });
    */
-  beforeBinding(fn: TrivuleFormHandler) {
+  beforeBinding(fn: TrivuleFormHandler<TrivuleForm>) {
     this._addLifeCycleCallback('before.binding', fn);
     return this;
   }
@@ -1020,7 +1023,10 @@ export class TrivuleForm {
    * @param call - The callback function to be added.
    * @private
    */
-  private _addLifeCycleCallback(name: string, call: TrivuleFormHandler) {
+  private _addLifeCycleCallback(
+    name: string,
+    call: TrivuleFormHandler<TrivuleForm>,
+  ) {
     if (!this._lifeCycleCallbacks[name]) {
       this._lifeCycleCallbacks[name] = [call];
     } else {
@@ -1052,7 +1058,7 @@ export class TrivuleForm {
    *   console.log('Form has been bound.');
    * });
    */
-  afterBinding(fn: TrivuleFormHandler) {
+  afterBinding(fn: TrivuleFormHandler<TrivuleForm>) {
     this._addLifeCycleCallback('after.binding', fn);
     return this;
   }

@@ -1,4 +1,4 @@
-import { ArgumentParser } from '../../../src/validation/utils/argument-parser';
+import { ArgumentParser } from '../../../src/core/utils/argument-parser';
 
 describe('ArgumentParser', () => {
   let argumentParser: ArgumentParser;

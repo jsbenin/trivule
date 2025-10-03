@@ -31,21 +31,6 @@ const trEmail = new TrivuleInput({
 Regardless of the chosen validation mode, the instance `trEmail` is available for advanced interactions.
 
 ```javascript
-trEmail.appendRule({
-  rule: 'endWith:@gmail.com',
-});
-
-trEmail.appendRule({
-  rule: 'startWithContact',
-  validate: function (input) {
-    return {
-      passes: input.startsWith('contact'),
-      value: input,
-    };
-  },
-  message: 'Please enter a valid email address',
-  local: 'en',
-});
 
 trEmail.onPassRule('startWithContact', (trEmail) => {
   // Perform actions on passing the rule

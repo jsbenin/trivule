@@ -1,7 +1,7 @@
 import { isNumber } from '.';
-import { RuleCallBack } from '../contracts';
+import { RuleCallBack } from '../types';
 import { spliteParam, throwEmptyArgsException } from '../utils';
-import { ArgumentParser } from '../validation/utils/argument-parser';
+import { ArgumentParser } from '../core/utils/argument-parser';
 /**
  * Validates an email address.
  *

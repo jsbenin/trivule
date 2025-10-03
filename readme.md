@@ -23,10 +23,6 @@ trivuleForm.make({
 
 trivuleForm
   .get('email')
-  .appendRule({
-    rule: 'endWith:@gmail.com',
-  })
-  .removeRule('maxlength');
 ```
 
 - **Streamlined Validation**: Implement complex validation rules without the hassle. Trivule simplifies your workflow, allowing you to focus on building better user experiences.
@@ -336,12 +332,12 @@ This command will generate the `index.mjs` and `index.umd.js` files in the `./di
 The directory structure of the Trivule project is organized as follows:
 
 - `src`: contains the main code of Trivule.
-- `src/contracts`: contains interfaces and types used in Trivule.
+- `src/types`: contains interfaces and types used in Trivule.
 - `src/locale`: contains internationalization files for different supported languages.
 - `src/messages`: contains message generation files based on validation rules.
 - `src/rules`: contains various validation rules available in Trivule.
 - `src/utils`: contains utility files for Trivule.
-- `src/validation`: contains the validation logic of Trivule.
+- `src/core`: contains the core logic of Trivule.
 - `dist`: contains the bundle files.
 - `types`: contains TypeScript declarations.
 

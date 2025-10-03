@@ -1,4 +1,4 @@
-import { RulesMessages } from '../../contracts';
+import { RulesMessages } from '../../types';
 
 export const en_messages: RulesMessages = {
   default: 'This field is invalid',
