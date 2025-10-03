@@ -1,5 +1,5 @@
-import { TrivuleForm } from '../src/validation/tr-form';
-import { TrivuleInput } from '../src/validation/tr-input';
+import { TrivuleForm } from '../src/core/form';
+import { TrivuleInput } from '../src/core/input';
 
 class MyForm {
   form: HTMLFormElement;

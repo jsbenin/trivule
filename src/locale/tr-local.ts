@@ -1,4 +1,4 @@
-import { Rule, RulesMessages } from '../contracts';
+import { Rule, RulesMessages } from '../types';
 import { is_string } from '../rules';
 import { en_messages } from './lang/en';
 
@@ -55,51 +55,10 @@ export class TrLocal {
    */
   static addMessage(rule: string, message?: string, local?: string) {
     if (message) {
-      const messages = TrLocal.getMessages(local);
-      messages[rule] = message;
-      TrLocal.putMessages(messages, local);
+      local = local || TrLocal.DEFAULT_LANG;
+      const existingMessages = TrLocal._message[local] || {};
+      TrLocal._message[local] = { ...existingMessages, [rule]: message };
     }
-  }
-
-  /**
-   * Update the messages object for a specific language.
-   * If the language is not provided, the default language is used.
-   *
-   * @param messages The updated messages object
-   * @param local The language code (optional)
-   */
-  static putMessages(messages: RulesMessages, local?: string) {
-    if (!messages || Object.keys(messages).length === 0) {
-      throw new Error("The 'messages' argument must be a non-empty object");
-    }
-
-    local = local || TrLocal.DEFAULT_LANG;
-
-    const existingMessages = TrLocal._message[local] || {};
-
-    const mergedMessages = { ...existingMessages, ...messages };
-
-    TrLocal._message[local] = mergedMessages;
-  }
-
-  /**
-   * Translate the messages into a specific language.
-   *
-   * @param lang The target language code
-   * @param messages The translated messages object
-   */
-  static translate(lang: string, messages: RulesMessages) {
-    if (typeof lang !== 'string' || !lang.length)
-      throw new Error(
-        'The first argument must be a string with one or more characters',
-      );
-
-    if (typeof messages !== 'object' || messages === undefined)
-      throw new Error(
-        'The second argument must be a valid key/value pair object',
-      );
-
-    TrLocal._message[lang] = { ...TrLocal.getMessages(lang), ...messages };
   }
 
   /**
@@ -112,38 +71,6 @@ export class TrLocal {
    */
   static rewrite(lang: string, rule: string | Rule, message: string) {
     TrLocal.addMessage(rule, message, lang);
-  }
-
-  /**
-   * Rewrite multiple messages for a specific language.
-   *
-   * @param lang The language code
-   * @param rules An array of rule names or objects
-   * @param messages An array of new messages
-   */
-  static rewriteMany(
-    lang: string,
-    rules: string[] | Rule[],
-    messages: string[],
-  ) {
-    if (typeof lang !== 'string' || !lang.length)
-      throw new Error(
-        "The 'lang' argument must be a string with one or more characters",
-      );
-
-    if (!Array.isArray(rules) || !Array.isArray(messages))
-      throw new Error("The 'rules' and 'messages' arguments must be arrays");
-
-    if (rules.length !== messages.length)
-      throw new Error(
-        "The 'rules' and 'messages' arrays must have the same length",
-      );
-
-    for (let i = 0; i < rules.length; i++) {
-      const rule = rules[i];
-      const message = messages[i];
-      TrLocal.rewrite(lang, rule, message);
-    }
   }
 
   /**

@@ -1,8 +1,8 @@
 import { InputRule } from './utils/input-rule';
-import { InputValueType, InputType, Rule, RulesMessages } from '../contracts';
+import { InputValueType, InputType, Rule, RulesMessages } from '../types';
 
 import { RuleExecuted } from '.';
-import { TrMessages } from '../messages';
+import { I18nResolver } from './i18n';
 import { TrLocal } from '../locale/tr-local';
 
 export class TrValidation {
@@ -180,11 +180,11 @@ export class TrValidation {
       );
     }
 
-    const trMessages = new TrMessages().setMessages(
+    const trMessages = new I18nResolver().setMessages(
       this._trmessages as RulesMessages,
     );
 
-    message = TrMessages.parseMessage(
+    message = I18nResolver.parseMessage(
       this._attr,
       ruleExec.ruleName as Rule,
       trMessages.getRulesMessages([ruleExec.ruleName as Rule])[0],

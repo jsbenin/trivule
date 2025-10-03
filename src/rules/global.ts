@@ -7,7 +7,7 @@ import {
   stringBetween,
   fileBetween,
 } from '.';
-import { RuleCallBack } from '../contracts';
+import { RuleCallBack } from '../types';
 import {
   calculateFileSize,
   convertFileSize,
@@ -15,7 +15,7 @@ import {
   spliteParam,
   throwEmptyArgsException,
 } from '../utils';
-import { ArgumentParser } from '../validation/utils/argument-parser';
+import { ArgumentParser } from '../core/utils/argument-parser';
 import { dateBetween } from './date';
 /**
  * Checks if the input is required.
@@ -332,6 +332,64 @@ export const minDigitRule: RuleCallBack = (input, minDigitCount) => {
 
   return {
     passes: passes,
+    value: input,
+  };
+};
+
+/**
+ * Checks if the input is equal to a specified value.
+ * Accepts numbers or strings; when both sides are numeric, compares as numbers.
+ *
+ * @param input - The input to check.
+ * @param expected - The expected value to compare against.
+ * @example
+ * ```html
+ * <input data-tr-rules="equals:50" />
+ * ```
+ */
+export const equals: RuleCallBack = (input, expected) => {
+  if (typeof expected !== 'number' && typeof expected !== 'string') {
+    throwEmptyArgsException('equals');
+  }
+
+  let passes = false;
+  if (isNumber(input).passes && isNumber(expected).passes) {
+    passes = Number(input) === Number(expected);
+  } else {
+    passes = String(input) === String(expected);
+  }
+
+  return {
+    passes,
+    value: input,
+  };
+};
+
+/**
+ * Checks if the input is NOT equal to a specified value.
+ * Accepts numbers or strings; when both sides are numeric, compares as numbers.
+ *
+ * @param input - The input to check.
+ * @param unexpected - The value that must not match.
+ * @example
+ * ```html
+ * <input data-tr-rules="notEquals:admin" />
+ * ```
+ */
+export const notEquals: RuleCallBack = (input, unexpected) => {
+  if (typeof unexpected !== 'number' && typeof unexpected !== 'string') {
+    throwEmptyArgsException('notEquals');
+  }
+
+  let equalsValue = false;
+  if (isNumber(input).passes && isNumber(unexpected).passes) {
+    equalsValue = Number(input) === Number(unexpected);
+  } else {
+    equalsValue = String(input) === String(unexpected);
+  }
+
+  return {
+    passes: !equalsValue,
     value: input,
   };
 };

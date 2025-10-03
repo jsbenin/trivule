@@ -1,4 +1,4 @@
-import { RuleCallBack } from '../contracts';
+import { RuleCallBack } from '../types';
 import { CountryPhoneValidator } from './phone/country-phone-validator';
 /**
  * This callback validates the format of the phone number.

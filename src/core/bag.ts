@@ -1,7 +1,7 @@
-import { dateBetween } from './../rules/date';
+import { dateBetween } from '../rules/date';
 import { endWithString, stringBetween } from '../rules/string';
 import { fileBetween, isMimes, minFileSize } from '../rules/file';
-import { Rule, RuleCallBack, RulesBag, RulesMessages } from '../contracts';
+import { Rule, RuleCallBack, RulesBag } from '../types';
 import {
   between,
   contains,
@@ -35,6 +35,8 @@ import {
   upper,
   modulo,
   only,
+  equals,
+  notEquals,
   digitRule,
   minDigitRule,
   lessthan,
@@ -92,6 +94,8 @@ export class TrBag {
     stringBetween: stringBetween,
     mod: modulo,
     only: only,
+    equals: equals,
+    notEquals: notEquals,
     mimes: isMimes,
     digit: digitRule,
     minDigit: minDigitRule,
@@ -163,111 +167,23 @@ export class TrBag {
 }
 
 /**
- * Class representing custom validation rule management.
- * @extends TrBag
+ * Lightweight namespace for custom validation rule management.
+ * Provides a cleaner API than TrBag while maintaining backward compatibility.
  */
-export class TrRule extends TrBag {
-  /**
-   * Adds a custom validation rule to the rule bag.
-   * @param rule - The name of the custom rule.
-   * @param callback - The callback function for the custom rule.
-   * @example
-   * ```typescript
-   * TrRule.add("customRule", (input) => {
-   *   // Custom validation logic here
-   *   return {
-   *     passes: true,
-   *     value: input
-   *   };
-   * });
-   * ```
-   */
-  static add(rule: string, callback: RuleCallBack): void {
-    TrRule.addRule(rule, callback);
-  }
-
-  /**
-   * Checks if a validation rule exists in the rule bag.
-   * @param rule - The name of the validation rule.
-   * @returns True if the rule exists, otherwise false.
-   * @example
-   * ```typescript
-   * const exists = TrRule.has("required");
-   * ```
-   */
-  static has(rule: string): boolean {
-    return TrRule.hasRule(rule);
-  }
-
-  /**
-   * Retrieves all validation rules from the rule bag.
-   * @returns An object containing all validation rules.
-   * @example
-   * ```typescript
-   * const allRules = TrRule.all();
-   * ```
-   */
-  static all(): RulesBag {
-    return TrRule.allRules();
-  }
-
-  /**
-   * Retrieves a specific validation rule from the rule bag.
-   * @param name - The name of the validation rule to retrieve.
-   * @returns The callback function associated with the validation rule.
-   * @example
-   * ```typescript
-   * const ruleFunction = TrRule.get("required");
-   * ```
-   */
-  static get(name: string): RuleCallBack {
-    return TrRule.getRule(name);
-  }
-}
+export const TrRule = {
+  add: (rule: string, callback: RuleCallBack) => TrBag.addRule(rule, callback),
+  has: (rule: string) => TrBag.hasRule(rule),
+  all: () => TrBag.allRules(),
+  get: (name: string) => TrBag.getRule(name),
+} as const;
 
 /**
- * Class representing error message management for validation rules.
- * @extends TrBag
+ * Lightweight namespace for error message management for validation rules.
+ * Provides a cleaner API than TrBag while maintaining backward compatibility.
  */
-export class TrMessage extends TrBag {
-  /**
-   * Retrieves the error message for a validation rule.
-   * @param rule - The name of the validation rule.
-   * @param local - The locale for the error message (optional).
-   * @returns The error message for the validation rule.
-   * @example
-   * ```typescript
-   * const errorMessage = TrMessage.get("required", "en");
-   * ```
-   */
-  static get(rule: string, local?: string): string {
-    return TrBag.getMessage(rule, local);
-  }
-
-  /**
-   * Retrieves all error messages for validation rules.
-   * @param local - The locale for the error messages (optional).
-   * @returns An object containing all error messages for validation rules.
-   * @example
-   * ```typescript
-   * const allMessages = TrMessage.all("en");
-   * ```
-   */
-  static all(local?: string): RulesMessages {
-    return TrBag.allMessages(local);
-  }
-
-  /**
-   * Adds a custom error message for a validation rule.
-   * @param rule - The name of the validation rule.
-   * @param message - The custom error message (optional).
-   * @param local - The locale for the error message (optional).
-   * @example
-   * ```typescript
-   * TrMessage.add("customRule", "Custom error message", "en");
-   * ```
-   */
-  static add(rule: string, message?: string, local?: string): void {
-    TrBag.addMessage(rule, message, local);
-  }
-}
+export const TrMessage = {
+  get: (rule: string, local?: string) => TrBag.getMessage(rule, local),
+  all: (local?: string) => TrBag.allMessages(local),
+  add: (rule: string, message?: string, local?: string) =>
+    TrBag.addMessage(rule, message, local),
+} as const;

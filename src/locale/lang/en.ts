@@ -1,4 +1,4 @@
-import { RulesMessages } from '../../contracts';
+import { RulesMessages } from '../../types';
 
 export const en_messages: RulesMessages = {
   default: 'This field is invalid',
@@ -48,6 +48,8 @@ export const en_messages: RulesMessages = {
   regex: 'This field is invalid.',
   lower: 'This field must be lowercase',
   upper: 'This field must be uppercase',
+  equals: "This field must be equal to ':arg0'",
+  notEquals: "This field must be different from ':arg0'",
   fileBetween: 'File size must be between :arg0 and :arg1',
   stringBetween:
     'The number of characters allowed must be between :arg0 and :arg1',

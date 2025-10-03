@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { RuleCallBack } from '../contracts';
+import { RuleCallBack } from '../types';
 import { now, spliteParam, throwEmptyArgsException } from '../utils';
 /**
  * This is a callback function that checks if the input is a valid date.
