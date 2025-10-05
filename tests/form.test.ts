@@ -63,7 +63,8 @@ class MyForm {
 const formInstance = new MyForm();
 
 describe('TrivuleForm', () => {
-  const trivuleForm = new TrivuleForm(formInstance.form, {
+  const trivuleForm = new TrivuleForm();
+  trivuleForm.setConfig(formInstance.form, {
     realTime: false,
   });
   test('Test get method', () => {
@@ -127,7 +128,8 @@ describe('TrivuleForm', () => {
       expect(trForm.getNativeElement()).toBe(formInstance.form);
     });
     test('Should return the native element with config', () => {
-      trForm = new TrivuleForm({
+      trForm = new TrivuleForm();
+      trForm.setConfig({
         element: formInstance.form,
         realTime: false,
       });
@@ -135,7 +137,8 @@ describe('TrivuleForm', () => {
       expect(trForm.isRealTimeEnabled()).toBe(false);
     });
     test('Should resole inputs validations', () => {
-      trForm = new TrivuleForm({
+      trForm = new TrivuleForm();
+      trForm.setConfig({
         realTime: false,
       });
       trForm.make([
@@ -153,7 +156,8 @@ describe('TrivuleForm', () => {
       expect(trForm.isRealTimeEnabled()).toBe(false);
     });
     test('Should return the native element', () => {
-      trForm = new TrivuleForm(formInstance.form);
+      trForm = new TrivuleForm();
+      trForm.setConfig(formInstance.form);
       expect(trForm.getNativeElement()).toBe(formInstance.form);
     });
   });

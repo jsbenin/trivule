@@ -239,6 +239,7 @@ Example:
 import TrivuleForm from 'trivule';
 
 const form = new TrivuleForm();
+form.setConfig({ element: 'form' });
 
 // Define your validation rules here
 form.afterBinding((form) => {

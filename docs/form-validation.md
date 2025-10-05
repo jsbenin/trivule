@@ -38,7 +38,8 @@ Specify validation rules in the attributes of HTML fields for basic form validat
 **Initialization:**
 
 ```js
-const trForm = new TrivuleForm('form');
+const trForm = new TrivuleForm();
+trForm.setConfig('form');
 ```
 
 ### Imperative Validation

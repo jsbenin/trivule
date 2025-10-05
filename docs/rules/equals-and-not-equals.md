@@ -24,7 +24,8 @@ Both rules accept either string or numeric values. If both the input and the par
 ```ts
 import { TrivuleForm } from 'trivule';
 
-const form = new TrivuleForm('form');
+const form = new TrivuleForm();
+form.setConfig('form');
 form.make({
   points: {
     rules: 'equals:50',
