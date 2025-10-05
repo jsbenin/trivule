@@ -12,7 +12,11 @@ import {
   TrivuleAttribute,
 } from '../types';
 import { isNumber } from '../rules';
-import { getHTMLElementBySelector, transformToArray } from '../utils';
+import {
+  getHTMLElementBySelector,
+  transformToArray,
+  attrSelector,
+} from '../utils';
 import { TrBag } from './bag';
 import { TrivuleInput } from './input';
 import { TrParameter } from './utils/parameter';
@@ -121,8 +125,9 @@ export class TrivuleForm {
       submitButton = getHTMLElementBySelector<HTMLButtonElement>(selector);
     }
     if (!submitButton && this.container) {
-      submitButton =
-        this.container?.querySelector<HTMLButtonElement>('[data-tr-submit]');
+      submitButton = this.container?.querySelector<HTMLButtonElement>(
+        attrSelector('submit'),
+      );
     }
 
     if (submitButton) {
@@ -492,7 +497,7 @@ export class TrivuleForm {
       inputs = inputs
         ? inputs
         : Array.from(
-            this.container.querySelectorAll<HTMLElement>('[data-tr-rules]'),
+            this.container.querySelectorAll<HTMLElement>(attrSelector('rules')),
           );
       inputs.forEach((el) => this.add({ selector: el }));
     }
