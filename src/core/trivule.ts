@@ -9,6 +9,7 @@ import { TrConfig } from '../tr.config';
 import { TrBag } from './bag';
 import { TrivuleForm } from './form';
 import { TrivuleInput } from './input';
+import { TrParameter } from './utils/parameter';
 /**
  *
  * Initializes Trivule and applies form validation to all forms in the document.
@@ -31,14 +32,16 @@ export class Trivule {
   private _trForms: TrivuleForm[] = [];
 
   /**
-   * Default configuration
+   * Shared parameter/configuration instance
    */
-  protected config: ITrConfig = TrConfig;
+  public parameter: TrParameter;
 
   /**
    * Private constructor to prevent direct instantiation
    */
-  private constructor() {}
+  private constructor() {
+    this.parameter = TrParameter.instance();
+  }
 
   /**
    * Static method to get or create the singleton instance
@@ -50,20 +53,28 @@ export class Trivule {
       Trivule._instance = new Trivule();
     }
 
-    Trivule._instance.setConfig(config);
-    Trivule._instance._trForms = [];
+    // Merge with default config to ensure required fields are set
+    const finalConfig: ITrConfig = {
+      ...TrConfig,
+      ...config,
+    };
 
+    // Configure parameter instance with all configuration
+    Trivule._instance.parameter.configure(finalConfig);
+
+    // Initialize forms
+    Trivule._instance._trForms = [];
     document
       .querySelectorAll<HTMLFormElement>('form')
       .forEach((formElement) => {
-        const trForm = new TrivuleForm();
-        trForm.setConfig(formElement, Trivule._instance!.config);
-        trForm.init();
+        const trForm = new TrivuleForm(Trivule._instance!.parameter);
+        trForm.init(formElement);
         Trivule._instance!._trForms.push(trForm);
       });
 
     return Trivule._instance;
   }
+
   /**
    * Adds a new validation rule to Trivule's rule bag.
    * @param ruleName The name of the rule.
@@ -82,18 +93,6 @@ export class Trivule {
     return this._trForms;
   }
 
-  /**
-   * Set default configuration
-   * @param config
-   */
-  protected setConfig(config?: ITrConfig) {
-    this.config = TrConfig;
-
-    if (config && typeof config === 'object') {
-      this.config = { ...this.config, ...config };
-    }
-  }
-
   static Rule(ruleName: string, call: RuleCallBack, message?: string) {
     TrBag.rule(ruleName, call, message);
   }
@@ -101,9 +100,8 @@ export class Trivule {
     selector: ValidatableForm | TrivuleFormConfig,
     config: TrivuleFormConfig,
   ) {
-    const trForm = new TrivuleForm();
-    trForm.setConfig(selector, config);
-    trForm.init();
+    const trForm = new TrivuleForm(this.parameter);
+    trForm.init(selector, config);
     return trForm;
   }
 

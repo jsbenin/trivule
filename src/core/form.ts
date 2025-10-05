@@ -11,8 +11,7 @@ import {
   CssSelector,
   TrivuleAttribute,
 } from '../types';
-import { TrLocal } from '../locale/tr-local';
-import { isBoolean, isNumber } from '../rules';
+import { isNumber } from '../rules';
 import { getHTMLElementBySelector, transformToArray } from '../utils';
 import { TrBag } from './bag';
 import { TrivuleInput } from './input';
@@ -75,21 +74,16 @@ export class TrivuleForm {
   submitButton!: HTMLElement;
 
   /**
-   * Tr Config object
+   * Shared parameter/configuration instance
    */
-  protected config: TrivuleFormConfig = {
-    auto: true,
-    realTime: true,
-  };
-
-  parameter!: TrParameter;
+  parameter: TrParameter;
 
   private _onUpdateCallbacks: TrivuleFormHandler<TrivuleForm>[] = [];
 
   private _wasInit = false;
   private _wasBound = false;
-  constructor() {
-    this.parameter = TrParameter.instance();
+  constructor(parameter?: TrParameter) {
+    this.parameter = parameter ?? TrParameter.instance();
   }
 
   /**
@@ -136,18 +130,39 @@ export class TrivuleForm {
     }
   }
   /**
-   * Initializes live validation on the form element.
+   * Initializes live validation on the form element with optional configuration.
    * Example:
    * ```
    * const trivuleForm = new TrivuleForm();
-   * trivuleForm.setConfig(formElement);
-   * trivuleForm.init();
+   * trivuleForm.init(formElement, config);
    * ```
    */
-  init() {
+  init(
+    containerOrConfig?: ValidatableForm | TrivuleFormConfig,
+    config?: TrivuleFormConfig,
+  ) {
+    // Handle configuration
+    if (
+      typeof containerOrConfig === 'string' ||
+      containerOrConfig instanceof HTMLElement
+    ) {
+      // If the first parameter is a container (string or HTMLElement)
+      if (config) {
+        this.parameter.configure(config);
+      }
+      this.bind(containerOrConfig);
+    } else {
+      // If the first parameter is a config object (or undefined)
+      config = config ?? containerOrConfig;
+      this.parameter.configure(config);
+      if (config?.element) {
+        this.bind(config.element);
+      }
+    }
+
     if (!this._wasInit) {
       this._wasInit = true;
-      if (this.config.auto) {
+      if (this.parameter.auto) {
         this.disableButton();
       }
 
@@ -183,7 +198,7 @@ export class TrivuleForm {
    */
   disableButton() {
     if (this.submitButton) {
-      if (this.config.auto) {
+      if (this.parameter.auto) {
         this.submitButton.setAttribute('disabled', 'true');
       }
       if (this._trDisabledClass) {
@@ -357,58 +372,6 @@ export class TrivuleForm {
    */
   rule(ruleName: string, call: RuleCallBack, message?: string) {
     TrBag.rule(ruleName, call, message);
-  }
-
-  setConfig(
-    containerOrConfig?: ValidatableForm | TrivuleFormConfig,
-    config?: TrivuleFormConfig,
-  ) {
-    // Handle the logic that was previously in the constructor
-    if (
-      typeof containerOrConfig === 'string' ||
-      containerOrConfig instanceof HTMLElement
-    ) {
-      // If the first parameter is a container (string or HTMLElement)
-      this._setConfigOptions(config);
-      this.bind(containerOrConfig);
-    } else {
-      // If the first parameter is a config object (or undefined)
-      config = config ?? containerOrConfig;
-      this._setConfigOptions(config);
-      if (config?.element) {
-        this.bind(config.element);
-      }
-    }
-  }
-
-  /**
-   * Set configuration options for the form
-   * @param config Configuration options
-   */
-  private _setConfigOptions(config?: TrivuleFormConfig) {
-    let lang =
-      this.getAttrData<string | undefined>(
-        document.querySelector('html'),
-        'lang',
-      ) || document.querySelector('html')?.getAttribute('lang');
-
-    lang = this.getAttrData(this.container, 'lang', lang);
-
-    const auto = this.getAttrData<string>(this.container, 'auto');
-    if (auto) {
-      this.config.auto = isBoolean(auto).passes;
-    }
-    if (config && typeof config === 'object') {
-      this.config = { ...this.config, ...config };
-      if (config.local) {
-        const local = config.local;
-        if (local.lang) {
-          lang = local.lang;
-        }
-      }
-    }
-
-    TrLocal.LANG = lang ?? TrLocal.DEFAULT_LANG;
   }
 
   /**
@@ -857,7 +820,6 @@ export class TrivuleForm {
    * @returns The form instance with real-time functionality enabled.
    */
   enableRealTime() {
-    this.config.realTime = true;
     this.each((tr) => {
       tr.enableRealTime();
       return this;
@@ -871,7 +833,6 @@ export class TrivuleForm {
    * @returns The form instance with real-time functionality disabled.
    */
   disableRealTime() {
-    this.config.realTime = false;
     this.each((tr) => {
       tr.disableRealTime();
       return this;
@@ -883,14 +844,13 @@ export class TrivuleForm {
    * @returns A boolean indicating whether real-time functionality is enabled.
    */
   isRealTimeEnabled() {
-    return this.config.realTime;
+    return this.parameter.realTime;
   }
   /**
    * Set the CSS class for valid inputs in the form.
    * @param cls The CSS class to apply to valid inputs.
    */
   setInputValidClass(cls: string) {
-    this.config.validClass = cls;
     this.each((i) => {
       i.setValidClass(cls);
     });
@@ -900,7 +860,6 @@ export class TrivuleForm {
    * @param cls The CSS class to apply to invalid inputs.
    */
   setInputInvalidClass(cls: string) {
-    this.config.invalidClass = cls;
     this.each((i) => {
       i.setInvalidClass(cls);
     });
@@ -937,8 +896,8 @@ export class TrivuleForm {
       }
     }
     if (!(this.container instanceof HTMLElement)) {
-      if (this.config.element) {
-        const element = getHTMLElementBySelector(this.config.element);
+      if (this.parameter.element) {
+        const element = getHTMLElementBySelector(this.parameter.element);
         if (element instanceof HTMLElement) {
           this.container = element;
         }
@@ -946,8 +905,6 @@ export class TrivuleForm {
     }
 
     if (this.container instanceof HTMLElement) {
-      this.parameter.setFeedbackSelector(this.config.feedbackSelector);
-
       this._initTrivuleInputs();
       this.init();
       this._wasBound = true;
@@ -1021,14 +978,14 @@ export class TrivuleForm {
     }
 
     if (typeof param.realTime !== 'boolean') {
-      param.realTime = this.config.realTime;
+      param.realTime = this.parameter.realTime;
     } else {
-      param.realTime = param.realTime ?? this.config.realTime;
+      param.realTime = param.realTime ?? this.parameter.realTime;
     }
 
-    param.validClass = param.validClass ?? this.config.validClass;
-    param.invalidClass = param.invalidClass ?? this.config.invalidClass;
-    param.autoValidate = param.autoValidate ?? this.config.auto;
+    param.validClass = param.validClass ?? this.parameter.validClass;
+    param.invalidClass = param.invalidClass ?? this.parameter.invalidClass;
+    param.autoValidate = param.autoValidate ?? this.parameter.auto;
     param.feedbackElement =
       param.feedbackElement ?? this.parameter.feedbackSelector;
     param.selector = selector as ValidatableInput;
