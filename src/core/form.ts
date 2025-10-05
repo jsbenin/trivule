@@ -731,6 +731,7 @@ export class TrivuleForm {
       throw new Error('Invalid arguments passed to make method');
     }
     transformToArray(input, this._bootInputs.bind(this));
+
     return this;
   }
   /**
@@ -993,6 +994,7 @@ export class TrivuleForm {
     this.addTrivuleInput(
       new TrivuleInput(selector as ValidatableInput, param, this.parameter),
     );
+
     return param;
   }
 

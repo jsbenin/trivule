@@ -95,6 +95,7 @@ export class TrivuleInput {
     this.validator = new TrValidation();
     this.rules = new InputRule([]);
     this.parameter = parameter ?? new TrParameter();
+
     this._init(inputElement, param);
     this.init();
   }
