@@ -7,11 +7,12 @@ import {
   ITrivuleInputCallback,
   Rule,
   RuleCallBack,
+  TrivuleAttribute,
   TrivuleHooks,
   TrivuleInputParms,
   ValidatableInput,
 } from '../types';
-import { getHTMLElementBySelector, getAttrData } from '../utils';
+import { getHTMLElementBySelector } from '../utils';
 import { TrBag } from './bag';
 import { InputRule } from './utils/input-rule';
 import { TrParameter } from './utils/parameter';
@@ -206,6 +207,35 @@ export class TrivuleInput {
    * Check if fails event should be emitted
    */
   private _emitOnFails = true;
+
+  /**
+   * Private method to get attribute data from the input element
+   * @param attribute - The TrivuleAttribute to get
+   * @param defaults - Default value if attribute is not found
+   * @param toJson - Whether to parse the value as JSON
+   * @returns The attribute value or default
+   */
+  private getAttrData<T = unknown>(
+    attribute: TrivuleAttribute,
+    defaults: unknown = null,
+    toJson = false,
+  ): T {
+    if (!this.inputElement) {
+      return defaults as T;
+    }
+    const attributePrefix = this.parameter.get('attribute');
+    let value = this.inputElement.getAttribute(
+      `${attributePrefix}${attribute}`,
+    );
+    if (!!value && toJson) {
+      try {
+        value = JSON.parse(value);
+      } catch (error) {
+        value = defaults as string;
+      }
+    }
+    return (value ?? defaults) as T;
+  }
 
   /**
    * Performs validation on the input element. And emits tr.input.validated event if necessary.
@@ -629,11 +659,7 @@ export class TrivuleInput {
    */
 
   protected _setEvent(events?: string[]) {
-    const ev = getAttrData<string | undefined>(
-      this.inputElement,
-      'events',
-      undefined,
-    );
+    const ev = this.getAttrData<string | undefined>('events', undefined);
 
     if (ev) {
       events = ev.split('|').length ? ev.split('|') : this.param.events;
@@ -766,7 +792,7 @@ export class TrivuleInput {
    * Get and set the ways error message will be displayed
    */
   private setShowMessage() {
-    this.showMessage = getAttrData(this.inputElement, 'show', 'first');
+    this.showMessage = this.getAttrData('show', 'first');
     this.showMessage = this.showMessages.includes(this.showMessage)
       ? this.showMessage
       : 'first';
@@ -776,16 +802,8 @@ export class TrivuleInput {
     this.invalidClass = this.param.invalidClass ?? this.invalidClass;
     this.validClass = this.param.validClass ?? this.validClass;
 
-    this.invalidClass = getAttrData(
-      this.inputElement,
-      'invalid-class',
-      this.invalidClass,
-    );
-    this.validClass = getAttrData(
-      this.inputElement,
-      'valid-class',
-      this.validClass,
-    );
+    this.invalidClass = this.getAttrData('invalid-class', this.invalidClass);
+    this.validClass = this.getAttrData('valid-class', this.validClass);
   }
 
   protected setValidationClass() {
@@ -941,14 +959,12 @@ export class TrivuleInput {
     this._setEvent(params?.events ?? this._events);
 
     //Set the validation rules
-    const rules: string | string[] | Rule[] | undefined = getAttrData(
-      this.inputElement,
+    const rules: string | string[] | Rule[] | undefined = this.getAttrData(
       'rules',
       params?.rules,
     );
     if (rules) {
-      const elMessages = getAttrData<string>(
-        this.inputElement,
+      const elMessages = this.getAttrData<string>(
         'messages',
         this.param.messages,
       );
