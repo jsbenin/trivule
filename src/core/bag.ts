@@ -165,25 +165,3 @@ export class TrBag {
     return TrLocal.getMessages(local);
   }
 }
-
-/**
- * Lightweight namespace for custom validation rule management.
- * Provides a cleaner API than TrBag while maintaining backward compatibility.
- */
-export const TrRule = {
-  add: (rule: string, callback: RuleCallBack) => TrBag.addRule(rule, callback),
-  has: (rule: string) => TrBag.hasRule(rule),
-  all: () => TrBag.allRules(),
-  get: (name: string) => TrBag.getRule(name),
-} as const;
-
-/**
- * Lightweight namespace for error message management for validation rules.
- * Provides a cleaner API than TrBag while maintaining backward compatibility.
- */
-export const TrMessage = {
-  get: (rule: string, local?: string) => TrBag.getMessage(rule, local),
-  all: (local?: string) => TrBag.allMessages(local),
-  add: (rule: string, message?: string, local?: string) =>
-    TrBag.addMessage(rule, message, local),
-} as const;
