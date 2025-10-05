@@ -56,7 +56,8 @@ export class Trivule {
     document
       .querySelectorAll<HTMLFormElement>('form')
       .forEach((formElement) => {
-        const trForm = new TrivuleForm(formElement, Trivule._instance!.config);
+        const trForm = new TrivuleForm();
+        trForm.setConfig(formElement, Trivule._instance!.config);
         trForm.init();
         Trivule._instance!._trForms.push(trForm);
       });
@@ -100,7 +101,8 @@ export class Trivule {
     selector: ValidatableForm | TrivuleFormConfig,
     config: TrivuleFormConfig,
   ) {
-    const trForm = new TrivuleForm(selector, config);
+    const trForm = new TrivuleForm();
+    trForm.setConfig(selector, config);
     trForm.init();
     return trForm;
   }

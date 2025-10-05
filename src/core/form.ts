@@ -24,11 +24,11 @@ import { TrParameter } from './utils/parameter';
 /**
  * TrivuleForm is responsible for applying live validation to an HTML form.
  * Creates an instance of TrivuleForm.
- * @param formElement The HTML form element to apply live validation to.
  * Example:
  * ```
  * const formElement = document.getElementById("myForm") as HTMLFormElement;
- * const trivuleForm = new TrivuleForm(formElement);
+ * const trivuleForm = new TrivuleForm();
+ * trivuleForm.setConfig(formElement);
  * trivuleForm.init();
  * ```
  */
@@ -91,28 +91,8 @@ export class TrivuleForm {
 
   private _wasInit = false;
   private _wasBound = false;
-  constructor(
-    containerOrConfig?: ValidatableForm | TrivuleFormConfig,
-    config?: TrivuleFormConfig,
-  ) {
+  constructor() {
     this.parameter = TrParameter.instance();
-    //If the container is provided and is resolvable we bind it automatically
-    //if the container is config, we check if element attribut exists and bind it
-    //If config is provided we assign it
-    if (
-      typeof containerOrConfig === 'string' ||
-      containerOrConfig instanceof HTMLElement
-    ) {
-      this.setConfig(config);
-      this.bind(containerOrConfig);
-    } else {
-      config = config ?? containerOrConfig;
-
-      this.setConfig(config);
-      if (config?.element) {
-        this.bind(config.element);
-      }
-    }
   }
 
   setSubmitButton(selector?: CssSelector) {
@@ -133,7 +113,8 @@ export class TrivuleForm {
    * Initializes live validation on the form element.
    * Example:
    * ```
-   * const trivuleForm = new TrivuleForm(formElement);
+   * const trivuleForm = new TrivuleForm();
+   * trivuleForm.setConfig(formElement);
    * trivuleForm.init();
    * ```
    */
@@ -352,7 +333,33 @@ export class TrivuleForm {
     TrBag.rule(ruleName, call, message);
   }
 
-  protected setConfig(config?: TrivuleFormConfig) {
+  setConfig(
+    containerOrConfig?: ValidatableForm | TrivuleFormConfig,
+    config?: TrivuleFormConfig,
+  ) {
+    // Handle the logic that was previously in the constructor
+    if (
+      typeof containerOrConfig === 'string' ||
+      containerOrConfig instanceof HTMLElement
+    ) {
+      // If the first parameter is a container (string or HTMLElement)
+      this._setConfigOptions(config);
+      this.bind(containerOrConfig);
+    } else {
+      // If the first parameter is a config object (or undefined)
+      config = config ?? containerOrConfig;
+      this._setConfigOptions(config);
+      if (config?.element) {
+        this.bind(config.element);
+      }
+    }
+  }
+
+  /**
+   * Set configuration options for the form
+   * @param config Configuration options
+   */
+  private _setConfigOptions(config?: TrivuleFormConfig) {
     let lang =
       getAttrData<string | undefined>(document.querySelector('html'), 'lang') ||
       document.querySelector('html')?.getAttribute('lang');
@@ -519,7 +526,8 @@ export class TrivuleForm {
    * Example:
    * ```typescript
    * const formElement = document.getElementById("myForm") as HTMLFormElement;
-   * const trivuleForm = new TrivuleForm(formElement);
+   * const trivuleForm = new TrivuleForm();
+   * trivuleForm.setConfig(formElement);
    * trivuleForm.init();
    *
    * // Use the form...
@@ -574,7 +582,8 @@ export class TrivuleForm {
    *
    * @example
    * const formElement = document.getElementById("myForm") as HTMLFormElement;
-   * const trivuleForm = new TrivuleForm(formElement);
+   * const trivuleForm = new TrivuleForm();
+   * trivuleForm.setConfig(formElement);
    * // Configure additional parameters for an input
    * trivuleForm.with("inputName", { rules: ['required','email']});
    * trivuleForm.init();
