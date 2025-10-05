@@ -1,11 +1,12 @@
 import { TrivuleInput } from '../src/core/input';
+import { attr } from '../src/utils';
 
 describe('TrivuleInput', () => {
   describe('getRules', () => {
     test('should return an array of rules for a given input field', () => {
       // Arrange
       const inputElement = document.createElement('input'); // Create an input element
-      inputElement.setAttribute('data-tr-rules', 'required|min:30'); // Set rules for the input element
+      inputElement.setAttribute(attr('rules'), 'required|min:30'); // Set rules for the input element
       const rules = [
         { name: 'required', message: 'This field is required' },
         {
@@ -39,7 +40,7 @@ describe('TrivuleInput', () => {
   describe('hasRules', () => {
     test('should return true if input have rules', () => {
       const inputElement = document.createElement('input'); // Create an input element
-      inputElement.setAttribute('data-tr-rules', 'required|min:30');
+      inputElement.setAttribute(attr('rules'), 'required|min:30');
       const validator = new TrivuleInput(inputElement);
       expect(validator.hasRules()).toBe(true);
     });
@@ -54,9 +55,9 @@ describe('TrivuleInput', () => {
   describe('getMessages', () => {
     test('should return  messages set via tr-messages', () => {
       const inputElement = document.createElement('input');
-      inputElement.setAttribute('data-tr-rules', 'required|min:30');
+      inputElement.setAttribute(attr('rules'), 'required|min:30');
       inputElement.setAttribute(
-        'data-tr-messages',
+        attr('messages'),
         'Required message | Min message',
       );
       const validator = new TrivuleInput(inputElement, {
@@ -72,11 +73,11 @@ describe('TrivuleInput', () => {
     test('should return array of messages set via tr-messages with compensations messages', () => {
       const inputElement = document.createElement('input');
       inputElement.setAttribute(
-        'data-tr-rules',
+        attr('rules'),
         'required|min:30|max:60|email',
       );
       inputElement.setAttribute(
-        'data-tr-messages',
+        attr('messages'),
         'Required message | {1,2,3}Invalid email address',
       );
       const validator = new TrivuleInput(inputElement, {
@@ -105,7 +106,7 @@ describe('TrivuleInput', () => {
       // Arrange
       const inputElement = document.createElement('input');
       inputElement.setAttribute(
-        'data-tr-rules',
+        attr('rules'),
         'required|min:2|regex:^(Js&pip;Ts)$',
       );
       inputElement.value = 'Js'; // Set the input value
@@ -117,7 +118,7 @@ describe('TrivuleInput', () => {
     test('should return false if input is invalid', () => {
       // Arrange
       const inputElement = document.createElement('input');
-      inputElement.setAttribute('data-tr-rules', 'required|min:3');
+      inputElement.setAttribute(attr('rules'), 'required|min:3');
       inputElement.value = ''; // Set the input value to empty
       const validator = new TrivuleInput(inputElement);
 
@@ -129,7 +130,7 @@ describe('TrivuleInput', () => {
     test('should return true if input is valid', () => {
       // Arrange
       const inputElement = document.createElement('input');
-      inputElement.setAttribute('data-tr-rules', 'required|min:3');
+      inputElement.setAttribute(attr('rules'), 'required|min:3');
       inputElement.value = 'test'; // Set the input value
       const validator = new TrivuleInput(inputElement);
       jest
@@ -147,7 +148,7 @@ describe('TrivuleInput', () => {
     test('should return false if input is invalid', () => {
       // Arrange
       const inputElement = document.createElement('input');
-      inputElement.setAttribute('data-tr-rules', 'required|min:3');
+      inputElement.setAttribute(attr('rules'), 'required|min:3');
       inputElement.value = ''; // Set the input value to empty
       const validator = new TrivuleInput(inputElement);
       jest
@@ -169,7 +170,7 @@ describe('TrivuleInput', () => {
     test('should return error messages', () => {
       // Arrange
       const inputElement = document.createElement('input');
-      inputElement.setAttribute('data-tr-rules', 'required|min:3');
+      inputElement.setAttribute(attr('rules'), 'required|min:3');
       inputElement.name = 'input-name';
       inputElement.value = ''; // Set the input value to empty
       inputElement.type = 'text';
@@ -196,7 +197,7 @@ describe('TrivuleInput', () => {
     test('should return empty error messages', () => {
       // Arrange
       const inputElement = document.createElement('input');
-      inputElement.setAttribute('data-tr-rules', 'required|min:3');
+      inputElement.setAttribute(attr('rules'), 'required|min:3');
       inputElement.type = 'number';
       inputElement.name = 'name-empty';
       inputElement.value = '4';
@@ -230,7 +231,7 @@ describe('TrivuleInput', () => {
 
     test('should return true if no feedback element found', () => {
       inputElement.name = 'my-input';
-      feedbackElement.setAttribute('data-tr-feedback', 'my-input');
+      feedbackElement.setAttribute(attr('feedback'), 'my-input');
       validator.setFeedbackElement('no-select');
 
       expect(validator.getFeedbackElement() === null).toBe(true);
@@ -238,7 +239,7 @@ describe('TrivuleInput', () => {
 
     test('should return the feedback element supplied througth the attribute', () => {
       inputElement.name = 'my-input';
-      feedbackElement.setAttribute('data-tr-feedback', 'my-input');
+      feedbackElement.setAttribute(attr('feedback'), 'my-input');
       validator.setFeedbackElement();
 
       expect(validator.getFeedbackElement() === feedbackElement).toBe(true);
@@ -270,7 +271,7 @@ describe('TrivuleInput', () => {
 
   describe('setEvents', () => {
     let input = document.createElement('input');
-    input.setAttribute('data-tr-rules', 'required');
+    input.setAttribute(attr('rules'), 'required');
     const trivuleInput = new TrivuleInput(input);
     it('Should return defaults events, if not events provided', () => {
       expect(trivuleInput.events).toEqual(['change', 'blur', 'input']);
@@ -281,8 +282,8 @@ describe('TrivuleInput', () => {
       expect(trivuleInput.events).toEqual(['change']);
     });
     input = document.createElement('input');
-    input.setAttribute('data-tr-rules', 'required');
-    input.setAttribute('data-tr-events', 'keyup');
+    input.setAttribute(attr('rules'), 'required');
+    input.setAttribute(attr('events'), 'keyup');
     const trivuleInput1 = new TrivuleInput(input);
     it('Should return the provided events', () => {
       expect(trivuleInput1.events).toEqual(['keyup']);

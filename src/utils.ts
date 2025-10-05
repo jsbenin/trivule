@@ -213,3 +213,37 @@ export function transformToArray<T, R = T>(
   }
   return result;
 }
+
+/**
+ * Get a configuration value from the TrParameter singleton
+ * @param key The configuration key to retrieve
+ * @returns The configuration value
+ *
+ * @example
+ * ```typescript
+ * const prefix = config('attributePrefix'); // Returns 'data-tr-'
+ * const invalidClass = config('invalidClass'); // Returns 'is-invalid'
+ * ```
+ */
+export const config = (key: string): unknown => {
+  const param = TrParameter.instance() as unknown as Record<string, unknown>;
+  return param[key];
+};
+
+/**
+ * Build a complete attribute name using the configured attribute prefix
+ * @param name The attribute name without prefix (e.g., 'rules', 'messages', 'feedback')
+ * @returns The full attribute name with prefix (e.g., 'data-tr-rules')
+ *
+ * @example
+ * ```typescript
+ * element.setAttribute(attr('rules'), 'required');
+ * // Equivalent to: element.setAttribute('data-tr-rules', 'required')
+ *
+ * element.setAttribute(attr('feedback'), 'email');
+ * // Equivalent to: element.setAttribute('data-tr-feedback', 'email')
+ * ```
+ */
+export const attr = (name: string): string => {
+  return `${config('attributePrefix')}${name}`;
+};

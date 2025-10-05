@@ -1,4 +1,4 @@
-import { getAttrData } from '../src/utils';
+import { getAttrData, attr } from '../src/utils';
 
 describe('getAttrData function', () => {
   test('should return defaults if element is null or undefined', () => {
@@ -13,13 +13,13 @@ describe('getAttrData function', () => {
 
   test('should return value from dataset attribute', () => {
     const element = document.createElement('div');
-    element.setAttribute('data-tr-rules', 'value');
+    element.setAttribute(attr('rules'), 'value');
     expect(getAttrData(element, 'rules', 'default')).toBe('value');
   });
 
   test('should return parsed JSON value if toJson parameter is true', () => {
     const element = document.createElement('div');
-    element.setAttribute('data-tr-rules', '{"key": "value"}');
+    element.setAttribute(attr('rules'), '{"key": "value"}');
     expect(getAttrData(element, 'rules', 'default', true)).toEqual({
       key: 'value',
     });
@@ -27,7 +27,7 @@ describe('getAttrData function', () => {
 
   test('should return defaults if parsed JSON value is invalid', () => {
     const element = document.createElement('div');
-    element.setAttribute('data-tr-rules', '{invalidJson}');
+    element.setAttribute(attr('rules'), '{invalidJson}');
     expect(getAttrData(element, 'rules', 'default', true)).toBe('default');
   });
 });

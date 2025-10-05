@@ -1,5 +1,6 @@
 import { TrivuleForm } from '../src/core/form';
 import { TrivuleInput } from '../src/core/input';
+import { attr } from '../src/utils';
 
 class MyForm {
   form: HTMLFormElement;
@@ -13,7 +14,7 @@ class MyForm {
     this.form = document.createElement('form');
 
     this.nameInput = this.createInput('text', 'name');
-    this.nameInput.setAttribute('data-tr-rules', 'required');
+    this.nameInput.setAttribute(attr('rules'), 'required');
     this.ageInput = this.createInput('number', 'age');
     this.birthDayInput = this.createInput('date', 'birthDay');
     this.languageSelect = this.createSelect('language', [
