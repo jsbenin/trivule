@@ -213,3 +213,80 @@ export function transformToArray<T, R = T>(
   }
   return result;
 }
+
+/**
+ * Get a configuration value from the TrParameter singleton
+ * @param key The configuration key to retrieve
+ * @returns The configuration value
+ *
+ * @example
+ * ```typescript
+ * const prefix = config('attributePrefix'); // Returns 'data-tr-'
+ * const invalidClass = config('invalidClass'); // Returns 'is-invalid'
+ * ```
+ */
+export const config = (key: string): unknown => {
+  const param = TrParameter.instance() as unknown as Record<string, unknown>;
+  return param[key];
+};
+
+/**
+ * Escapes special CSS characters in a string for use in CSS selectors
+ * @param str The string to escape
+ * @returns The escaped string safe for CSS selectors
+ *
+ * @example
+ * ```typescript
+ * escapeCssSelector('v:rules') // Returns 'v\\:rules'
+ * escapeCssSelector('data-tr-rules') // Returns 'data-tr-rules'
+ * ```
+ */
+export const escapeCssSelector = (str: string): string => {
+  // Use native CSS.escape if available
+  if (typeof CSS !== 'undefined' && CSS.escape) {
+    return CSS.escape(str);
+  }
+
+  // Fallback: manually escape special CSS characters
+  // Characters that need escaping: : . [ ] # , ; ( ) { } + > ~ * = ^ $ | " ' \
+  return str.replace(/([:.[\]#,;(){}+>~*=^$|"'\\])/g, '\\$1');
+};
+
+/**
+ * Build a complete attribute name using the configured attribute prefix
+ * @param name The attribute name without prefix (e.g., 'rules', 'messages', 'feedback')
+ * @returns The full attribute name with prefix (e.g., 'data-tr-rules')
+ *
+ * @example
+ * ```typescript
+ * element.setAttribute(attr('rules'), 'required');
+ * // Equivalent to: element.setAttribute('data-tr-rules', 'required')
+ *
+ * element.setAttribute(attr('feedback'), 'email');
+ * // Equivalent to: element.setAttribute('data-tr-feedback', 'email')
+ * ```
+ */
+export const attr = (name: string): string => {
+  return `${config('attributePrefix')}${name}`;
+};
+
+/**
+ * Build a CSS attribute selector using the configured attribute prefix
+ * Automatically escapes special CSS characters in the prefix
+ * @param name The attribute name without prefix (e.g., 'rules', 'submit')
+ * @returns A valid CSS attribute selector (e.g., '[data-tr-rules]', '[v\\:rules]')
+ *
+ * @example
+ * ```typescript
+ * // With default prefix 'data-tr-'
+ * attrSelector('rules') // Returns '[data-tr-rules]'
+ *
+ * // With custom prefix 'v:'
+ * attrSelector('rules') // Returns '[v\\:rules]'
+ * ```
+ */
+export const attrSelector = (name: string): string => {
+  const prefix = config('attributePrefix') as string;
+  const escapedAttr = escapeCssSelector(`${prefix}${name}`);
+  return `[${escapedAttr}]`;
+};

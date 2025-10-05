@@ -67,8 +67,7 @@ export class Trivule {
     document
       .querySelectorAll<HTMLFormElement>('form')
       .forEach((formElement) => {
-        const trForm = new TrivuleForm(Trivule._instance!.parameter);
-        trForm.init(formElement);
+        const trForm = Trivule._instance!.form(formElement, {});
         Trivule._instance!._trForms.push(trForm);
       });
 

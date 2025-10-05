@@ -95,6 +95,7 @@ export class TrivuleInput {
     this.validator = new TrValidation();
     this.rules = new InputRule([]);
     this.parameter = parameter ?? new TrParameter();
+
     this._init(inputElement, param);
     this.init();
   }
@@ -223,10 +224,12 @@ export class TrivuleInput {
     if (!this.inputElement) {
       return defaults as T;
     }
+
     const attributePrefix = this.parameter.get('attribute');
     let value = this.inputElement.getAttribute(
       `${attributePrefix}${attribute}`,
     );
+
     if (!!value && toJson) {
       try {
         value = JSON.parse(value);
@@ -822,11 +825,9 @@ export class TrivuleInput {
     if (isValid) {
       this.invalidClass.split(' ').forEach(removeClass);
       this.validClass.split(' ').forEach(addClass);
-      this.inputElement.setAttribute('data-tr-valid', '1');
     } else {
       this.validClass.split(' ').forEach(removeClass);
       this.invalidClass.split(' ').forEach(addClass);
-      this.inputElement.setAttribute('data-tr-valid', '0');
     }
   }
 
@@ -963,6 +964,7 @@ export class TrivuleInput {
       'rules',
       params?.rules,
     );
+
     if (rules) {
       const elMessages = this.getAttrData<string>(
         'messages',
