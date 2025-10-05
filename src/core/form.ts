@@ -9,14 +9,11 @@ import {
   ITrivuleInputCallback,
   ValidatableInput,
   CssSelector,
+  TrivuleAttribute,
 } from '../types';
 import { TrLocal } from '../locale/tr-local';
 import { isBoolean, isNumber } from '../rules';
-import {
-  getHTMLElementBySelector,
-  getAttrData,
-  transformToArray,
-} from '../utils';
+import { getHTMLElementBySelector, transformToArray } from '../utils';
 import { TrBag } from './bag';
 import { TrivuleInput } from './input';
 import { TrParameter } from './utils/parameter';
@@ -57,7 +54,7 @@ export class TrivuleForm {
   /**
    * The class that indicates the submit button is enabled
    */
-  private _trEnabledClass = 'etr-enabled';
+  private _trEnabledClass = 'tr-enabled';
   /**
    * The class that indicates the submit button is disabled
    */
@@ -93,6 +90,35 @@ export class TrivuleForm {
   private _wasBound = false;
   constructor() {
     this.parameter = TrParameter.instance();
+  }
+
+  /**
+   * Private method to get attribute data from an element
+   * @param element - The HTMLElement to get attribute from (can be null)
+   * @param attribute - The TrivuleAttribute to get
+   * @param defaults - Default value if attribute is not found
+   * @param toJson - Whether to parse the value as JSON
+   * @returns The attribute value or default
+   */
+  private getAttrData<T = unknown>(
+    element: HTMLElement | null | undefined,
+    attribute: TrivuleAttribute,
+    defaults: unknown = null,
+    toJson = false,
+  ): T {
+    if (!element) {
+      return defaults as T;
+    }
+    const attributePrefix = this.parameter.get('attribute');
+    let value = element.getAttribute(`${attributePrefix}${attribute}`);
+    if (!!value && toJson) {
+      try {
+        value = JSON.parse(value);
+      } catch (error) {
+        value = defaults as string;
+      }
+    }
+    return (value ?? defaults) as T;
   }
 
   setSubmitButton(selector?: CssSelector) {
@@ -167,7 +193,7 @@ export class TrivuleForm {
           this.submitButton.classList.remove(value);
         }
         //add class en disabled dataset
-        this._trDisabledClass = getAttrData(
+        this._trDisabledClass = this.getAttrData(
           this.submitButton,
           'disabled-class',
           this._trDisabledClass,
@@ -207,7 +233,7 @@ export class TrivuleForm {
           this.submitButton.classList.remove(value);
         }
         //add class en enabled dataset
-        this._trEnabledClass = getAttrData(
+        this._trEnabledClass = this.getAttrData(
           this.submitButton,
           'enabled-class',
           this._trEnabledClass,
@@ -361,12 +387,14 @@ export class TrivuleForm {
    */
   private _setConfigOptions(config?: TrivuleFormConfig) {
     let lang =
-      getAttrData<string | undefined>(document.querySelector('html'), 'lang') ||
-      document.querySelector('html')?.getAttribute('lang');
+      this.getAttrData<string | undefined>(
+        document.querySelector('html'),
+        'lang',
+      ) || document.querySelector('html')?.getAttribute('lang');
 
-    lang = getAttrData(this.container, 'lang', lang);
+    lang = this.getAttrData(this.container, 'lang', lang);
 
-    const auto = getAttrData<string>(this.container, 'auto');
+    const auto = this.getAttrData<string>(this.container, 'auto');
     if (auto) {
       this.config.auto = isBoolean(auto).passes;
     }
