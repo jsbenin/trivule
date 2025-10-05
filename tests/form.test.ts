@@ -64,7 +64,7 @@ const formInstance = new MyForm();
 
 describe('TrivuleForm', () => {
   const trivuleForm = new TrivuleForm();
-  trivuleForm.setConfig(formInstance.form, {
+  trivuleForm.init(formInstance.form, {
     realTime: false,
   });
   test('Test get method', () => {
@@ -129,7 +129,7 @@ describe('TrivuleForm', () => {
     });
     test('Should return the native element with config', () => {
       trForm = new TrivuleForm();
-      trForm.setConfig({
+      trForm.init({
         element: formInstance.form,
         realTime: false,
       });
@@ -138,9 +138,6 @@ describe('TrivuleForm', () => {
     });
     test('Should resole inputs validations', () => {
       trForm = new TrivuleForm();
-      trForm.setConfig({
-        realTime: false,
-      });
       trForm.make([
         {
           rules: 'required|between:18,40',
@@ -151,13 +148,16 @@ describe('TrivuleForm', () => {
           selector: formInstance.birthDayInput,
         },
       ]);
-      trForm.bind(formInstance.form);
+      trForm.init({
+        element: formInstance.form,
+        realTime: false,
+      });
       expect(trForm.getNativeElement()).toBe(formInstance.form);
       expect(trForm.isRealTimeEnabled()).toBe(false);
     });
     test('Should return the native element', () => {
       trForm = new TrivuleForm();
-      trForm.setConfig(formInstance.form);
+      trForm.init(formInstance.form);
       expect(trForm.getNativeElement()).toBe(formInstance.form);
     });
   });

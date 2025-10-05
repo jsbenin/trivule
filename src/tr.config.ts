@@ -10,4 +10,5 @@ export const TrConfig: ITrConfig = {
     lang: TrLocal.DEFAULT_LANG,
   },
   realTime: true,
+  attributePrefix: 'data-tr-', // Required attribute prefix for all data attributes
 };
