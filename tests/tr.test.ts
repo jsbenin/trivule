@@ -3,7 +3,7 @@ import { TrBag } from '../src/core/bag';
 describe('TrBag', () => {
   it('should return true if a rule exists in the rules bag', () => {
     // Add a custom rule to the bag of rules
-    TrBag.addRule('customRule', () => {
+    TrBag.defineRule('customRule', () => {
       return { value: '', passes: true };
     });
 
@@ -17,13 +17,13 @@ describe('TrBag', () => {
   });
 });
 
-describe('rule', () => {
+describe('defineRule', () => {
   it('should add a custom validation rule to the rules bag with a message', () => {
     // Define a callback function for the custom rule
     const customCallback = jest.fn();
 
-    // Call the rule method to add the custom rule with a message
-    TrBag.rule('customRule', customCallback, 'This is a custom error message');
+    // Call the defineRule method to add the custom rule with a message
+    TrBag.defineRule('customRule', customCallback, 'This is a custom error message');
 
     // Check if the rule and message have been added to the bag of rules and messages
     expect(TrBag.getRule('customRule')).toBe(customCallback);
@@ -36,8 +36,8 @@ describe('rule', () => {
     // Define a callback function for the custom rule
     const customCallback = jest.fn();
 
-    // Call the rule method to add the custom rule without a message
-    TrBag.rule('customRule', customCallback);
+    // Call the defineRule method to add the custom rule without a message
+    TrBag.defineRule('customRule', customCallback);
 
     // Check if the rule has been added to the bag of rules with a default message
     expect(TrBag.getRule('customRule')).toBe(customCallback);

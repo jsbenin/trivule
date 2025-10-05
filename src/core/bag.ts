@@ -110,35 +110,19 @@ export class TrBag {
   };
 
   /**
-   * Add a custom validation rule to the rules bag
+   * Define a custom validation rule with optional error message
    * @param rule - The name of the custom rule
    * @param callback - The callback function for the custom rule
    * @param message - The error message for the custom rule
+   * @param local - The locale for the error message
    */
-  static rule(
+  static defineRule(
     rule: string,
     callback: RuleCallBack,
     message?: string,
     local?: string,
   ) {
-    TrBag.addRule(rule, callback);
-    TrBag.addMessage(rule, message, local);
-  }
-  /**
-   * Add a custom validation rule to the rules bag
-   * @param rule - The name of the custom rule
-   * @param callback - The callback function for the custom rule
-   */
-  static addRule(rule: string, callback: RuleCallBack) {
     TrBag.rules[rule as keyof RulesBag] = callback;
-  }
-
-  /**
-   * Add a custom error message for a validation rule to the messages bag
-   * @param rule - The name of the validation rule
-   * @param message - The error message for the validation rule
-   */
-  static addMessage(rule: string, message?: string, local?: string) {
     TrLocal.addMessage(rule, message, local);
   }
 
@@ -165,25 +149,3 @@ export class TrBag {
     return TrLocal.getMessages(local);
   }
 }
-
-/**
- * Lightweight namespace for custom validation rule management.
- * Provides a cleaner API than TrBag while maintaining backward compatibility.
- */
-export const TrRule = {
-  add: (rule: string, callback: RuleCallBack) => TrBag.addRule(rule, callback),
-  has: (rule: string) => TrBag.hasRule(rule),
-  all: () => TrBag.allRules(),
-  get: (name: string) => TrBag.getRule(name),
-} as const;
-
-/**
- * Lightweight namespace for error message management for validation rules.
- * Provides a cleaner API than TrBag while maintaining backward compatibility.
- */
-export const TrMessage = {
-  get: (rule: string, local?: string) => TrBag.getMessage(rule, local),
-  all: (local?: string) => TrBag.allMessages(local),
-  add: (rule: string, message?: string, local?: string) =>
-    TrBag.addMessage(rule, message, local),
-} as const;
