@@ -85,7 +85,7 @@ export class Trivule {
    * ```
    */
   rule(ruleName: string, call: RuleCallBack, message?: string) {
-    TrBag.rule(ruleName, call, message);
+    TrBag.defineRule(ruleName, call, message);
   }
 
   forms(): TrivuleForm[] {
@@ -93,7 +93,7 @@ export class Trivule {
   }
 
   static Rule(ruleName: string, call: RuleCallBack, message?: string) {
-    TrBag.rule(ruleName, call, message);
+    TrBag.defineRule(ruleName, call, message);
   }
   form(
     selector: ValidatableForm | TrivuleFormConfig,

@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example</title>
+  </head>
+  <body>
+    <form @v:form @v:event="input">
+      <input
+        type="text"
+        name="email"
+        @v:rules="required|email"
+        @v:msg.email="Please provide a valid email"
+      />
+      <p @v:feedback="email"></p>
+
+      <input type="password" name="password" @v:rules="required|min:6" />
+      <p @v:feedback="password"></p>
+
+      <button type="submit" @v:submit>Register</button>
+    </form>
+    <script src="/src/index.ts" type="module"></script>
+
+    <script type="module">
+      const trivule = Trivule.init();
+    </script>
+  </body>
+</html>

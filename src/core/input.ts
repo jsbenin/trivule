@@ -149,7 +149,7 @@ export class TrivuleInput {
    * @param message
    */
   rule(ruleName: string, call: RuleCallBack, message?: string) {
-    TrBag.rule(ruleName, call, message);
+    TrBag.defineRule(ruleName, call, message);
   }
 
   with(param: TrivuleInputParms) {

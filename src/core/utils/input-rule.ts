@@ -1,6 +1,6 @@
 import { Rule, RuleCallBack, RuleParam, RuleType } from '../../types';
 import { getRule } from '../../utils';
-import { TrMessage, TrRule } from '../bag';
+import { TrBag } from '../bag';
 
 export class InputRule {
   items: RuleType[] = [];
@@ -101,9 +101,9 @@ export class InputRule {
     const { ruleName, params } = getRule(originaleRule);
 
     if (!message) {
-      message = TrMessage.get(ruleName, local);
+      message = TrBag.getMessage(ruleName, local);
     }
-    const ruleCallback = TrRule.get(ruleName);
+    const ruleCallback = TrBag.getRule(ruleName);
     validate = validate ?? ruleCallback;
 
     if (!validate) {
