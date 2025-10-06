@@ -5,6 +5,7 @@ import {
   ValidatableForm,
 } from '../../types';
 import { TrLocal } from '../../locale/tr-local';
+import { escapeCssSelector } from '../../utils';
 
 /**
  * TrParameter - Centralized configuration container for Trivule
@@ -21,11 +22,12 @@ export class TrParameter {
   inputSelector: CssSelector | null = '[name={name}]';
 
   /**
-   * Get the feedback selector with attribute prefix replaced
+   * Get the feedback selector with attribute prefix replaced and CSS-escaped
    */
   get feedbackSelector(): CssSelector | null {
     if (typeof this._feedbackSelector === 'string') {
-      return this._feedbackSelector.replace('{attr}', this.attributePrefix);
+      const escapedPrefix = escapeCssSelector(this.attributePrefix);
+      return this._feedbackSelector.replace('{attr}', escapedPrefix);
     }
     return this._feedbackSelector;
   }
@@ -66,13 +68,7 @@ export class TrParameter {
       throw new Error('Trivule: attributePrefix must be a non-empty string');
     }
     this._attributePrefix = value;
-
-    if (typeof this._feedbackSelector === 'string') {
-      this._feedbackSelector = this._feedbackSelector.replace(
-        /{attr}/g,
-        this._attributePrefix,
-      );
-    }
+    // Note: {attr} placeholder replacement is handled in the feedbackSelector getter
   }
 
   /**

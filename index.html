@@ -24,6 +24,11 @@
 
     <script type="module">
       const trivule = Trivule.init();
+      const t = trivule.form('form');
+      const e = t.get('email');
+      e.onUpdate((value) => {
+        console.log('Email updated:', value);
+      });
     </script>
   </body>
 </html>

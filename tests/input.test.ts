@@ -72,10 +72,7 @@ describe('TrivuleInput', () => {
     });
     test('should return array of messages set via tr-messages with compensations messages', () => {
       const inputElement = document.createElement('input');
-      inputElement.setAttribute(
-        attr('rules'),
-        'required|min:30|max:60|email',
-      );
+      inputElement.setAttribute(attr('rules'), 'required|min:30|max:60|email');
       inputElement.setAttribute(
         attr('messages'),
         'Required message | {1,2,3}Invalid email address',
