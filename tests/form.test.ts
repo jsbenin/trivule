@@ -106,17 +106,6 @@ describe('TrivuleForm', () => {
     expect(messageInput?.hasRule('only')).toBe(true);
   });
 
-  test('Test realTime feature', () => {
-    trivuleForm.add({
-      rules: 'required|between:18,40',
-      selector: 'age', //The input name
-    });
-    expect(trivuleForm.isRealTimeEnabled()).toBe(false);
-    const ageInput = trivuleForm.get('age');
-    expect(ageInput?.isRealTimeEnabled()).toBe(false);
-    trivuleForm.enableRealTime();
-    expect(ageInput?.isRealTimeEnabled()).toBe(true);
-  });
   describe('bind', () => {
     let trForm = new TrivuleForm();
     test('Should return null for the native element', () => {

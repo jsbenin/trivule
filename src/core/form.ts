@@ -499,7 +499,7 @@ export class TrivuleForm {
         : Array.from(
             this.container.querySelectorAll<HTMLElement>(attrSelector('rules')),
           );
-      inputs.forEach((el) => this.add({ selector: el }));
+      inputs.forEach((el) => this.make([{ selector: el }]));
     }
   }
 
@@ -783,42 +783,7 @@ export class TrivuleForm {
   getNativeElement() {
     return this.container;
   }
-  /**
-   * Set an attribute to the native element of the form.
-   * @param name The name of the attribute to set.
-   * @param value The value of the attribute to set (string or number).
-   * @returns The form instance for method chaining.
-   */
-  setAttrToNativeElement(name: string, value: string | number) {
-    this.container?.setAttribute(name, value.toString());
-    return this;
-  }
-  /**
-   * Add a CSS class to the native element of the form.
-   * @param name The name of the CSS class to add.
-   * @returns The form instance for method chaining.
-   */
-  setClassToNativeElement(name: string) {
-    this.container?.classList.add(name);
-    return this;
-  }
-  /**
-   * Remove a CSS class from the native element of the form.
-   * @param name The name of the CSS class to remove.
-   * @returns The form instance for method chaining.
-   */
-  removeClassFromNativeElement(name: string) {
-    this.container?.classList.remove(name);
-    return this;
-  }
-  /**
-   * Add a TrivuleInput based on the provided parameters.
-   * @param params The parameters for creating the TrivuleInput.
-   * @returns The result of creating the TrivuleInput.
-   */
-  add(params: TrivuleInputParms) {
-    return this.make([params]);
-  }
+
   /**
    * Enable real-time functionality for the form.
    * Sets the configuration to enable real-time updates.
@@ -995,7 +960,6 @@ export class TrivuleForm {
     param.feedbackElement =
       param.feedbackElement ?? this.parameter.feedbackSelector;
     param.selector = selector as ValidatableInput;
-
     this.addTrivuleInput(
       new TrivuleInput(selector as ValidatableInput, param, this.parameter),
     );

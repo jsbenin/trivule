@@ -747,6 +747,7 @@ export class TrivuleInput {
       }
 
       selector ??= this.parameter.getFeedbackSelector(this.name);
+
       if (!selector) {
         return;
       }
@@ -758,6 +759,7 @@ export class TrivuleInput {
         if (feedbackElement) {
           break;
         }
+
         parentElement = parentElement?.parentElement || null;
       } while (!!parentElement && !feedbackElement);
     }
