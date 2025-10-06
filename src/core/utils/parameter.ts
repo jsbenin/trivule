@@ -66,6 +66,13 @@ export class TrParameter {
       throw new Error('Trivule: attributePrefix must be a non-empty string');
     }
     this._attributePrefix = value;
+
+    if (typeof this._feedbackSelector === 'string') {
+      this._feedbackSelector = this._feedbackSelector.replace(
+        /{attr}/g,
+        this._attributePrefix,
+      );
+    }
   }
 
   /**
