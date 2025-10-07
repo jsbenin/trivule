@@ -1,6 +1,6 @@
-import { dateBetween } from './../rules/date';
-import { endWithString, stringBetween } from '../rules/string';
-import { fileBetween, isMimes, minFileSize } from '../rules/file';
+import { dateBetween } from './../core/rules/date';
+import { endWithString, stringBetween } from '../core/rules/string';
+import { fileBetween, isMimes, minFileSize } from '../core/rules/file';
 import { Rule, RuleCallBack, RulesBag, RulesMessages } from '../contracts';
 import {
   between,
@@ -41,10 +41,10 @@ import {
   maxDigitRule,
   greaterthan,
   numberBetween,
-} from '../rules';
-import { dateAfter, dateBefore, isDate, isTime } from '../rules/date';
+} from '../core/rules';
+import { dateAfter, dateBefore, isDate, isTime } from '../core/rules/date';
 import { TrLocal } from '../locale/tr-local';
-import { phone } from '../rules/phone';
+import { phone } from '../core/rules/phone';
 
 export class TrBag {
   private static rules: RulesBag = {

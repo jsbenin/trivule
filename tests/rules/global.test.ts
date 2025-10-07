@@ -8,7 +8,7 @@ import {
   minDigitRule,
   maxDigitRule,
   digitRule,
-} from '../../src/rules';
+} from '../../src/core/rules';
 
 describe('required', () => {
   it('should return false for undefined input', () => {

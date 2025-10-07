@@ -1,5 +1,5 @@
 import { Rule, RulesMessages } from '../contracts';
-import { is_string } from '../rules';
+import { is_string } from '../core/rules';
 import { en_messages } from './lang/en';
 
 export class TrLocal {

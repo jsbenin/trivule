@@ -1,4 +1,4 @@
-import { phone } from '../../src/rules/phone';
+import { phone } from '../../src/core/rules/phone';
 
 describe('phone', () => {
   it('should return true for a valid phone number', () => {

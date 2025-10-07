@@ -338,7 +338,7 @@ The directory structure of the Trivule project is organized as follows:
 - `src/contracts`: contains interfaces and types used in Trivule.
 - `src/locale`: contains internationalization files for different supported languages.
 - `src/messages`: contains message generation files based on validation rules.
-- `src/rules`: contains various validation rules available in Trivule.
+- `src/core/rules`: contains various validation rules available in Trivule.
 - `src/utils`: contains utility files for Trivule.
 - `src/validation`: contains the validation logic of Trivule.
 - `dist`: contains the bundle files.
