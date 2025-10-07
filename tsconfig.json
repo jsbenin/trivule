@@ -105,6 +105,6 @@
   },
   "exclude": ["**/*.test.ts", "types/*"],
   "typeAcquisition": {
-    "exclude": ["jest"]
+    "exclude": ["vitest"]
   }
 }
