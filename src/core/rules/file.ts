@@ -1,11 +1,11 @@
-import { RuleCallBack } from '../contracts';
+import { RuleCallBack } from '../../contracts';
 import {
   convertFileSize,
   explodeFileParam,
   fileToArray,
   spliteParam,
   throwEmptyArgsException,
-} from '../utils';
+} from '../../utils';
 
 /**
  * Checks whether a given value is a `File` or `Blob` object.

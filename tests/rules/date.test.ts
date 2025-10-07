@@ -3,7 +3,7 @@ import {
   dateBefore,
   dateBetween,
   isDate,
-} from '../../src/rules/date';
+} from '../../src/core/rules/date';
 
 describe('isDate', () => {
   test('should return true for a valid date in UTC format', () => {

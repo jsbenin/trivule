@@ -10,8 +10,8 @@ import {
   ValidatableInput,
 } from '../contracts';
 import { TrLocal } from '../locale/tr-local';
-import { isBoolean, isNumber } from '../rules';
-import { FormValidator } from '../rules/form/form-validator';
+import { isBoolean, isNumber } from '../core/rules';
+import { FormValidator } from '../core/rules/form/form-validator';
 import {
   getHTMLElementBySelector,
   tr_attr_get,

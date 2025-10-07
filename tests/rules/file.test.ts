@@ -4,7 +4,7 @@ import {
   isMimes,
   maxFileSize,
   minFileSize,
-} from '../../src/rules';
+} from '../../src/core/rules';
 // Mocking a File object for testing
 const createFile = (name: any, size: any) => {
   const file = new File([], name, { type: 'text/plain' });

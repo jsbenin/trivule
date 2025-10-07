@@ -1,5 +1,5 @@
-import { RuleParam, ValidationState } from '../../contracts';
-import { spliteParam } from '../../utils';
+import { RuleParam, ValidationState } from '../../../contracts';
+import { spliteParam } from '../../../utils';
 import { required } from '../global';
 import { AbstractFormValidator } from './abstract-form-validator';
 

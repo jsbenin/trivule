@@ -1,4 +1,4 @@
-import { FormValidator } from '../../src/rules/form/form-validator';
+import { FormValidator } from '../../src/core/rules/form/form-validator';
 
 describe('FormValidator', () => {
   describe('same', () => {

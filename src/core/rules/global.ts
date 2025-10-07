@@ -7,15 +7,15 @@ import {
   stringBetween,
   fileBetween,
 } from '.';
-import { RuleCallBack } from '../contracts';
+import { RuleCallBack } from '../../contracts';
 import {
   calculateFileSize,
   convertFileSize,
   explodeFileParam,
   spliteParam,
   throwEmptyArgsException,
-} from '../utils';
-import { ArgumentParser } from '../validation/utils/argument-parser';
+} from '../../utils';
+import { ArgumentParser } from '../../validation/utils/argument-parser';
 import { dateBetween } from './date';
 /**
  * Checks if the input is required.

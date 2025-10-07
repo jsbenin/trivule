@@ -1,5 +1,5 @@
 import { CssSelector, Rule, RuleParam } from '../contracts';
-import { is_string, isFile } from '../rules';
+import { is_string, isFile } from '../core/rules';
 
 /**
  * Parses a rule string and extracts the rule name and parameters.
