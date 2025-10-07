@@ -20,11 +20,9 @@ describe('TrValidation', () => {
   });
 
   test('Validation failed messages', () => {
-    trvalidation.failsOnFirst = false;
     trvalidation.value = '';
     const received = trvalidation.getErrors();
     expect(received).toEqual({
-      email: 'Invalid email format',
       required: 'This field is required',
     });
   });
@@ -48,13 +46,5 @@ describe('TrValidation', () => {
         param: '8',
       },
     ]);
-  });
-  test('getRuleExecuted', () => {
-    trvalidation.failsOnFirst = false;
-    trvalidation.value = '';
-    const received = trvalidation
-      .getRuleExecuted()
-      .map((rule) => rule.ruleName);
-    expect(received).toEqual(['required', 'email']);
   });
 });

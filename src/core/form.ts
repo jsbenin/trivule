@@ -688,6 +688,7 @@ export class TrivuleForm {
 
     /**
      * Listen for each input and update form state
+     *
      */
     trInput.onFails(() => {
       this.valid = this.isValid();

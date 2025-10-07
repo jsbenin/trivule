@@ -16,7 +16,6 @@ import { getHTMLElementBySelector } from '../utils';
 import { TrBag } from './bag';
 import { InputRule } from './utils/input-rule';
 import { TrParameter } from './utils/parameter';
-import { RuleExecuted } from './utils/rule-executed';
 import { TrValidation } from './validate';
 
 /**
@@ -53,13 +52,6 @@ export class TrivuleInput {
 
   /** Current input errors */
   protected _errors: string[] = [];
-
-  /**
-   * How to show the message
-   */
-  protected showMessage = 'first';
-
-  protected showMessages = ['first', 'full', 'last'];
 
   /** Wich class assign to input if validation pass */
   protected validClass = '';
@@ -417,10 +409,6 @@ export class TrivuleInput {
     if (typeof fn == 'function') {
       fn(...params);
     }
-  }
-
-  getRuleExecuted(): RuleExecuted[] {
-    return this.validator.getRuleExecuted();
   }
 
   filledErrors(errors?: string[]) {
@@ -782,25 +770,9 @@ export class TrivuleInput {
       let message = '';
       if (Array.isArray(this._errors)) {
         message = this._errors[0];
-        if (this.showMessage == 'full') {
-          message = this._errors.join('<br>');
-        } else if (this.showMessage == 'last') {
-          if (this._errors.length > 0) {
-            message = this._errors[this._errors.length - 1];
-          }
-        }
       }
       this.feedbackElement.innerHTML = message ?? '';
     }
-  }
-  /**
-   * Get and set the ways error message will be displayed
-   */
-  private setShowMessage() {
-    this.showMessage = this.getAttrData('show', 'first');
-    this.showMessage = this.showMessages.includes(this.showMessage)
-      ? this.showMessage
-      : 'first';
   }
 
   private _setTrValidationClass() {
@@ -956,7 +928,7 @@ export class TrivuleInput {
       .setParams(params)
       .setMessageAttributeName()
       .setFeedbackElement();
-    this.setShowMessage();
+
     this._setTrValidationClass();
 
     this._setEvent(params?.events ?? this._events);
@@ -1009,12 +981,6 @@ export class TrivuleInput {
 
   get events() {
     return this._events;
-  }
-
-  commit() {
-    if (this._type !== 'file') {
-      this.inputElement.value = this._value as string;
-    }
   }
 
   protected eventToArray(value?: string | string[]) {
