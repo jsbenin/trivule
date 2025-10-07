@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 import { TrivuleInput } from '../src/core/input';
 import { attr } from '../src/utils';
 
@@ -130,12 +131,12 @@ describe('TrivuleInput', () => {
       inputElement.setAttribute(attr('rules'), 'required|min:3');
       inputElement.value = 'test'; // Set the input value
       const validator = new TrivuleInput(inputElement);
-      jest
-        .spyOn(validator as any, 'setValidationClass')
-        .mockImplementation(() => {}); // Mock setValidationClass to prevent side effects
-      jest
-        .spyOn(validator as any, 'emitChangeEvent')
-        .mockImplementation(() => {}); // Mock emitChangeEvent to prevent side effects
+      vi.spyOn(validator as any, 'setValidationClass').mockImplementation(
+        () => {},
+      ); // Mock setValidationClass to prevent side effects
+      vi.spyOn(validator as any, 'emitChangeEvent').mockImplementation(
+        () => {},
+      ); // Mock emitChangeEvent to prevent side effects
 
       const result = validator.validate();
 
@@ -148,12 +149,12 @@ describe('TrivuleInput', () => {
       inputElement.setAttribute(attr('rules'), 'required|min:3');
       inputElement.value = ''; // Set the input value to empty
       const validator = new TrivuleInput(inputElement);
-      jest
-        .spyOn(validator as any, 'setValidationClass')
-        .mockImplementation(() => {}); // Mock setValidationClass to prevent side effects
-      jest
-        .spyOn(validator as any, 'emitChangeEvent')
-        .mockImplementation(() => {}); // Mock emitChangeEvent to prevent side effects
+      vi.spyOn(validator as any, 'setValidationClass').mockImplementation(
+        () => {},
+      ); // Mock setValidationClass to prevent side effects
+      vi.spyOn(validator as any, 'emitChangeEvent').mockImplementation(
+        () => {},
+      ); // Mock emitChangeEvent to prevent side effects
 
       // Act
       const result = validator.validate();
@@ -175,12 +176,12 @@ describe('TrivuleInput', () => {
         failsOnfirst: false,
       });
 
-      jest
-        .spyOn(validator as any, 'setValidationClass')
-        .mockImplementation(() => {}); // Mock setValidationClass to prevent side effects
-      jest
-        .spyOn(validator as any, 'emitChangeEvent')
-        .mockImplementation(() => {}); // Mock emitChangeEvent to prevent side effects
+      vi.spyOn(validator as any, 'setValidationClass').mockImplementation(
+        () => {},
+      ); // Mock setValidationClass to prevent side effects
+      vi.spyOn(validator as any, 'emitChangeEvent').mockImplementation(
+        () => {},
+      ); // Mock emitChangeEvent to prevent side effects
 
       validator.validate();
       const result = validator.getErrors();
@@ -200,12 +201,12 @@ describe('TrivuleInput', () => {
       inputElement.value = '4';
       const validator = new TrivuleInput(inputElement);
 
-      jest
-        .spyOn(validator as any, 'setValidationClass')
-        .mockImplementation(() => {}); // Mock setValidationClass to prevent side effects
-      jest
-        .spyOn(validator as any, 'emitChangeEvent')
-        .mockImplementation(() => {}); // Mock emitChangeEvent to prevent side effects
+      vi.spyOn(validator as any, 'setValidationClass').mockImplementation(
+        () => {},
+      ); // Mock setValidationClass to prevent side effects
+      vi.spyOn(validator as any, 'emitChangeEvent').mockImplementation(
+        () => {},
+      ); // Mock emitChangeEvent to prevent side effects
 
       validator.validate();
       const result = validator.getErrors();

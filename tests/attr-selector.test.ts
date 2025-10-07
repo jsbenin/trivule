@@ -46,7 +46,6 @@ describe('attrSelector with different prefixes', () => {
     expect(selector).toMatch(/^\[.*\]$/); // Should be wrapped in brackets
   });
 
-
   it('should create valid selector with Alpine.js style prefix (x-)', () => {
     Trivule.init({ attributePrefix: 'x-' });
     const selector = attrSelector('rules');

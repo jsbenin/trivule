@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 import { TrivuleForm } from '../src/core/form';
 import { TrivuleInput } from '../src/core/input';
 import { attr } from '../src/utils';
@@ -161,14 +162,14 @@ describe('TrivuleForm', () => {
 
     describe('afterBinding', () => {
       it('should register a callback for after binding', () => {
-        const callback = jest.fn();
+        const callback = vi.fn();
         form.afterBinding(callback);
         form.bind(formInstance.form);
         expect(callback).toHaveBeenCalled();
       });
 
       it('should allow method chaining', () => {
-        const callback = jest.fn();
+        const callback = vi.fn();
         const returnValue = form.afterBinding(callback);
         expect(returnValue).toBe(form);
       });
@@ -176,14 +177,14 @@ describe('TrivuleForm', () => {
 
     describe('beforeBinding', () => {
       it('should register a callback for before binding', () => {
-        const callback = jest.fn();
+        const callback = vi.fn();
         form.beforeBinding(callback);
         form.bind(formInstance.form);
         expect(callback).toHaveBeenCalled();
       });
 
       it('should allow method chaining', () => {
-        const callback = jest.fn();
+        const callback = vi.fn();
         const returnValue = form.beforeBinding(callback);
         expect(returnValue).toBe(form);
       });
