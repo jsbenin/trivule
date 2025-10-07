@@ -5,7 +5,10 @@ describe('TrLocal', () => {
     // Reset the messages to the default state before each test
     TrLocal.addMessage('required', 'This field is required.');
     TrLocal.addMessage('email', 'Please enter a valid email address.');
-    TrLocal.addMessage('maxLength', 'The maximum length is {length} characters.');
+    TrLocal.addMessage(
+      'maxLength',
+      'The maximum length is {length} characters.',
+    );
     TrLocal.addMessage('default', 'The field is invalid.');
   });
 
@@ -49,12 +52,22 @@ describe('TrLocal', () => {
 
     it('should add messages for a new language', () => {
       TrLocal.addMessage('required', 'Champ requis.', 'fr');
-      TrLocal.addMessage('email', 'Veuillez saisir une adresse e-mail valide.', 'fr');
-      TrLocal.addMessage('maxLength', 'La longueur maximale est de {length} caractères.', 'fr');
+      TrLocal.addMessage(
+        'email',
+        'Veuillez saisir une adresse e-mail valide.',
+        'fr',
+      );
+      TrLocal.addMessage(
+        'maxLength',
+        'La longueur maximale est de {length} caractères.',
+        'fr',
+      );
       const messages = TrLocal.getMessages('fr');
       expect(messages.required).toBe('Champ requis.');
       expect(messages.email).toBe('Veuillez saisir une adresse e-mail valide.');
-      expect(messages.maxLength).toBe('La longueur maximale est de {length} caractères.');
+      expect(messages.maxLength).toBe(
+        'La longueur maximale est de {length} caractères.',
+      );
     });
   });
 
