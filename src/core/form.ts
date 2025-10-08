@@ -375,7 +375,7 @@ export class TrivuleForm {
    * @param call
    * @param message
    */
-  rule(ruleName: string, call: RuleCallBack, message?: string) {
+  defineRule(ruleName: string, call: RuleCallBack, message?: string) {
     TrBag.defineRule(ruleName, call, message);
   }
 
