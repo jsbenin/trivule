@@ -84,4 +84,19 @@ describe('attrSelector with different prefixes', () => {
     const elements = document.querySelectorAll(selector);
     expect(elements.length).toBe(2);
   });
+
+  it('should properly override attributePrefix on init (issue #51)', () => {
+    // First init with custom prefix
+    const trivule1 = Trivule.init({ attributePrefix: 'data-custom-' });
+    expect(trivule1.parameter.attributePrefix).toBe('data-custom-');
+    const selector1 = attrSelector('rules');
+    expect(selector1).toBe('[data-custom-rules]');
+
+    // Second init with different prefix should override
+    const trivule2 = Trivule.init({ attributePrefix: 'v:' });
+    expect(trivule2.parameter.attributePrefix).toBe('v:');
+    const selector2 = attrSelector('rules');
+    expect(selector2).toContain('v');
+    expect(selector2).toContain('rules');
+  });
 });
