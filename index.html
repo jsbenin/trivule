@@ -11,7 +11,7 @@
         type="text"
         name="email"
         @v:rules="required|email"
-        @v:msg.email="Please provide a valid email"
+        @v:msg:email="Please provide a valid email"
       />
       <p @v:feedback="email"></p>
 
