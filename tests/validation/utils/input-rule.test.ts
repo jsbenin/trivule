@@ -1,13 +1,21 @@
 import { InputRule } from '../../../src/core/utils/input-rule';
+import { TrParameter } from '../../../src/core/utils/parameter';
+
+const parameter = TrParameter.instance();
 
 describe('InputRule', () => {
   let inputRule: InputRule;
 
   beforeEach(() => {
-    inputRule = new InputRule(['required', 'minlength:8'], {
-      required: 'This field is required',
-      minlength: 'This field must be at least 8 characters',
-    });
+    inputRule = new InputRule(
+      ['required', 'minlength:8'],
+      {
+        required: 'This field is required',
+        minlength: 'This field must be at least 8 characters',
+      },
+      undefined,
+      parameter.ruleRegistry,
+    );
   });
 
   it('should push a new rule', () => {
@@ -84,7 +92,7 @@ describe('InputRule', () => {
 
 describe('convertAcoladeGroupToArray', () => {
   it('should return an array of numbers contained in the acolade group', () => {
-    const inputRule = new InputRule([], []);
+    const inputRule = new InputRule([], [], undefined, parameter.ruleRegistry);
 
     const result = inputRule.convertAcoladeGroupToArray('{0,1,2,3}');
 
@@ -92,7 +100,7 @@ describe('convertAcoladeGroupToArray', () => {
   });
 
   it('should return an empty array if the acolade group is empty', () => {
-    const inputRule = new InputRule([], []);
+    const inputRule = new InputRule([], [], undefined, parameter.ruleRegistry);
 
     const result = inputRule.convertAcoladeGroupToArray('{}');
 
@@ -100,7 +108,7 @@ describe('convertAcoladeGroupToArray', () => {
   });
 
   it('should return an empty array if the acolade group is not well-formed', () => {
-    const inputRule = new InputRule([], []);
+    const inputRule = new InputRule([], [], undefined, parameter.ruleRegistry);
 
     const result = inputRule.convertAcoladeGroupToArray('{0, 1, 2');
 
