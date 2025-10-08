@@ -107,4 +107,17 @@ export class Trivule {
   input(params: TrivuleInputParms) {
     return new TrivuleInput(params);
   }
+
+  /**
+   * Returns the configured attribute prefix
+   * @returns The attribute prefix string (e.g., "data-tr-")
+   * Example:
+   * ```
+   * const trivule = Trivule.init({ attributePrefix: 'data-tr-' });
+   * trivule.getAttributePrefix(); // Returns "data-tr-"
+   * ```
+   */
+  getAttributePrefix(): string {
+    return this.parameter.attributePrefix;
+  }
 }
