@@ -21,8 +21,7 @@ export class TrValidation {
    * A list of rules run
    */
   private _ruleExecuted: RuleExecuted[] = [];
-  /**
- 
+
   /**
    * A boolean value indicating whether the validation rules should
    * fail on the first error or continue executing all rules

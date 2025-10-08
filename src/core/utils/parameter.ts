@@ -6,6 +6,7 @@ import {
 } from '../../types';
 import { TrLocal } from '../../locale/tr-local';
 import { escapeCssSelector } from '../../utils';
+import { RuleRegistry } from '../bag';
 
 /**
  * TrParameter - Centralized configuration container for Trivule
@@ -52,6 +53,16 @@ export class TrParameter {
 
   // Element reference (for form-specific usage)
   element?: ValidatableForm;
+
+  // Rule registry instance
+  public ruleRegistry: RuleRegistry;
+
+  /**
+   * Private constructor to prevent direct instantiation
+   */
+  private constructor() {
+    this.ruleRegistry = new RuleRegistry();
+  }
 
   /**
    * Get the attribute prefix

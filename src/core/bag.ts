@@ -48,8 +48,8 @@ import { dateAfter, dateBefore, isDate, isTime } from '../rules/date';
 import { TrLocal } from '../locale/tr-local';
 import { phone } from '../rules/phone';
 
-export class TrBag {
-  private static rules: RulesBag = {
+export class RuleRegistry {
+  private rules: RulesBag = {
     required: required,
     email: email,
     maxlength: maxlength,
@@ -116,13 +116,13 @@ export class TrBag {
    * @param message - The error message for the custom rule
    * @param local - The locale for the error message
    */
-  static defineRule(
+  defineRule(
     rule: string,
     callback: RuleCallBack,
     message?: string,
     local?: string,
   ) {
-    TrBag.rules[rule as keyof RulesBag] = callback;
+    this.rules[rule as keyof RulesBag] = callback;
     TrLocal.addMessage(rule, message, local);
   }
 
@@ -131,21 +131,21 @@ export class TrBag {
    * @param rule - The name of the validation rule
    * @returns True if the rule exists, false otherwise
    */
-  static hasRule(rule: string): boolean {
-    return rule in TrBag.rules;
+  hasRule(rule: string): boolean {
+    return rule in this.rules;
   }
 
-  static getRule(name: string) {
-    return TrBag.rules[name as Rule];
+  getRule(name: string) {
+    return this.rules[name as Rule];
   }
-  static getMessage(name: string | Rule, local?: string): string {
+  getMessage(name: string | Rule, local?: string): string {
     return TrLocal.getRuleMessage(name, local);
   }
 
-  static allRules() {
-    return TrBag.rules;
+  allRules() {
+    return this.rules;
   }
-  static allMessages(local?: string) {
+  allMessages(local?: string) {
     return TrLocal.getMessages(local);
   }
 }
