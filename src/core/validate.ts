@@ -1,5 +1,10 @@
-import { InputRule } from './utils/input-rule';
-import { InputValueType, InputType, Rule, RulesMessages } from '../types';
+import {
+  InputValueType,
+  InputType,
+  Rule,
+  RulesMessages,
+  RuleType,
+} from '../types';
 
 import { RuleExecuted } from '.';
 import { I18nResolver } from './i18n';
@@ -7,15 +12,6 @@ import { TrParameter } from './utils/parameter';
 
 export class TrValidation {
   private _inputType = 'text';
-  /**
-   * The list of rules that should be executed on the value
-   */
-  private _rules!: InputRule;
-
-  /**
-   * The current value to validate
-   */
-  private _value: InputValueType = undefined;
 
   /**
    * A list of rules run
@@ -49,22 +45,27 @@ export class TrValidation {
   }
 
   /**
-   * This method performs the validation process. It iterates over the _rules array and executes each rule on the
-   * _value. If _failOnfirst is set to true, the method stops executing rules after the first failure. The method
+   * This method performs the validation process. It iterates over the rules array and executes each rule on the
+   * provided value. If _failOnfirst is set to true, the method stops executing rules after the first failure. The method
    * updates the _ruleExecuted array with the result of each rule execution.
    * It returns a boolean value indicating whether the validation passed (true) or not (false)
+   * @param rules - Array of rules to validate against
+   * @param value - The value to validate
+   * @param type - Optional input type (defaults to 'text')
    * @example
-   * const tralidation = new TRalidation(param)
-   * tralidation.validate()
+   * const validation = new TrValidation(param)
+   * const rules = inputRule.all();
+   * const result = validation.validate(rules, 'test@example.com', 'email')
    */
-  validate() {
-    const rules = this._rules.all();
-
+  validate(rules: RuleType[], value: InputValueType, type?: InputType) {
     if (!Array.isArray(rules)) {
       throw new Error('The rule provided must be an array of Rule');
     }
 
-    let inputType = this._inputType as InputType;
+    // Clear previous validation state
+    this._ruleExecuted = [];
+    
+    let inputType = (type ?? this._inputType) as InputType;
     for (const rule of rules) {
       const ruleName = rule.name;
       const params = rule.params;
@@ -81,18 +82,18 @@ export class TrValidation {
         throw new Error(`The rule ${ruleName} is not defined`);
       }
 
-      const state = ruleCallback(this._value, params, inputType);
+      const state = ruleCallback(value, params, inputType);
 
       //Indicate if the rule passed
       ruleExec.passed = state.passes;
       //Get the value after validation
       //The value may be converted by the validation callback
-      this._value = state.value as InputValueType;
+      value = state.value as InputValueType;
 
       inputType = state.type ?? inputType;
       ruleToRun = state.alias ?? ruleName;
       //
-      ruleExec.valueTested = this._value;
+      ruleExec.valueTested = value;
       ruleExec.run = true;
       this._addRuleExecuted(ruleExec);
       // If rule is setup to stop on first fails
@@ -138,22 +139,6 @@ export class TrValidation {
    */
   passes() {
     return !this.hasErrors();
-  }
-
-  /**
-   * Set rules to run
-   * @param rules
-   */
-  setRules(rules: InputRule): void {
-    this._rules = rules;
-  }
-
-  /**
-   * Get rules to run
-   * @returns
-   */
-  getRules() {
-    return this._rules;
   }
 
   /**
@@ -206,20 +191,8 @@ export class TrValidation {
     return ruleExec;
   }
 
-  /**
-   * Set the value and validate it automatically
-   */
-  set value(v: InputValueType) {
-    this._value = v;
-    this.validate();
-  }
-
   set failsOnFirst(fails: boolean) {
     this._failOnfirst = fails;
-  }
-
-  get value(): InputValueType {
-    return this._value;
   }
 
   set attribute(attr: string) {
@@ -234,17 +207,11 @@ export class TrValidation {
    * @param param
    */
 
-  set(rules: InputRule, failsOnfirst: boolean, type: string) {
+  set(failsOnfirst: boolean) {
     this._failOnfirst = failsOnfirst;
-
-    this._rules = rules;
-    this._inputType = type ?? this._inputType;
   }
 
   getRuleExecuted(): RuleExecuted[] {
     return this._ruleExecuted;
-  }
-  set rules(rules: InputRule) {
-    this.setRules(rules);
   }
 }

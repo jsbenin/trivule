@@ -329,9 +329,12 @@ export class TrivuleInput {
    * ```
    */
   valid() {
-    this.validator.value = this.value;
     this._validateCount++;
-    return (this._passed = this.validator.passes());
+    return (this._passed = this.validator.validate(
+      this.rules.all(),
+      this.value,
+      this._type,
+    ));
   }
 
   /**
@@ -932,7 +935,6 @@ export class TrivuleInput {
       this.rules.set(rules, elMessages);
     }
 
-    this.validator.rules = this.rules;
     this.validator.failsOnFirst = this.param.failsOnfirst ?? true;
     this._type = (this.param.type ?? 'text') as InputType;
     this.realTime = this.param.realTime ?? this.realTime;
