@@ -15,7 +15,7 @@ import {
 import { getHTMLElementBySelector } from '../utils';
 import { InputRule } from './utils/input-rule';
 import { TrParameter } from './utils/parameter';
-import { TrValidation } from './validate';
+import { validate } from './validate';
 
 /**
  * TrivuleInput is responsible for applying live validation to an HTML input element.
@@ -39,10 +39,6 @@ export class TrivuleInput {
    * This status indicates the current state of the form
    */
   protected _passed = false;
-  /**
-   * Trivule Validator
-   */
-  protected validator!: TrValidation;
   /** Input element which must be validate */
   protected inputElement!: HTMLInputElement;
   /** Error feedback element */
@@ -53,8 +49,11 @@ export class TrivuleInput {
    */
   protected rules!: InputRule;
 
-  /** Current input errors */
+  /** Current input errors as array */
   protected _errors: string[] = [];
+
+  /** Current input errors as object */
+  protected _errorObj: Record<string, string> = {};
 
   /** Wich class assign to input if validation pass */
   protected validClass = '';
@@ -81,9 +80,13 @@ export class TrivuleInput {
   protected realTime: boolean = false;
   protected _events = ['change', 'blur', 'input'];
 
+  /**
+   * The attribute name used in validation error messages
+   */
+  private _messageAttribute = '';
+
   private constructor(param: TrivuleInputParms, parameter: TrParameter) {
     this.parameter = parameter;
-    this.validator = new TrValidation();
     this.rules = new InputRule(
       [],
       undefined,
@@ -265,7 +268,6 @@ export class TrivuleInput {
   validate() {
     this.valid();
     this.setValidationClass();
-    this.errors = this.validator.getErrors();
     if (this.emitOnValidate) {
       this.emitChangeEvent();
     }
@@ -329,11 +331,21 @@ export class TrivuleInput {
    */
   valid() {
     this._validateCount++;
-    return (this._passed = this.validator.validate(
-      this.rules.all(),
-      this.value,
-      this._type,
-    ));
+    const result = validate(this.rules.all(), this.value, {
+      type: this._type,
+      attribute: this._messageAttribute,
+    });
+
+    // Update errors based on validation result
+    if (result === true) {
+      this.errors = {};
+      this._passed = true;
+    } else {
+      this.errors = result;
+      this._passed = false;
+    }
+
+    return this._passed;
   }
 
   /**
@@ -393,9 +405,6 @@ export class TrivuleInput {
     }
   }
 
-  getErrors(): Record<string, string> {
-    return this.validator.getErrors();
-  }
   /**
    * Check if the input element has failed validation.
    * @returns `true` if the input element has failed validation, `false` otherwise.
@@ -430,8 +439,8 @@ export class TrivuleInput {
     }
   }
 
-  filledErrors(errors?: string[]) {
-    this.errors = errors ?? this.validator.getErrors();
+  filledErrors(errors?: Record<string, string>) {
+    this.errors = errors ?? this.errors;
   }
 
   /**
@@ -711,14 +720,26 @@ export class TrivuleInput {
     }
   }
 
+  get errors(): Record<string, string> {
+    return this._errorObj;
+  }
+
   set errors(value: string[] | Record<string, string>) {
     if (value) {
-      if (!Array.isArray(value)) {
-        value = Object.keys(value).map(
+      if (Array.isArray(value)) {
+        // Convert array to object for backward compatibility
+        this._errorObj = {};
+        this._errors = value;
+      } else {
+        // Store object and convert to array
+        this._errorObj = value as Record<string, string>;
+        this._errors = Object.keys(value).map(
           (k) => (value as Record<string, string>)[k],
         );
       }
-      this._errors = value ?? [];
+    } else {
+      this._errorObj = {};
+      this._errors = [];
     }
     this.showErrorMessages();
   }
@@ -884,7 +905,7 @@ export class TrivuleInput {
    * trivuleInput.setMessageAttributeName("data-feedback"); // Sets the feedback message attribute to "data-feedback"
    */
   setMessageAttributeName(attrName?: string): this {
-    this.validator.attribute = attrName ?? this.name;
+    this._messageAttribute = attrName ?? this.name;
     return this;
   }
 
@@ -933,7 +954,7 @@ export class TrivuleInput {
    * @returns
    */
   getMessageAttributeName() {
-    return this.validator.attribute;
+    return this._messageAttribute;
   }
   /**
    * Retrieves the current rules messages.

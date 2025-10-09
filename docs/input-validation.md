@@ -31,7 +31,6 @@ const trEmail = new TrivuleInput({
 Regardless of the chosen validation mode, the instance `trEmail` is available for advanced interactions.
 
 ```javascript
-
 trEmail.onPassRule('startWithContact', (trEmail) => {
   // Perform actions on passing the rule
 });

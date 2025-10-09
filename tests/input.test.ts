@@ -183,9 +183,7 @@ describe('TrivuleInput', () => {
       inputElement.name = 'input-name';
       inputElement.value = ''; // Set the input value to empty
       inputElement.type = 'text';
-      const validator = createTrivuleInput(inputElement, {
-        failsOnfirst: false,
-      });
+      const validator = createTrivuleInput(inputElement);
 
       vi.spyOn(validator as any, 'setValidationClass').mockImplementation(
         () => {},
@@ -195,7 +193,7 @@ describe('TrivuleInput', () => {
       ); // Mock emitChangeEvent to prevent side effects
 
       validator.validate();
-      const result = validator.getErrors();
+      const result = validator.errors;
 
       expect(result).toEqual({
         required: 'This field is required',
@@ -220,7 +218,7 @@ describe('TrivuleInput', () => {
       ); // Mock emitChangeEvent to prevent side effects
 
       validator.validate();
-      const result = validator.getErrors();
+      const result = validator.errors;
 
       expect(result).toEqual({});
     });

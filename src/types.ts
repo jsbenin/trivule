@@ -86,7 +86,7 @@ export type RuleType = {
   name: string;
   message?: string;
   params?: RuleParam;
-  validate?: RuleCallBack;
+  callback?: RuleCallBack;
 };
 
 export type InputType =
