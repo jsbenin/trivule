@@ -1,4 +1,3 @@
-import dayjs from 'dayjs';
 import { RuleCallBack } from '../types';
 import { now, spliteParam, throwEmptyArgsException } from '../utils';
 /**
@@ -17,12 +16,13 @@ export const isDate: RuleCallBack = (input) => {
       value: input,
     };
   }
-  const djs = dayjs(new Date(input.toString()), undefined, true);
+  const date = new Date(input.toString());
+  const isValid = !isNaN(date.getTime());
 
-  if (djs.isValid()) {
+  if (isValid) {
     return {
       passes: true,
-      value: djs.toISOString(),
+      value: date.toISOString(),
       type: 'date',
     };
   }
@@ -57,7 +57,8 @@ export const dateBefore: RuleCallBack = (input, date) => {
     throw new Error('Pease provide a valid argument for dateBefore rule');
   }
   return {
-    passes: dayjs(input as string).isBefore(date),
+    passes:
+      new Date(input as string).getTime() < new Date(date as string).getTime(),
     value: input,
   };
 };
@@ -93,7 +94,8 @@ export const dateAfter: RuleCallBack = (input, date) => {
     throw new Error('Pease provide a valid argument for dateAfter rule');
   }
   return {
-    passes: dayjs(input as string).isAfter(date),
+    passes:
+      new Date(input as string).getTime() > new Date(date as string).getTime(),
     value: isDate(input).value,
   };
 };

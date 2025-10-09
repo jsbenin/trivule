@@ -45,7 +45,6 @@ import {
   numberBetween,
 } from '../rules';
 import { dateAfter, dateBefore, isDate, isTime } from '../rules/date';
-import { phone } from '../rules/phone';
 import { en_messages } from '../locale/lang/en';
 
 export class RuleRegistry {
@@ -82,7 +81,6 @@ export class RuleRegistry {
     date: isDate,
     before: dateBefore,
     after: dateAfter,
-    phone: phone,
     time: isTime,
     startWithString: startWithString,
     endWithString: endWithString,

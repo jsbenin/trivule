@@ -1,10 +1,87 @@
-# Migration Guide: Trivule Singleton Refactor
+# Migration Guide: Trivule Updates
 
-This guide helps you migrate from the previous version of Trivule to the new singleton pattern implementation.
+This guide helps you migrate from previous versions of Trivule to the latest version.
 
 ## Breaking Changes
 
-### Constructor Access
+### Phone Number Validation Removed (v2.x)
+
+**⚠️ Important Change**: The built-in phone number validation has been removed to reduce bundle size and allow users to choose their preferred phone validation library.
+
+**Before (❌ No longer supported):**
+
+```javascript
+// Built-in phone validation
+<input data-tr-rules="phone" />
+<input data-tr-rules="phone:US,FR,BJ" />
+```
+
+**After (✅ Use external libraries):**
+
+```javascript
+// Option 1: Use a dedicated phone validation library like libphonenumber-js
+import { parsePhoneNumber } from 'libphonenumber-js';
+
+trivule.defineRule('phone', (value, countries) => {
+  try {
+    const phoneNumber = parsePhoneNumber(value, countries);
+    return {
+      passes: phoneNumber.isValid(),
+      value: value
+    };
+  } catch {
+    return {
+      passes: false,
+      value: value
+    };
+  }
+}, 'Invalid phone number');
+
+// Option 2: Use a simple regex for basic validation
+trivule.defineRule('phone', (value) => {
+  const phoneRegex = /^[\+]?[\d\s\-\(\)]+$/;
+  return {
+    passes: phoneRegex.test(value),
+    value: value
+  };
+}, 'Invalid phone number format');
+```
+
+**Migration Steps:**
+
+1. **Remove phone rules** from your HTML/JavaScript:
+   ```html
+   <!-- Remove this -->
+   <input data-tr-rules="phone" />
+   ```
+
+2. **Install a phone validation library** (recommended):
+   ```bash
+   npm install libphonenumber-js
+   # or
+   npm install google-libphonenumber
+   ```
+
+3. **Define your custom phone rule**:
+   ```javascript
+   import { parsePhoneNumber } from 'libphonenumber-js';
+   
+   trivule.defineRule('phone', (value, country) => {
+     try {
+       const phone = parsePhoneNumber(value, country);
+       return { passes: phone.isValid(), value };
+     } catch {
+       return { passes: false, value };
+     }
+   }, 'Please enter a valid phone number');
+   ```
+
+4. **Update your forms**:
+   ```html
+   <input data-tr-rules="phone:US" />
+   ```
+
+### Constructor Access (Previous versions)
 
 **Before (❌ No longer supported):**
 
@@ -21,13 +98,12 @@ const trivule = Trivule.init(config);
 
 ## Key Changes
 
-### 1. Private Constructor
+### 1. Removed Dependencies
+- Phone validation logic and dependencies have been removed
+- Reduced bundle size significantly
+- Better tree-shaking support
 
-- The `Trivule` constructor is now private
-- Direct instantiation with `new Trivule()` is no longer possible
-- This prevents multiple instances and configuration conflicts
-
-### 2. Static Initialization
+### 2. Private Constructor (Previous versions)
 
 - The `init()` method is now static
 - Returns the singleton instance
