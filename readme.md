@@ -9,7 +9,8 @@ To get started with Trivule, please refer to the comprehensive documentation ava
 **Imperative Validation Approach**
 
 ```js
-const trivuleForm = new TrivuleForm('form', {
+const trivule = Trivule.init();
+const trivuleForm = trivule.form('form', {
   feedbackSelector: '.invalid-feedback',
   realTime: true,
 });
