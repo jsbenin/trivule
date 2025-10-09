@@ -154,13 +154,35 @@ export class TrivuleInput {
     }
   }
   /**
-   * Add new rule to input element
-   * @param ruleName
-   * @param call
-   * @param message
+   * Defines a new custom validation rule
+   * @param name - The name of the rule
+   * @param fn - The validation function
+   * @param message - Optional custom error message
+   * @returns The TrivuleInput instance for method chaining
+   * @example
+   * ```typescript
+   * const input = trivule.input({ selector: '#email' });
+   *
+   * // Simple rule
+   * input.defineRule('positive', (value) => ({ passes: Number(value) > 0, value }));
+   *
+   * // With custom message
+   * input.defineRule('strongPassword', (value) => {
+   *   return {
+   *     passes: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/.test(value),
+   *     value
+   *   };
+   * }, 'Password must be strong');
+   *
+   * // Chainable
+   * input
+   *   .defineRule('ruleOne', (value) => ({ passes: true, value }))
+   *   .defineRule('ruleTwo', (value) => ({ passes: true, value }));
+   * ```
    */
-  rule(ruleName: string, call: RuleCallBack, message?: string) {
-    this.parameter.ruleRegistry.defineRule(ruleName, call, message);
+  defineRule(name: string, fn: RuleCallBack, message?: string): this {
+    this.parameter.ruleRegistry.defineRule(name, fn, message);
+    return this;
   }
 
   with(param: TrivuleInputParms) {

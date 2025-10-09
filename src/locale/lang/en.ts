@@ -39,7 +39,6 @@ export const en_messages: RulesMessages = {
     'The :field field is required when the :arg0 field has the current value',
   requiredWhen:
     'The :field field is required when the :arg0 fields are present',
-  phone: 'This phone number seems to be invalid',
   time: 'The :field field must be a valid time.',
   startWithString: 'The :field field must start with a letter',
   endWithString: 'The :field field must end with a letter',
