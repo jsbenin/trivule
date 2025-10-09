@@ -1,14 +1,14 @@
-import { TrValidation } from '../src/core/validate';
+import { validate } from '../src/core/validate';
 import { InputRule } from '../src/core/utils/input-rule';
 import { TrParameter } from '../src/core/utils/parameter';
 
 describe('TrValidation', () => {
-  let trvalidation: TrValidation;
   let parameter: TrParameter;
+  let inputRule: InputRule;
 
   beforeEach(() => {
     parameter = TrParameter.instance();
-    const inputRule = new InputRule(
+    inputRule = new InputRule(
       ['required', 'email'],
       {
         required: 'This field is required',
@@ -17,36 +17,38 @@ describe('TrValidation', () => {
       undefined,
       parameter.ruleRegistry,
     );
-    trvalidation = new TrValidation();
-    trvalidation.setRules(inputRule);
   });
 
-  test('validate() should return false for an invalid value', () => {
-    trvalidation.value = '';
-    const isValid = trvalidation.passes();
-    expect(isValid).toBe(false);
+  test('validate() should return errors object for an invalid value', () => {
+    const result = validate(inputRule.all(), '');
+    expect(result).not.toBe(true);
+    expect(typeof result).toBe('object');
+    expect(result).toHaveProperty('required');
+    expect(result).toHaveProperty('email');
   });
 
   test('Validation failed messages', () => {
-    trvalidation.value = '';
-    const received = trvalidation.getErrors();
+    const received = validate(inputRule.all(), '');
     expect(received).toEqual({
       required: 'This field is required',
+      email: 'Invalid email format',
     });
   });
 
-  test('setRules() should update the rules', () => {
-    trvalidation.setRules(
-      new InputRule(
-        ['minlength:8'],
-        {
-          minlength: 'The input must be at least 8 characters long',
-        },
-        undefined,
-        parameter.ruleRegistry,
-      ),
+  test('validate() should work with different rules', () => {
+    const newInputRule = new InputRule(
+      ['minlength:8'],
+      {
+        minlength: 'The input must be at least 8 characters long',
+      },
+      undefined,
+      parameter.ruleRegistry,
     );
-    const rules = trvalidation.getRules().map((rule) => {
+    const result = validate(newInputRule.all(), 'short');
+    expect(result).not.toBe(true);
+    expect(typeof result).toBe('object');
+
+    const rules = newInputRule.all().map((rule) => {
       return {
         name: rule.name,
         param: rule.params,

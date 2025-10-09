@@ -1,6 +1,7 @@
 import { Rule, RuleCallBack, RuleParam, RuleType } from '../../types';
 import { getRule } from '../../utils';
 import { RuleRegistry } from '../bag';
+import { TrParameter } from './parameter';
 
 export class InputRule {
   items: RuleType[] = [];
@@ -8,7 +9,7 @@ export class InputRule {
   constructor(
     rules: Rule[] | string[] | Rule | string,
     messages?: string | string[] | Record<string, string> | null,
-    private local?: string,
+    local?: string,
     private ruleRegistry?: RuleRegistry,
   ) {
     this.set(rules, messages, local);
@@ -101,8 +102,8 @@ export class InputRule {
   ): RuleType {
     const { ruleName, params } = getRule(originaleRule);
 
-    // Use provided ruleRegistry or create a default one
-    const registry = this.ruleRegistry || new RuleRegistry();
+    // Use provided ruleRegistry or get from singleton TrParameter instance
+    const registry = this.ruleRegistry || TrParameter.instance().ruleRegistry;
 
     if (!message) {
       message = registry.getMessage(ruleName, local) ?? '';
@@ -119,7 +120,7 @@ export class InputRule {
       name: ruleName,
       message: message ?? '',
       params: param ?? params,
-      validate,
+      callback: validate,
     };
   }
 

@@ -6,7 +6,6 @@ import {
   ValidatableForm,
 } from '../types';
 import { TrConfig } from '../tr.config';
-import { RuleRegistry } from './bag';
 import { TrivuleForm } from './form';
 import { TrivuleInput } from './input';
 import { TrParameter } from './utils/parameter';
@@ -92,22 +91,17 @@ export class Trivule {
     return this._trForms;
   }
 
-  static Rule(ruleName: string, call: RuleCallBack, message?: string) {
-    // Create a temporary RuleRegistry instance for static access
-    const registry = new RuleRegistry();
-    registry.defineRule(ruleName, call, message);
-  }
   form(
     selector: ValidatableForm | TrivuleFormConfig,
     config: TrivuleFormConfig,
   ) {
-    const trForm = new TrivuleForm(this.parameter);
+    const trForm = TrivuleForm.create(this.parameter);
     trForm.init(selector, config);
     return trForm;
   }
 
   input(params: TrivuleInputParms) {
-    return new TrivuleInput(params);
+    return TrivuleInput.create(params, this.parameter);
   }
 
   /**

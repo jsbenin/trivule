@@ -85,8 +85,23 @@ export class TrivuleForm {
 
   private _wasInit = false;
   private _wasBound = false;
-  constructor(parameter?: TrParameter) {
+  private constructor(parameter?: TrParameter) {
     this.parameter = parameter ?? TrParameter.instance();
+  }
+
+  /**
+   * @deprecated Use trivule.form() instead. Direct instantiation will be removed in a future version.
+   * Creates a new TrivuleForm instance using a static factory method.
+   * This method is temporary to help migration from direct constructor usage.
+   *
+   * @param parameter Optional TrParameter instance
+   * @returns A new TrivuleForm instance
+   */
+  static create(parameter?: TrParameter): TrivuleForm {
+    console.warn(
+      'TrivuleForm.create() is deprecated. Use trivule.form() instead. Direct instantiation will be removed in a future version.',
+    );
+    return new TrivuleForm(parameter);
   }
 
   /**
@@ -924,47 +939,44 @@ export class TrivuleForm {
       this._registerInputs[indexOrInputName] = param;
       return this;
     }
-    let selector = param.selector;
+
+    // Résolution du sélecteur
+    let resolvedSelector = param.selector;
     if (param.selector) {
-      selector =
-        getHTMLElementBySelector(param.selector, this.container) ?? selector;
+      resolvedSelector =
+        getHTMLElementBySelector(param.selector, this.container) ??
+        resolvedSelector;
     }
-    if (typeof selector === 'string') {
-      const s = this.parameter.getInputSelector(selector);
-
-      selector = getHTMLElementBySelector(s as string, this.container);
+    if (typeof resolvedSelector === 'string') {
+      const s = this.parameter.getInputSelector(resolvedSelector);
+      resolvedSelector = getHTMLElementBySelector(s as string, this.container);
     }
 
-    if (!selector) {
+    if (!resolvedSelector) {
       const name = isNumber(indexOrInputName).passes
         ? undefined
         : indexOrInputName;
       if (name) {
         const s = this.parameter.getInputSelector(name);
-        selector =
+        resolvedSelector =
           getHTMLElementBySelector(s as string, this.container) ?? undefined;
       }
-    } else {
-      param.selector = undefined;
     }
 
-    if (typeof param.realTime !== 'boolean') {
-      param.realTime = this.parameter.realTime;
-    } else {
-      param.realTime = param.realTime ?? this.parameter.realTime;
-    }
+    // Création de l'objet mergé avec toutes les propriétés configurées
+    const mergedParams: TrivuleInputParms = {
+      ...param,
+      selector: resolvedSelector as ValidatableInput,
+      realTime: param.realTime ?? this.parameter.realTime,
+      validClass: param.validClass ?? this.parameter.validClass,
+      invalidClass: param.invalidClass ?? this.parameter.invalidClass,
+      autoValidate: param.autoValidate ?? this.parameter.auto,
+      feedbackElement: param.feedbackElement ?? this.parameter.feedbackSelector,
+    };
 
-    param.validClass = param.validClass ?? this.parameter.validClass;
-    param.invalidClass = param.invalidClass ?? this.parameter.invalidClass;
-    param.autoValidate = param.autoValidate ?? this.parameter.auto;
-    param.feedbackElement =
-      param.feedbackElement ?? this.parameter.feedbackSelector;
-    param.selector = selector as ValidatableInput;
-    this.addTrivuleInput(
-      new TrivuleInput(selector as ValidatableInput, param, this.parameter),
-    );
+    this.addTrivuleInput(TrivuleInput.create(mergedParams, this.parameter));
 
-    return param;
+    return mergedParams;
   }
 
   /**

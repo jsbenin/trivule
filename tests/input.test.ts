@@ -1,6 +1,17 @@
 import { vi } from 'vitest';
 import { TrivuleInput } from '../src/core/input';
+import { TrParameter } from '../src/core/utils/parameter';
 import { attr } from '../src/utils';
+
+// Helper function to create TrivuleInput for tests
+const createTrivuleInput = (inputElement: HTMLElement, params: any = {}) => {
+  // Add the inputElement as selector for the new API
+  const inputParams = {
+    selector: inputElement,
+    ...params,
+  };
+  return TrivuleInput.create(inputParams, TrParameter.instance());
+};
 
 describe('TrivuleInput', () => {
   describe('getRules', () => {
@@ -16,7 +27,7 @@ describe('TrivuleInput', () => {
           params: '30',
         },
       ];
-      const validator = new TrivuleInput(inputElement);
+      const validator = createTrivuleInput(inputElement);
 
       expect(
         validator.getRules().map((r) => {
@@ -28,7 +39,7 @@ describe('TrivuleInput', () => {
     test('should return an empty array if no rules are set for a given input field', () => {
       // Arrange
       const inputElement = document.createElement('input');
-      const validator = new TrivuleInput(inputElement);
+      const validator = createTrivuleInput(inputElement);
 
       // Act
       const result = validator.getRules(); // Call the getRules method
@@ -42,13 +53,13 @@ describe('TrivuleInput', () => {
     test('should return true if input have rules', () => {
       const inputElement = document.createElement('input'); // Create an input element
       inputElement.setAttribute(attr('rules'), 'required|min:30');
-      const validator = new TrivuleInput(inputElement);
+      const validator = createTrivuleInput(inputElement);
       expect(validator.hasRules()).toBe(true);
     });
 
     test('should return false if rules are empty', () => {
       const inputElement = document.createElement('input');
-      const validator = new TrivuleInput(inputElement);
+      const validator = createTrivuleInput(inputElement);
       expect(validator.hasRules()).toBe(false); // Assert that the result is an empty array
     });
   });
@@ -61,7 +72,7 @@ describe('TrivuleInput', () => {
         attr('messages'),
         'Required message | Min message',
       );
-      const validator = new TrivuleInput(inputElement, {
+      const validator = createTrivuleInput(inputElement, {
         failsOnfirst: false,
       });
       validator.validate();
@@ -78,7 +89,7 @@ describe('TrivuleInput', () => {
         attr('messages'),
         'Required message | {1,2,3}Invalid email address',
       );
-      const validator = new TrivuleInput(inputElement, {
+      const validator = createTrivuleInput(inputElement, {
         failsOnfirst: false,
       });
 
@@ -94,7 +105,7 @@ describe('TrivuleInput', () => {
     test('should return false if rules are empty', () => {
       // Arrange
       const inputElement = document.createElement('input');
-      const validator = new TrivuleInput(inputElement);
+      const validator = createTrivuleInput(inputElement);
 
       expect(validator.hasRules()).toBe(false); // Assert that the result is an empty array
     });
@@ -108,7 +119,7 @@ describe('TrivuleInput', () => {
         'required|min:2|regex:^(Js&pip;Ts)$',
       );
       inputElement.value = 'Js'; // Set the input value
-      const validator = new TrivuleInput(inputElement);
+      const validator = createTrivuleInput(inputElement);
 
       expect(validator.valid()).toBe(true); // Assert that the input is valid
     });
@@ -118,7 +129,7 @@ describe('TrivuleInput', () => {
       const inputElement = document.createElement('input');
       inputElement.setAttribute(attr('rules'), 'required|min:3');
       inputElement.value = ''; // Set the input value to empty
-      const validator = new TrivuleInput(inputElement);
+      const validator = createTrivuleInput(inputElement);
 
       expect(validator.valid()).toBe(false); // Assert that the input is invalid
     });
@@ -130,7 +141,7 @@ describe('TrivuleInput', () => {
       const inputElement = document.createElement('input');
       inputElement.setAttribute(attr('rules'), 'required|min:3');
       inputElement.value = 'test'; // Set the input value
-      const validator = new TrivuleInput(inputElement);
+      const validator = createTrivuleInput(inputElement);
       vi.spyOn(validator as any, 'setValidationClass').mockImplementation(
         () => {},
       ); // Mock setValidationClass to prevent side effects
@@ -148,7 +159,7 @@ describe('TrivuleInput', () => {
       const inputElement = document.createElement('input');
       inputElement.setAttribute(attr('rules'), 'required|min:3');
       inputElement.value = ''; // Set the input value to empty
-      const validator = new TrivuleInput(inputElement);
+      const validator = createTrivuleInput(inputElement);
       vi.spyOn(validator as any, 'setValidationClass').mockImplementation(
         () => {},
       ); // Mock setValidationClass to prevent side effects
@@ -172,9 +183,7 @@ describe('TrivuleInput', () => {
       inputElement.name = 'input-name';
       inputElement.value = ''; // Set the input value to empty
       inputElement.type = 'text';
-      const validator = new TrivuleInput(inputElement, {
-        failsOnfirst: false,
-      });
+      const validator = createTrivuleInput(inputElement);
 
       vi.spyOn(validator as any, 'setValidationClass').mockImplementation(
         () => {},
@@ -184,7 +193,7 @@ describe('TrivuleInput', () => {
       ); // Mock emitChangeEvent to prevent side effects
 
       validator.validate();
-      const result = validator.getErrors();
+      const result = validator.errors;
 
       expect(result).toEqual({
         required: 'This field is required',
@@ -199,7 +208,7 @@ describe('TrivuleInput', () => {
       inputElement.type = 'number';
       inputElement.name = 'name-empty';
       inputElement.value = '4';
-      const validator = new TrivuleInput(inputElement);
+      const validator = createTrivuleInput(inputElement);
 
       vi.spyOn(validator as any, 'setValidationClass').mockImplementation(
         () => {},
@@ -209,7 +218,7 @@ describe('TrivuleInput', () => {
       ); // Mock emitChangeEvent to prevent side effects
 
       validator.validate();
-      const result = validator.getErrors();
+      const result = validator.errors;
 
       expect(result).toEqual({});
     });
@@ -221,7 +230,7 @@ describe('TrivuleInput', () => {
     const feedbackElement = document.createElement('div');
     body.appendChild(inputElement);
     body.appendChild(feedbackElement);
-    const validator = new TrivuleInput(inputElement);
+    const validator = createTrivuleInput(inputElement);
     test('should return the feedback element supplied througth the set method', () => {
       validator.setFeedbackElement(feedbackElement);
       expect(validator.getFeedbackElement() === feedbackElement).toBe(true);
@@ -246,7 +255,7 @@ describe('TrivuleInput', () => {
 
   describe('$rules', () => {
     const inputElement = document.createElement('input');
-    const trivuleInput = new TrivuleInput(inputElement, {
+    const trivuleInput = createTrivuleInput(inputElement, {
       rules: 'required',
     });
     test('should set the message', () => {
@@ -257,7 +266,7 @@ describe('TrivuleInput', () => {
   describe('setRules', () => {
     test('should set rules to the inputs', () => {
       const input = document.createElement('input');
-      const trivuleInput = new TrivuleInput(input, {
+      const trivuleInput = createTrivuleInput(input, {
         rules: 'required',
       });
 
@@ -270,7 +279,7 @@ describe('TrivuleInput', () => {
   describe('setEvents', () => {
     let input = document.createElement('input');
     input.setAttribute(attr('rules'), 'required');
-    const trivuleInput = new TrivuleInput(input);
+    const trivuleInput = createTrivuleInput(input);
     it('Should return defaults events, if not events provided', () => {
       expect(trivuleInput.events).toEqual(['change', 'blur', 'input']);
     });
@@ -282,7 +291,7 @@ describe('TrivuleInput', () => {
     input = document.createElement('input');
     input.setAttribute(attr('rules'), 'required');
     input.setAttribute(attr('events'), 'keyup');
-    const trivuleInput1 = new TrivuleInput(input);
+    const trivuleInput1 = createTrivuleInput(input);
     it('Should return the provided events', () => {
       expect(trivuleInput1.events).toEqual(['keyup']);
     });

@@ -86,7 +86,7 @@ export type RuleType = {
   name: string;
   message?: string;
   params?: RuleParam;
-  validate?: RuleCallBack;
+  callback?: RuleCallBack;
 };
 
 export type InputType =
@@ -234,10 +234,6 @@ export type TrivuleInputParms = {
    */
   attribute?: string;
 
-  /**
-   *If this field is true, the validation will stop at the first error. And will display the error at the same time
-   */
-  failsOnfirst?: boolean;
   /**
    * If this field is true, each time the validation has been performed,
    * a tr.input.validated event will be emitted, on which we can connect listeners for example

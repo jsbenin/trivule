@@ -1,7 +1,18 @@
 import { vi } from 'vitest';
 import { TrivuleForm } from '../src/core/form';
 import { TrivuleInput } from '../src/core/input';
+import { TrParameter } from '../src/core/utils/parameter';
 import { attr } from '../src/utils';
+
+// Helper function to create TrivuleInput for tests
+const createTrivuleInput = (inputElement: HTMLElement, params: any = {}) => {
+  // Add the inputElement as selector for the new API
+  const inputParams = {
+    selector: inputElement,
+    ...params,
+  };
+  return TrivuleInput.create(inputParams, TrParameter.instance());
+};
 
 class MyForm {
   form: HTMLFormElement;
@@ -65,7 +76,7 @@ class MyForm {
 const formInstance = new MyForm();
 
 describe('TrivuleForm', () => {
-  const trivuleForm = new TrivuleForm();
+  const trivuleForm = TrivuleForm.create();
   trivuleForm.init(formInstance.form, {
     realTime: false,
   });
@@ -74,13 +85,13 @@ describe('TrivuleForm', () => {
   });
 
   test('Test addTrivuleInput method', () => {
-    const trInput = new TrivuleInput(formInstance.ageInput);
+    const trInput = createTrivuleInput(formInstance.ageInput);
     trivuleForm.addTrivuleInput(trInput);
     expect(trivuleForm.get('age')).toBe(trInput);
   });
 
   test('Test the make method', () => {
-    const trInput = new TrivuleInput(formInstance.ageInput);
+    const trInput = createTrivuleInput(formInstance.ageInput);
     trivuleForm.addTrivuleInput(trInput);
     trivuleForm
       .make([
@@ -108,18 +119,18 @@ describe('TrivuleForm', () => {
   });
 
   describe('bind', () => {
-    let trForm = new TrivuleForm();
+    let trForm = TrivuleForm.create();
     test('Should return null for the native element', () => {
       expect(trForm.getNativeElement()).toBeNull();
     });
 
     test('Should return the native element with ', () => {
-      trForm = new TrivuleForm();
+      trForm = TrivuleForm.create();
       trForm.bind(formInstance.form);
       expect(trForm.getNativeElement()).toBe(formInstance.form);
     });
     test('Should return the native element with config', () => {
-      trForm = new TrivuleForm();
+      trForm = TrivuleForm.create();
       trForm.init({
         element: formInstance.form,
         realTime: false,
@@ -128,7 +139,7 @@ describe('TrivuleForm', () => {
       expect(trForm.isRealTimeEnabled()).toBe(false);
     });
     test('Should resole inputs validations', () => {
-      trForm = new TrivuleForm();
+      trForm = TrivuleForm.create();
       trForm.make([
         {
           rules: 'required|between:18,40',
@@ -147,7 +158,7 @@ describe('TrivuleForm', () => {
       expect(trForm.isRealTimeEnabled()).toBe(false);
     });
     test('Should return the native element', () => {
-      trForm = new TrivuleForm();
+      trForm = TrivuleForm.create();
       trForm.init(formInstance.form);
       expect(trForm.getNativeElement()).toBe(formInstance.form);
     });
@@ -157,7 +168,7 @@ describe('TrivuleForm', () => {
     let form: TrivuleForm;
 
     beforeEach(() => {
-      form = new TrivuleForm();
+      form = TrivuleForm.create();
     });
 
     describe('afterBinding', () => {
