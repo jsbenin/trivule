@@ -14,8 +14,8 @@ import { RuleRegistry } from '../bag';
 export class TrParameter {
   private static _instance: TrParameter | null = null;
 
-  // Attribute prefix configuration (defaults to 'data-tr-')
-  private _attributePrefix: string = 'data-tr-';
+  // Attribute prefix configuration (no default - must be set via configure)
+  private _attributePrefix?: string;
 
   // Selector configurations (using {attr} placeholder for dynamic attribute prefix)
   private _feedbackSelector: CssSelector | null = '[{attr}feedback={name}]';
@@ -67,7 +67,7 @@ export class TrParameter {
    * Get the attribute prefix
    */
   get attributePrefix(): string {
-    return this._attributePrefix;
+    return this._attributePrefix || 'data-tr-';
   }
 
   /**

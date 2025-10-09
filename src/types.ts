@@ -129,8 +129,13 @@ export interface InputChangeEvent {
 /**
  * Rule callback
  */
-export interface RuleCallBack {
-  (input: unknown, param?: RuleParam, type?: InputType): ValidationState;
+export interface RuleCallBack<E = unknown> {
+  (
+    input: unknown,
+    param?: RuleParam,
+    type?: InputType,
+    element?: E,
+  ): ValidationState;
 }
 
 export type RulesBag = {

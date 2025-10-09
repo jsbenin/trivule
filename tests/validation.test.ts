@@ -1,14 +1,22 @@
 import { TrValidation } from '../src/core/validate';
 import { InputRule } from '../src/core/utils/input-rule';
+import { TrParameter } from '../src/core/utils/parameter';
 
 describe('TrValidation', () => {
   let trvalidation: TrValidation;
+  let parameter: TrParameter;
 
   beforeEach(() => {
-    const inputRule = new InputRule(['required', 'email'], {
-      required: 'This field is required',
-      email: 'Invalid email format',
-    });
+    parameter = TrParameter.instance();
+    const inputRule = new InputRule(
+      ['required', 'email'],
+      {
+        required: 'This field is required',
+        email: 'Invalid email format',
+      },
+      undefined,
+      parameter.ruleRegistry,
+    );
     trvalidation = new TrValidation();
     trvalidation.setRules(inputRule);
   });
@@ -29,9 +37,14 @@ describe('TrValidation', () => {
 
   test('setRules() should update the rules', () => {
     trvalidation.setRules(
-      new InputRule(['minlength:8'], {
-        minlength: 'The input must be at least 8 characters long',
-      }),
+      new InputRule(
+        ['minlength:8'],
+        {
+          minlength: 'The input must be at least 8 characters long',
+        },
+        undefined,
+        parameter.ruleRegistry,
+      ),
     );
     const rules = trvalidation.getRules().map((rule) => {
       return {

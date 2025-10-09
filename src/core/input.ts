@@ -83,7 +83,7 @@ export class TrivuleInput {
     parameter?: TrParameter,
   ) {
     this.parameter = parameter ?? TrParameter.instance();
-    this.validator = new TrValidation(this.parameter);
+    this.validator = new TrValidation();
     this.rules = new InputRule(
       [],
       undefined,
@@ -136,6 +136,15 @@ export class TrivuleInput {
       }
       this.executeHooks('after.init');
     }
+  }
+  /**
+   * Add new rule to input element
+   * @param ruleName
+   * @param call
+   * @param message
+   */
+  rule(ruleName: string, call: RuleCallBack, message?: string) {
+    this.parameter.ruleRegistry.defineRule(ruleName, call, message);
   }
 
   with(param: TrivuleInputParms) {
