@@ -74,17 +74,35 @@ export class Trivule {
   }
 
   /**
-   * Adds a new validation rule to Trivule's rule bag.
-   * @param ruleName The name of the rule.
-   * @param call The rule callback function.
-   * @param message Optional error message for the rule.
-   * Example:
-   * ```
-   * trivule.rule('customRule', (value) => value === 'foo', 'Value must be "foo"');
+   * Defines a new custom validation rule
+   * @param name - The name of the rule
+   * @param fn - The validation function
+   * @param message - Optional custom error message
+   * @returns The Trivule instance for method chaining
+   * @example
+   * ```typescript
+   * const trivule = Trivule.init();
+   *
+   * // Simple rule
+   * trivule.defineRule('positive', (value) => ({ passes: Number(value) > 0, value }));
+   *
+   * // With custom message
+   * trivule.defineRule('strongPassword', (value) => {
+   *   return {
+   *     passes: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/.test(value),
+   *     value
+   *   };
+   * }, 'Password must be strong');
+   *
+   * // Chainable
+   * trivule
+   *   .defineRule('ruleOne', (value) => ({ passes: true, value }))
+   *   .defineRule('ruleTwo', (value) => ({ passes: true, value }));
    * ```
    */
-  rule(ruleName: string, call: RuleCallBack, message?: string) {
-    this.parameter.ruleRegistry.defineRule(ruleName, call, message);
+  defineRule(name: string, fn: RuleCallBack, message?: string): this {
+    this.parameter.ruleRegistry.defineRule(name, fn, message);
+    return this;
   }
 
   forms(): TrivuleForm[] {
