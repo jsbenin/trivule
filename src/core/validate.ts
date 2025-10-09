@@ -19,12 +19,6 @@ export class TrValidation {
   private _ruleExecuted: RuleExecuted[] = [];
 
   /**
-   * A boolean value indicating whether the validation rules should
-   * fail on the first error or continue executing all rules
-   */
-  private _failOnfirst = true;
-
-  /**
    * The attrabute name that should be used to display the validation errors
    */
   private _attr = '';
@@ -46,8 +40,8 @@ export class TrValidation {
 
   /**
    * This method performs the validation process. It iterates over the rules array and executes each rule on the
-   * provided value. If _failOnfirst is set to true, the method stops executing rules after the first failure. The method
-   * updates the _ruleExecuted array with the result of each rule execution.
+   * provided value. All rules are executed and all validation errors are collected.
+   * The method updates the _ruleExecuted array with the result of each rule execution.
    * It returns a boolean value indicating whether the validation passed (true) or not (false)
    * @param rules - Array of rules to validate against
    * @param value - The value to validate
@@ -64,7 +58,7 @@ export class TrValidation {
 
     // Clear previous validation state
     this._ruleExecuted = [];
-    
+
     let inputType = (type ?? this._inputType) as InputType;
     for (const rule of rules) {
       const ruleName = rule.name;
@@ -96,18 +90,11 @@ export class TrValidation {
       ruleExec.valueTested = value;
       ruleExec.run = true;
       this._addRuleExecuted(ruleExec);
-      // If rule is setup to stop on first fails
-      if (this._failOnfirst) {
-        if (!ruleExec.passed) {
-          this._parseRuleMessage(ruleExec, ruleToRun, message);
-          break;
-        }
+      // Always parse rule message for failed rules
+      if (!ruleExec.passed) {
+        this._parseRuleMessage(ruleExec, ruleToRun, message);
       } else {
-        if (!ruleExec.passed) {
-          this._parseRuleMessage(ruleExec, ruleToRun, message);
-        } else {
-          ruleExec.message = null;
-        }
+        ruleExec.message = null;
       }
     }
 
@@ -191,24 +178,12 @@ export class TrValidation {
     return ruleExec;
   }
 
-  set failsOnFirst(fails: boolean) {
-    this._failOnfirst = fails;
-  }
-
   set attribute(attr: string) {
     this._attr = attr;
   }
 
   get attribute() {
     return this._attr;
-  }
-  /**
-   * Set validation parameters
-   * @param param
-   */
-
-  set(failsOnfirst: boolean) {
-    this._failOnfirst = failsOnfirst;
   }
 
   getRuleExecuted(): RuleExecuted[] {

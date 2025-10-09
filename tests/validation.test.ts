@@ -31,6 +31,7 @@ describe('TrValidation', () => {
     const received = trvalidation.getErrors();
     expect(received).toEqual({
       required: 'This field is required',
+      email: 'Invalid email format',
     });
   });
 

@@ -65,7 +65,6 @@ export class TrivuleInput {
   protected param: TrivuleInputParms = {
     emitEvent: true,
     autoValidate: true,
-    failsOnfirst: true,
     validClass: '',
     invalidClass: 'is-invalid',
     type: 'text',
@@ -578,16 +577,6 @@ export class TrivuleInput {
   }
   /**
    * Sets whether validation should stop after the first error is encountered.
-   * @param boolean A boolean value indicating whether validation should stop on the first error.
-   * @returns This Trivule input instance.
-   * @example
-   * const trivuleInput = new TrivuleInput();
-   * trivuleInput.failsOnfirst(true); // Stops validation on the first error encountered
-   */
-  failsOnfirst(boolean: boolean = true): this {
-    this.validator.failsOnFirst = boolean;
-    return this;
-  }
   /**
    * Gets the feedback element associated with this Trivule input.
    * @returns The feedback element if set, otherwise null.
@@ -935,7 +924,6 @@ export class TrivuleInput {
       this.rules.set(rules, elMessages);
     }
 
-    this.validator.failsOnFirst = this.param.failsOnfirst ?? true;
     this._type = (this.param.type ?? 'text') as InputType;
     this.realTime = this.param.realTime ?? this.realTime;
   }
