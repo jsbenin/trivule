@@ -4,8 +4,8 @@ import {
   TrivuleFormConfig,
   ValidatableForm,
 } from '../../types';
-import { TrLocal } from '../../locale/tr-local';
 import { escapeCssSelector } from '../../utils';
+import { RuleRegistry } from '../bag';
 
 /**
  * TrParameter - Centralized configuration container for Trivule
@@ -48,10 +48,20 @@ export class TrParameter {
   auto: boolean = true;
 
   // Localization configuration
-  lang: string = TrLocal.DEFAULT_LANG;
+  lang: string = RuleRegistry.DEFAULT_LANG;
 
   // Element reference (for form-specific usage)
   element?: ValidatableForm;
+
+  // Rule registry instance
+  public ruleRegistry: RuleRegistry;
+
+  /**
+   * Private constructor to prevent direct instantiation
+   */
+  private constructor() {
+    this.ruleRegistry = new RuleRegistry();
+  }
 
   /**
    * Get the attribute prefix
@@ -99,7 +109,7 @@ export class TrParameter {
     }
     if (config.local?.lang) {
       this.lang = config.local.lang;
-      TrLocal.LANG = config.local.lang;
+      this.ruleRegistry.lang = config.local.lang;
     }
     if ('auto' in config && config.auto !== undefined) {
       this.auto = config.auto;

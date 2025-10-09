@@ -6,14 +6,12 @@ import {
   ITrivuleInput,
   ITrivuleInputCallback,
   Rule,
-  RuleCallBack,
   TrivuleAttribute,
   TrivuleHooks,
   TrivuleInputParms,
   ValidatableInput,
 } from '../types';
 import { getHTMLElementBySelector } from '../utils';
-import { TrBag } from './bag';
 import { InputRule } from './utils/input-rule';
 import { TrParameter } from './utils/parameter';
 import { TrValidation } from './validate';
@@ -84,9 +82,14 @@ export class TrivuleInput {
     param?: TrivuleInputParms,
     parameter?: TrParameter,
   ) {
-    this.validator = new TrValidation();
-    this.rules = new InputRule([]);
-    this.parameter = parameter ?? new TrParameter();
+    this.parameter = parameter ?? TrParameter.instance();
+    this.validator = new TrValidation(this.parameter);
+    this.rules = new InputRule(
+      [],
+      undefined,
+      undefined,
+      this.parameter.ruleRegistry,
+    );
 
     this._init(inputElement, param);
     this.init();
@@ -133,15 +136,6 @@ export class TrivuleInput {
       }
       this.executeHooks('after.init');
     }
-  }
-  /**
-   * Add new rule to input element
-   * @param ruleName
-   * @param call
-   * @param message
-   */
-  rule(ruleName: string, call: RuleCallBack, message?: string) {
-    TrBag.defineRule(ruleName, call, message);
   }
 
   with(param: TrivuleInputParms) {

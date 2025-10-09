@@ -1,6 +1,8 @@
-import { TrLocal } from './locale/tr-local';
 import { TrConfig } from './tr.config';
-import { Trivule, TrBag, TrivuleForm, TrivuleInput } from './core';
+import { Trivule, RuleRegistry, TrivuleForm, TrivuleInput } from './core';
+
+// Export TrBag as an alias for backward compatibility
+export const TrBag = RuleRegistry;
 
 declare global {
   interface Window {
@@ -8,7 +10,6 @@ declare global {
     TrivuleForm: typeof TrivuleForm;
     Trivule: typeof Trivule;
     TrBag: typeof TrBag;
-    TrLocal: typeof TrLocal;
   }
 }
 
@@ -17,7 +18,6 @@ if (typeof window !== 'undefined') {
   window.TrivuleForm = window.TrivuleForm ?? TrivuleForm;
   window.Trivule = window.Trivule ?? Trivule;
   window.TrBag = window.TrBag ?? TrBag;
-  window.TrLocal = window.TrLocal ?? TrLocal;
 }
 
-export { Trivule, TrivuleForm, TrivuleInput, TrConfig, TrBag, TrLocal };
+export { Trivule, TrivuleForm, TrivuleInput, TrConfig, RuleRegistry };

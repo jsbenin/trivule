@@ -17,7 +17,6 @@ import {
   transformToArray,
   attrSelector,
 } from '../utils';
-import { TrBag } from './bag';
 import { TrivuleInput } from './input';
 import { TrParameter } from './utils/parameter';
 
@@ -376,7 +375,7 @@ export class TrivuleForm {
    * @param message
    */
   rule(ruleName: string, call: RuleCallBack, message?: string) {
-    TrBag.defineRule(ruleName, call, message);
+    this.parameter.ruleRegistry.defineRule(ruleName, call, message);
   }
 
   /**

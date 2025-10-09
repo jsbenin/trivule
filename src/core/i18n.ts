@@ -1,12 +1,13 @@
 import { Rule, RuleParam, RulesMessages } from '../types';
-import { TrLocal } from '../locale/tr-local';
+import { RuleRegistry } from './bag';
 import { spliteParam } from '../utils';
 
 export class I18nResolver {
   protected messages!: RulesMessages;
 
-  constructor(local?: string) {
-    this.messages = TrLocal.getMessages(local ?? TrLocal.getLocal());
+  constructor(local?: string, ruleRegistry?: RuleRegistry) {
+    const registry = ruleRegistry || new RuleRegistry();
+    this.messages = registry.getMessages(local ?? registry.getLocal());
   }
   /**
 

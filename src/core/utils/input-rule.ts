@@ -1,6 +1,6 @@
 import { Rule, RuleCallBack, RuleParam, RuleType } from '../../types';
 import { getRule } from '../../utils';
-import { TrBag } from '../bag';
+import { RuleRegistry } from '../bag';
 
 export class InputRule {
   items: RuleType[] = [];
@@ -9,6 +9,7 @@ export class InputRule {
     rules: Rule[] | string[] | Rule | string,
     messages?: string | string[] | Record<string, string> | null,
     private local?: string,
+    private ruleRegistry?: RuleRegistry,
   ) {
     this.set(rules, messages, local);
   }
@@ -100,20 +101,23 @@ export class InputRule {
   ): RuleType {
     const { ruleName, params } = getRule(originaleRule);
 
+    // Use provided ruleRegistry or create a default one
+    const registry = this.ruleRegistry || new RuleRegistry();
+
     if (!message) {
-      message = TrBag.getMessage(ruleName, local);
+      message = registry.getMessage(ruleName, local) ?? '';
     }
-    const ruleCallback = TrBag.getRule(ruleName);
+    const ruleCallback = registry.getRule(ruleName);
     validate = validate ?? ruleCallback;
 
     if (!validate) {
       throw new Error(`The rule ${ruleName} is not defined`);
     }
-    this.messages[ruleName] = message;
+    this.messages[ruleName] = message ?? '';
 
     return {
       name: ruleName,
-      message,
+      message: message ?? '',
       params: param ?? params,
       validate,
     };

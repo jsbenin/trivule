@@ -1,7 +1,7 @@
 import { dateBetween } from '../rules/date';
 import { endWithString, stringBetween } from '../rules/string';
 import { fileBetween, isMimes, minFileSize } from '../rules/file';
-import { Rule, RuleCallBack, RulesBag } from '../types';
+import { Rule, RuleCallBack, RulesBag, RulesMessages } from '../types';
 import {
   between,
   contains,
@@ -45,11 +45,11 @@ import {
   numberBetween,
 } from '../rules';
 import { dateAfter, dateBefore, isDate, isTime } from '../rules/date';
-import { TrLocal } from '../locale/tr-local';
 import { phone } from '../rules/phone';
+import { en_messages } from '../locale/lang/en';
 
-export class TrBag {
-  private static rules: RulesBag = {
+export class RuleRegistry {
+  private rules: RulesBag = {
     required: required,
     email: email,
     maxlength: maxlength,
@@ -109,6 +109,14 @@ export class TrBag {
     numberBetween: numberBetween,
   };
 
+  // Localization properties (ex-TrLocal)
+  private _useLang: string | null = null;
+  public static readonly DEFAULT_LANG = 'en';
+  public lang: string = RuleRegistry.DEFAULT_LANG;
+  private _messages: Record<string, RulesMessages> = {
+    en: en_messages,
+  };
+
   /**
    * Define a custom validation rule with optional error message
    * @param rule - The name of the custom rule
@@ -116,14 +124,14 @@ export class TrBag {
    * @param message - The error message for the custom rule
    * @param local - The locale for the error message
    */
-  static defineRule(
+  defineRule(
     rule: string,
     callback: RuleCallBack,
     message?: string,
     local?: string,
-  ) {
-    TrBag.rules[rule as keyof RulesBag] = callback;
-    TrLocal.addMessage(rule, message, local);
+  ): void {
+    this.rules[rule as keyof RulesBag] = callback;
+    this.addMessage(rule, message, local);
   }
 
   /**
@@ -131,21 +139,101 @@ export class TrBag {
    * @param rule - The name of the validation rule
    * @returns True if the rule exists, false otherwise
    */
-  static hasRule(rule: string): boolean {
-    return rule in TrBag.rules;
+  hasRule(rule: string): boolean {
+    return rule in this.rules;
   }
 
-  static getRule(name: string) {
-    return TrBag.rules[name as Rule];
-  }
-  static getMessage(name: string | Rule, local?: string): string {
-    return TrLocal.getRuleMessage(name, local);
+  getRule(name: string) {
+    return this.rules[name as Rule];
   }
 
-  static allRules() {
-    return TrBag.rules;
+  getMessage(name: string | Rule, local?: string): string {
+    const messages: Record<string | Rule, string> = this.getMessages(local);
+    return messages[name] ?? messages['default'];
   }
-  static allMessages(local?: string) {
-    return TrLocal.getMessages(local);
+
+  allRules() {
+    return this.rules;
+  }
+
+  // Localization methods (ex-TrLocal methods converted to instance methods)
+
+  /**
+   * Get the messages for a specific language.
+   * If the language is not provided, the default language is used.
+   *
+   * @param local The language code (optional)
+   * @returns The messages object for the specified language
+   */
+  getMessages(local?: string): RulesMessages {
+    local = local ?? RuleRegistry.DEFAULT_LANG;
+    let messages = this._messages[local];
+    if (!messages) {
+      messages = this._messages[RuleRegistry.DEFAULT_LANG];
+    }
+    return messages;
+  }
+
+  /**
+   * Add or update a message for a specific rule and language.
+   * If the language is not provided, the default language is used.
+   *
+   * @param rule The rule name
+   * @param message The new message
+   * @param local The language code (optional)
+   */
+  addMessage(rule: string, message?: string, local?: string): void {
+    if (message) {
+      local = local || RuleRegistry.DEFAULT_LANG;
+      const existingMessages = this._messages[local] || {};
+      this._messages[local] = { ...existingMessages, [rule]: message };
+    }
+  }
+
+  /**
+   * Rewrite the message for a specific rule and language.
+   * This is a shorthand method that calls `addMessage`.
+   *
+   * @param lang The language code
+   * @param rule The rule name
+   * @param message The new message
+   */
+  rewrite(lang: string, rule: string | Rule, message: string): void {
+    this.addMessage(rule, message, lang);
+  }
+
+  /**
+   * Set the current translation language to be used for displaying error messages.
+   * This method overrides all other methods of assigning the language for displaying error messages.
+   *
+   * @param lang The language code
+   */
+  setLocal(lang: string): void {
+    if (!is_string(lang) || !lang.length) {
+      throw new Error('The language must be a valid string');
+    }
+    this._useLang = lang;
+  }
+
+  /**
+   * Get the currently set translation language.
+   * If no language is set, the default language is used.
+   *
+   * @returns The currently set language code
+   */
+  getLocal(): string {
+    return this._useLang ?? this.lang;
+  }
+
+  /**
+   * Get all messages for all languages
+   * @param local The language code (optional)
+   * @returns All messages for the specified language or default language
+   */
+  allMessages(local?: string): RulesMessages {
+    return this.getMessages(local);
   }
 }
+
+// Keep TrBag as an alias for backward compatibility during transition
+export const TrBag = RuleRegistry;
