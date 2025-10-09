@@ -3,7 +3,7 @@ import { InputValueType, InputType, Rule, RulesMessages } from '../types';
 
 import { RuleExecuted } from '.';
 import { I18nResolver } from './i18n';
-import { TrLocal } from '../locale/tr-local';
+import { TrParameter } from './utils/parameter';
 
 export class TrValidation {
   private _inputType = 'text';
@@ -38,6 +38,15 @@ export class TrValidation {
    * messages
    */
   private _trmessages: Record<string, string> = {};
+
+  /**
+   * Parameter instance for accessing configuration and rules
+   */
+  private _parameter: TrParameter;
+
+  constructor(parameter?: TrParameter) {
+    this._parameter = parameter ?? TrParameter.instance();
+  }
 
   /**
    * This method performs the validation process. It iterates over the _rules array and executes each rule on the
@@ -169,19 +178,21 @@ export class TrValidation {
     aliasRule: string,
     message: string | undefined | null,
   ) {
-    const orgMesage = TrLocal.getRuleMessage(ruleExec.orignalName);
+    const orgMesage = this._parameter.ruleRegistry.getMessage(
+      ruleExec.orignalName,
+    );
 
     if (message && message !== orgMesage) {
       this._trmessages[ruleExec.ruleName] = message;
     } else {
-      this._trmessages[ruleExec.ruleName] = TrLocal.getRuleMessage(
-        aliasRule ?? ruleExec.ruleName,
-      );
+      this._trmessages[ruleExec.ruleName] =
+        this._parameter.ruleRegistry.getMessage(aliasRule ?? ruleExec.ruleName);
     }
 
-    const trMessages = new I18nResolver().setMessages(
-      this._trmessages as RulesMessages,
-    );
+    const trMessages = new I18nResolver(
+      undefined,
+      this._parameter.ruleRegistry,
+    ).setMessages(this._trmessages as RulesMessages);
 
     message = I18nResolver.parseMessage(
       this._attr,

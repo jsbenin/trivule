@@ -101,10 +101,13 @@ export class InputRule {
   ): RuleType {
     const { ruleName, params } = getRule(originaleRule);
 
+    // Use provided ruleRegistry or create a default one
+    const registry = this.ruleRegistry || new RuleRegistry();
+
     if (!message) {
-      message = this.ruleRegistry?.getMessage(ruleName, local) ?? null;
+      message = registry.getMessage(ruleName, local) ?? '';
     }
-    const ruleCallback = this.ruleRegistry?.getRule(ruleName);
+    const ruleCallback = registry.getRule(ruleName);
     validate = validate ?? ruleCallback;
 
     if (!validate) {

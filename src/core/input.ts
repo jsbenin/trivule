@@ -6,7 +6,6 @@ import {
   ITrivuleInput,
   ITrivuleInputCallback,
   Rule,
-  RuleCallBack,
   TrivuleAttribute,
   TrivuleHooks,
   TrivuleInputParms,
