@@ -16,11 +16,6 @@ describe('Trivule', () => {
       expect(trivule.getAttributePrefix()).toBe('@v:');
     });
 
-    it('should return the custom attribute prefix data-tr- when provided in config', () => {
-      const trivule = Trivule.init({ attributePrefix: 'data-tr-' });
-      expect(trivule.getAttributePrefix()).toBe('data-tr-');
-    });
-
     it('should return the custom attribute prefix data-custom- when provided in config', () => {
       const trivule = Trivule.init({ attributePrefix: 'data-custom-' });
       expect(trivule.getAttributePrefix()).toBe('data-custom-');
@@ -52,7 +47,7 @@ describe('Trivule', () => {
   });
 
   describe('init', () => {
-    it('should create a singleton instance', () => {
+    it('should create a unique instance', () => {
       const trivule1 = Trivule.init();
       const trivule2 = Trivule.init();
       expect(trivule1).toBe(trivule2);
@@ -66,12 +61,10 @@ describe('Trivule', () => {
 
     it('should apply custom configuration', () => {
       const trivule = Trivule.init({
-        attributePrefix: 'data-custom-',
         invalidClass: 'error',
         validClass: 'success',
       });
 
-      expect(trivule.getAttributePrefix()).toBe('data-custom-');
       expect(trivule.parameter.invalidClass).toBe('error');
       expect(trivule.parameter.validClass).toBe('success');
     });

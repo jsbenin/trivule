@@ -332,4 +332,5 @@ export type TrivuleAttribute =
   | 'disabled-class'
   | 'name'
   | 'lang'
-  | 'show';
+  | 'show'
+  | 'form';
