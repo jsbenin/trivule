@@ -8,38 +8,7 @@ To get started with Trivule, please refer to the comprehensive documentation ava
 
 **Major v2.0 Refactor**: Trivule has been completely streamlined for better performance and maintainability:
 
-- **30-40% less code** with the same validation power
-- **Removed complex features** like lifecycle hooks and real-time validation
-- **Simplified API** focused on core validation functionality
-- **Better performance** with reduced bundle size and faster execution
-- **Cleaner codebase** that's easier to understand and extend
-
 ## Key Features
-
-**Imperative Validation Approach**
-
-```js
-const trivule = Trivule.init();
-const trivuleForm = trivule.form('form', {
-  feedbackSelector: '.invalid-feedback',
-});
-
-trivuleForm.make({
-  email: {
-    rules: ['required', 'email', 'maxlength:60'],
-    feedbackElement: '.invalid-feedback',
-  },
-});
-
-trivuleForm.get('email');
-```
-
-- **Streamlined Validation**: Implement complex validation rules without the hassle. Trivule simplifies your workflow, allowing you to focus on building better user experiences.
-- **Time-Saving**: With Trivule, save valuable time that you can invest in other critical aspects of your project.
-- **Simplified API**: Clean, focused API with ~30-40% less complexity while maintaining all essential validation features.
-- **Framework Compatibility**: Seamlessly integrate with modern frameworks using a consistent interface
-
-**Declarative Validation Approach**
 
 ```html
 <input name="email" type="text" @v:rules="required|email|maxlength:60" />
