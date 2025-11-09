@@ -22,40 +22,50 @@ This guide helps you migrate from previous versions of Trivule to the latest ver
 // Option 1: Use a dedicated phone validation library like libphonenumber-js
 import { parsePhoneNumber } from 'libphonenumber-js';
 
-trivule.defineRule('phone', (value, countries) => {
-  try {
-    const phoneNumber = parsePhoneNumber(value, countries);
-    return {
-      passes: phoneNumber.isValid(),
-      value: value
-    };
-  } catch {
-    return {
-      passes: false,
-      value: value
-    };
-  }
-}, 'Invalid phone number');
+trivule.defineRule(
+  'phone',
+  (value, countries) => {
+    try {
+      const phoneNumber = parsePhoneNumber(value, countries);
+      return {
+        passes: phoneNumber.isValid(),
+        value: value,
+      };
+    } catch {
+      return {
+        passes: false,
+        value: value,
+      };
+    }
+  },
+  'Invalid phone number',
+);
 
 // Option 2: Use a simple regex for basic validation
-trivule.defineRule('phone', (value) => {
-  const phoneRegex = /^[\+]?[\d\s\-\(\)]+$/;
-  return {
-    passes: phoneRegex.test(value),
-    value: value
-  };
-}, 'Invalid phone number format');
+trivule.defineRule(
+  'phone',
+  (value) => {
+    const phoneRegex = /^[\+]?[\d\s\-\(\)]+$/;
+    return {
+      passes: phoneRegex.test(value),
+      value: value,
+    };
+  },
+  'Invalid phone number format',
+);
 ```
 
 **Migration Steps:**
 
 1. **Remove phone rules** from your HTML/JavaScript:
+
    ```html
    <!-- Remove this -->
    <input data-tr-rules="phone" />
    ```
 
 2. **Install a phone validation library** (recommended):
+
    ```bash
    npm install libphonenumber-js
    # or
@@ -63,17 +73,22 @@ trivule.defineRule('phone', (value) => {
    ```
 
 3. **Define your custom phone rule**:
+
    ```javascript
    import { parsePhoneNumber } from 'libphonenumber-js';
-   
-   trivule.defineRule('phone', (value, country) => {
-     try {
-       const phone = parsePhoneNumber(value, country);
-       return { passes: phone.isValid(), value };
-     } catch {
-       return { passes: false, value };
-     }
-   }, 'Please enter a valid phone number');
+
+   trivule.defineRule(
+     'phone',
+     (value, country) => {
+       try {
+         const phone = parsePhoneNumber(value, country);
+         return { passes: phone.isValid(), value };
+       } catch {
+         return { passes: false, value };
+       }
+     },
+     'Please enter a valid phone number',
+   );
    ```
 
 4. **Update your forms**:
@@ -99,6 +114,7 @@ const trivule = Trivule.init(config);
 ## Key Changes
 
 ### 1. Removed Dependencies
+
 - Phone validation logic and dependencies have been removed
 - Reduced bundle size significantly
 - Better tree-shaking support
