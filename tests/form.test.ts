@@ -76,7 +76,7 @@ class MyForm {
 const formInstance = new MyForm();
 
 describe('TrivuleForm', () => {
-  const trivuleForm = TrivuleForm.create();
+  const trivuleForm = new TrivuleForm();
   trivuleForm.init(formInstance.form, {
     realTime: false,
   });
@@ -119,27 +119,18 @@ describe('TrivuleForm', () => {
   });
 
   describe('bind', () => {
-    let trForm = TrivuleForm.create();
+    let trForm = new TrivuleForm();
     test('Should return null for the native element', () => {
       expect(trForm.getNativeElement()).toBeNull();
     });
 
     test('Should return the native element with ', () => {
-      trForm = TrivuleForm.create();
+      trForm = new TrivuleForm();
       trForm.bind(formInstance.form);
       expect(trForm.getNativeElement()).toBe(formInstance.form);
     });
-    test('Should return the native element with config', () => {
-      trForm = TrivuleForm.create();
-      trForm.init({
-        element: formInstance.form,
-        realTime: false,
-      });
-      expect(trForm.getNativeElement()).toBe(formInstance.form);
-      expect(trForm.isRealTimeEnabled()).toBe(false);
-    });
     test('Should resole inputs validations', () => {
-      trForm = TrivuleForm.create();
+      trForm = new TrivuleForm();
       trForm.make([
         {
           rules: 'required|between:18,40',
@@ -155,10 +146,9 @@ describe('TrivuleForm', () => {
         realTime: false,
       });
       expect(trForm.getNativeElement()).toBe(formInstance.form);
-      expect(trForm.isRealTimeEnabled()).toBe(false);
     });
     test('Should return the native element', () => {
-      trForm = TrivuleForm.create();
+      trForm = new TrivuleForm();
       trForm.init(formInstance.form);
       expect(trForm.getNativeElement()).toBe(formInstance.form);
     });
@@ -168,7 +158,7 @@ describe('TrivuleForm', () => {
     let form: TrivuleForm;
 
     beforeEach(() => {
-      form = TrivuleForm.create();
+      form = new TrivuleForm();
     });
 
     describe('afterBinding', () => {

@@ -291,6 +291,10 @@ export type TrivuleFormConfig = {
   feedbackSelector?: CssSelector;
   realTime?: boolean;
   element?: ValidatableForm;
+  /**
+   * Events that trigger form validation ('input', 'blur', 'submit')
+   */
+  triggerEvents?: ('input' | 'blur' | 'submit')[];
 };
 
 export type TrivuleHooks = 'before.init' | 'after.init' | 'destroy' | string;

@@ -115,7 +115,7 @@ export class Trivule {
     selector: ValidatableForm | TrivuleFormConfig,
     config: TrivuleFormConfig,
   ) {
-    const trForm = TrivuleForm.create(this.parameter);
+    const trForm = new TrivuleForm(this.parameter);
     trForm.init(selector, config);
     return trForm;
   }
@@ -126,11 +126,11 @@ export class Trivule {
 
   /**
    * Returns the configured attribute prefix
-   * @returns The attribute prefix string (e.g., "data-tr-")
+   * @returns The attribute prefix string (e.g., "@v:")
    * Example:
    * ```
-   * const trivule = Trivule.init({ attributePrefix: 'data-tr-' });
-   * trivule.getAttributePrefix(); // Returns "data-tr-"
+   * const trivule = Trivule.init({ attributePrefix: '@v:' });
+   * trivule.getAttributePrefix(); // Returns "@v:"
    * ```
    */
   getAttributePrefix(): string {

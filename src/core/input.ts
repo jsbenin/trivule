@@ -67,7 +67,7 @@ export class TrivuleInput {
     validClass: '',
     invalidClass: 'is-invalid',
     type: 'text',
-    realTime: true,
+    realTime: false,
   };
 
   protected parameter: TrParameter;
@@ -126,18 +126,7 @@ export class TrivuleInput {
         this.__wasInit = true;
         this.events.forEach((e) => {
           this.inputElement.addEventListener(e, () => {
-            if (!this.realTime) {
-              if (e != 'input' && e != 'keyup' && e != 'keydown') {
-                this.value = this.getInputElemenyValue();
-                this.emit('tr.input.update', {
-                  detail: {
-                    rules: this.rules,
-                    input: {},
-                    element: this.inputElement,
-                  },
-                });
-              }
-            } else {
+            if (e != 'input' && e != 'keyup' && e != 'keydown') {
               this.value = this.getInputElemenyValue();
               this.emit('tr.input.update', {
                 detail: {
@@ -607,11 +596,11 @@ export class TrivuleInput {
     return this;
   }
   /**
-   * Sets whether validation should stop after the first error is encountered.
-  /**
-   * Gets the feedback element associated with this Trivule input.
-   * @returns The feedback element if set, otherwise null.
-   */
+	 * Sets whether validation should stop after the first error is encountered.
+	/**
+	 * Gets the feedback element associated with this Trivule input.
+	 * @returns The feedback element if set, otherwise null.
+	 */
   getFeedbackElement() {
     return this.feedbackElement;
   }
