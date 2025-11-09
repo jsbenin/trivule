@@ -101,6 +101,7 @@ export class TrParameter {
     if (config.validClass !== undefined) {
       this.validClass = config.validClass;
     }
+    // TODO: replace this attribute by those event: input | blur | submit
     if (config.realTime !== undefined) {
       this.realTime = config.realTime;
     }

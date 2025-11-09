@@ -57,8 +57,14 @@ describe('defineRule', () => {
 
     it('should define multiple rules independently', () => {
       // Define multiple custom rules
-      trivule.defineRule('ruleOne', (value) => ({ passes: value === 'one', value }));
-      trivule.defineRule('ruleTwo', (value) => ({ passes: value === 'two', value }));
+      trivule.defineRule('ruleOne', (value) => ({
+        passes: value === 'one',
+        value,
+      }));
+      trivule.defineRule('ruleTwo', (value) => ({
+        passes: value === 'two',
+        value,
+      }));
       trivule.defineRule('ruleThree', (value) => ({
         passes: value === 'three',
         value,
@@ -102,7 +108,10 @@ describe('defineRule', () => {
       const result = trivule
         .defineRule('chainOne', (value) => ({ passes: value === 'one', value }))
         .defineRule('chainTwo', (value) => ({ passes: value === 'two', value }))
-        .defineRule('chainThree', (value) => ({ passes: value === 'three', value }));
+        .defineRule('chainThree', (value) => ({
+          passes: value === 'three',
+          value,
+        }));
 
       // Verify chaining returns the trivule instance
       expect(result).toBe(trivule);
@@ -190,7 +199,9 @@ describe('defineRule', () => {
       input.value = '15';
       trivuleInput.validate();
       expect(trivuleInput.fails()).toBe(true);
-      expect(trivuleInput.errors.minValue).toBe('The value must be at least 18');
+      expect(trivuleInput.errors.minValue).toBe(
+        'The value must be at least 18',
+      );
 
       // Test with valid value (at or above minimum)
       input.value = '20';
@@ -223,7 +234,10 @@ describe('defineRule', () => {
       const input = document.createElement('input');
       input.setAttribute('type', 'email');
       input.setAttribute('name', 'email');
-      input.setAttribute(attr('rules'), 'required|email|emailDomain:company.com');
+      input.setAttribute(
+        attr('rules'),
+        'required|email|emailDomain:company.com',
+      );
 
       const feedbackElement = document.createElement('p');
       feedbackElement.setAttribute(attr('feedback'), 'email');
@@ -329,7 +343,9 @@ describe('defineRule', () => {
       ageInput.value = '15';
       ageValidator.validate();
       expect(ageValidator.fails()).toBe(true);
-      expect(ageValidator.errors.validAge).toBe('Age must be between 18 and 120');
+      expect(ageValidator.errors.validAge).toBe(
+        'Age must be between 18 and 120',
+      );
 
       // Test valid password
       passwordInput.value = 'StrongP@ss1';
@@ -692,9 +708,9 @@ describe('defineRule', () => {
       const form = trivule.form(formElement, {});
 
       // The rule defined on Trivule should be available on the form
-      expect(form.parameter.ruleRegistry.hasRule('sharedBetweenInstances')).toBe(
-        true,
-      );
+      expect(
+        form.parameter.ruleRegistry.hasRule('sharedBetweenInstances'),
+      ).toBe(true);
 
       // Define a rule on the form
       form.defineRule('formSpecificRule', (value) => ({

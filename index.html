@@ -3,28 +3,56 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Example</title>
+    <title>Trivule - Test</title>
+    <style>
+      .is-valid {
+        border-color: green;
+      }
+      .is-invalid {
+        border-color: red;
+      }
+      .error-message {
+        color: red;
+        font-size: 0.9em;
+      }
+    </style>
   </head>
   <body>
-    <form @v:form @v:event="input">
-      <input
-        type="text"
-        name="email"
-        @v:rules="required|email"
-        @v:msg:email="Please provide a valid email"
-      />
-      <p @v:feedback="email"></p>
+    <h1>Trivule Global Initialization Demo</h1>
 
-      <input type="password" name="password" @v:rules="required|min:6" />
-      <p @v:feedback="password"></p>
+    <form @v:form>
+      <div>
+        <label for="email">Email:</label>
+        <input
+          id="email-1"
+          type="text"
+          id="email"
+          name="email"
+          @v:rules="required|email"
+          @v:msg:email="Please provide a valid email"
+        />
+        <p @v:feedback="email" class="error-message"></p>
+      </div>
+
+      <div>
+        <label for="password">Password:</label>
+        <input
+          id="password-1"
+          type="password"
+          id="password"
+          name="password"
+          @v:rules="required|min:6"
+        />
+        <p @v:feedback="password" class="is-invalid"></p>
+      </div>
 
       <button type="submit" @v:submit>Register</button>
     </form>
+
     <script src="/src/index.ts" type="module"></script>
 
     <script type="module">
-      const trivule = Trivule.init();
-      const t = trivule.form('form');
+      console.log('Trivule global initialization complete');
     </script>
   </body>
 </html>

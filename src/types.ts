@@ -254,6 +254,11 @@ export type TrivuleInputParms = {
   type?: string;
 
   realTime?: boolean;
+
+  /**
+   * Events that trigger validation for this input
+   */
+  triggerEvents?: ('input' | 'blur' | 'submit')[];
 };
 
 /**
@@ -291,6 +296,10 @@ export type TrivuleFormConfig = {
   feedbackSelector?: CssSelector;
   realTime?: boolean;
   element?: ValidatableForm;
+  /**
+   * Events that trigger form validation ('input', 'blur', 'submit')
+   */
+  triggerEvents?: ('input' | 'blur' | 'submit')[];
 };
 
 export type TrivuleHooks = 'before.init' | 'after.init' | 'destroy' | string;
@@ -332,4 +341,5 @@ export type TrivuleAttribute =
   | 'disabled-class'
   | 'name'
   | 'lang'
-  | 'show';
+  | 'show'
+  | 'form';

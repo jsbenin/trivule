@@ -237,7 +237,7 @@ export const config = (key: string): unknown => {
  *
  * @example
  * ```typescript
- * escapeCssSelector('v:rules') // Returns 'v\\:rules'
+ * escapeCssSelector('@v:rules') // Returns '\\@v\\:rules'
  * escapeCssSelector('data-tr-rules') // Returns 'data-tr-rules'
  * ```
  */
@@ -249,7 +249,7 @@ export const escapeCssSelector = (str: string): string => {
 
   // Fallback: manually escape special CSS characters
   // Characters that need escaping: : . [ ] # , ; ( ) { } + > ~ * = ^ $ | " ' \
-  return str.replace(/([:.[\]#,;(){}+>~*=^$|"'\\])/g, '\\$1');
+  return str.replace(/([:.[\]#,;(){}+>~*=^$|"'\\@])/g, '\\$1');
 };
 
 /**

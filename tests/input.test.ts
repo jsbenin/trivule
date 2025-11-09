@@ -145,9 +145,6 @@ describe('TrivuleInput', () => {
       vi.spyOn(validator as any, 'setValidationClass').mockImplementation(
         () => {},
       ); // Mock setValidationClass to prevent side effects
-      vi.spyOn(validator as any, 'emitChangeEvent').mockImplementation(
-        () => {},
-      ); // Mock emitChangeEvent to prevent side effects
 
       const result = validator.validate();
 
@@ -163,9 +160,6 @@ describe('TrivuleInput', () => {
       vi.spyOn(validator as any, 'setValidationClass').mockImplementation(
         () => {},
       ); // Mock setValidationClass to prevent side effects
-      vi.spyOn(validator as any, 'emitChangeEvent').mockImplementation(
-        () => {},
-      ); // Mock emitChangeEvent to prevent side effects
 
       // Act
       const result = validator.validate();
@@ -188,9 +182,6 @@ describe('TrivuleInput', () => {
       vi.spyOn(validator as any, 'setValidationClass').mockImplementation(
         () => {},
       ); // Mock setValidationClass to prevent side effects
-      vi.spyOn(validator as any, 'emitChangeEvent').mockImplementation(
-        () => {},
-      ); // Mock emitChangeEvent to prevent side effects
 
       validator.validate();
       const result = validator.errors;
@@ -213,9 +204,6 @@ describe('TrivuleInput', () => {
       vi.spyOn(validator as any, 'setValidationClass').mockImplementation(
         () => {},
       ); // Mock setValidationClass to prevent side effects
-      vi.spyOn(validator as any, 'emitChangeEvent').mockImplementation(
-        () => {},
-      ); // Mock emitChangeEvent to prevent side effects
 
       validator.validate();
       const result = validator.errors;
@@ -276,24 +264,11 @@ describe('TrivuleInput', () => {
     });
   });
 
-  describe('setEvents', () => {
-    let input = document.createElement('input');
-    input.setAttribute(attr('rules'), 'required');
-    const trivuleInput = createTrivuleInput(input);
-    it('Should return defaults events, if not events provided', () => {
-      expect(trivuleInput.events).toEqual(['change', 'blur', 'input']);
-    });
-
-    it('Should return the provided events', () => {
-      trivuleInput.setEventTriggers('change');
-      expect(trivuleInput.events).toEqual(['change']);
-    });
-    input = document.createElement('input');
-    input.setAttribute(attr('rules'), 'required');
-    input.setAttribute(attr('events'), 'keyup');
-    const trivuleInput1 = createTrivuleInput(input);
-    it('Should return the provided events', () => {
-      expect(trivuleInput1.events).toEqual(['keyup']);
+  describe('getInputElement', () => {
+    test('should return the input element', () => {
+      const inputElement = document.createElement('input');
+      const trivuleInput = createTrivuleInput(inputElement);
+      expect(trivuleInput.getInputElement()).toBe(inputElement);
     });
   });
 });

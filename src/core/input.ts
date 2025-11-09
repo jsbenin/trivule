@@ -3,12 +3,9 @@ import {
   EventCallback,
   InputValueType,
   InputType,
-  ITrivuleInput,
-  ITrivuleInputCallback,
   Rule,
   RuleCallBack,
   TrivuleAttribute,
-  TrivuleHooks,
   TrivuleInputParms,
   ValidatableInput,
 } from '../types';
@@ -67,18 +64,14 @@ export class TrivuleInput {
     validClass: '',
     invalidClass: 'is-invalid',
     type: 'text',
-    realTime: true,
   };
 
   protected parameter: TrParameter;
 
   autoValidate = true;
   protected _value: InputValueType = undefined;
-  private _emitOnValidate: boolean = true;
 
   protected _type: InputType = 'text';
-  protected realTime: boolean = false;
-  protected _events = ['change', 'blur', 'input'];
 
   /**
    * The attribute name used in validation error messages
@@ -120,37 +113,14 @@ export class TrivuleInput {
    * ```
    */
   init() {
-    if (!this.__wasInit) {
-      this.executeHooks('before.init');
-      if (this.autoValidate) {
-        this.__wasInit = true;
-        this.events.forEach((e) => {
-          this.inputElement.addEventListener(e, () => {
-            if (!this.realTime) {
-              if (e != 'input' && e != 'keyup' && e != 'keydown') {
-                this.value = this.getInputElemenyValue();
-                this.emit('tr.input.update', {
-                  detail: {
-                    rules: this.rules,
-                    input: {},
-                    element: this.inputElement,
-                  },
-                });
-              }
-            } else {
-              this.value = this.getInputElemenyValue();
-              this.emit('tr.input.update', {
-                detail: {
-                  rules: this.rules,
-                  input: {},
-                  element: this.inputElement,
-                },
-              });
-            }
-          });
+    // Attach trigger events for validation
+    if (this.param.triggerEvents) {
+      this.param.triggerEvents.forEach((event) => {
+        if (event === 'submit') return;
+        this.inputElement.addEventListener(event, () => {
+          this.validate();
         });
-      }
-      this.executeHooks('after.init');
+      });
     }
   }
   /**
@@ -193,54 +163,11 @@ export class TrivuleInput {
     return this.name === inputName;
   }
 
-  onFails(fn: EventCallback) {
-    this.on('tr.input.fails', () => {
-      this.__call(fn, this);
-    });
-  }
-
-  onPasses(fn: EventCallback) {
-    this.on('tr.input.passes', () => {
-      this.__call(fn, this);
-    });
-  }
-
-  onUpdate(fn: EventCallback) {
-    this.on('tr.input.update', () => {
-      this.__call(fn, this);
-    });
-  }
-
-  destroy() {
-    this.param.events?.forEach((e) => {
-      this.inputElement.removeEventListener(e, () => {
-        this.validate();
-      });
-    });
-    this.param.events = [];
-    this.rules.clear();
-    this.param.rules = [];
-    this.executeHooks('destroy');
-  }
-
   is(input: HTMLInputElement) {
     return input === this.inputElement;
   }
-  private hooks: Record<TrivuleHooks, ITrivuleInputCallback<ITrivuleInput>[]> =
-    {
-      'before.init': [],
-      'after.init': [],
-      destroy: [],
-    };
+
   _validateCount = 0;
-  /**
-   * Check if pass event should be emitted
-   */
-  private _emitOnPasses = true;
-  /**
-   * Check if fails event should be emitted
-   */
-  private _emitOnFails = true;
 
   /**
    * Private method to get attribute data from the input element
@@ -290,9 +217,6 @@ export class TrivuleInput {
   validate() {
     this.valid();
     this.setValidationClass();
-    if (this.emitOnValidate) {
-      this.emitChangeEvent();
-    }
     return this._passed;
   }
 
@@ -392,40 +316,6 @@ export class TrivuleInput {
   on(e: string, fn: EventCallback): void {
     this.inputElement.addEventListener(e, fn);
   }
-  /**
-   * Emit event if input change
-   */
-  private emitChangeEvent() {
-    if (this._passed) {
-      if (this._emitOnPasses) {
-        this.emit('tr.input.passes', {
-          detail: {
-            rules: this.rules,
-            input: {},
-            element: this.inputElement,
-          },
-        });
-        //Disable on passes emition until, validation failed
-        this._emitOnPasses = false;
-        //Enable on fails emitions
-        this._emitOnFails = true;
-      }
-    } else {
-      if (this._emitOnFails) {
-        this.emit('tr.input.fails', {
-          detail: {
-            rules: this.rules,
-            input: {},
-            element: this.inputElement,
-          },
-        });
-        //Enable on passes emitions
-        this._emitOnPasses = true;
-        // Disable on fails emitions, until validation passes
-        this._emitOnFails = false;
-      }
-    }
-  }
 
   /**
    * Check if the input element has failed validation.
@@ -513,18 +403,6 @@ export class TrivuleInput {
     this.autoValidate = autoValidate;
     return this;
   }
-  /**
-   * Sets the events that trigger validation of the input.
-   * @param eventTriggers The event or events that trigger validation.
-   * @returns This Trivule input instance.
-   * @example
-   * const trivuleInput = new TrivuleInput();
-   * trivuleInput.setEventTriggers(["input", "change"]); // Sets events "input" and "change" to trigger validation
-   */
-  setEventTriggers(eventTriggers: string | string[]): this {
-    this.events = this.eventToArray(eventTriggers);
-    return this;
-  }
 
   /**
    * Sets the type of the input element.
@@ -540,85 +418,14 @@ export class TrivuleInput {
   }
 
   /**
-   * Sets a callback function to execute before initializing the Trivule input.
-   * @param callback The callback function to execute.
-   * @example
-   * const trivuleInput = new TrivuleInput();
-   * trivuleInput.beforeInit((input) => { console.log("Before init:", input); }); // Sets a callback to execute before initializing the Trivule input
-   */
-  beforeInit(callback: ITrivuleInputCallback<ITrivuleInput>): this {
-    this.addHook('before.init', callback);
-    return this;
-  }
-
-  /**
-   * Sets a callback function to execute after initializing the Trivule input.
-   * @param callback The callback function to execute.
-   * @example
-   * const trivuleInput = new TrivuleInput();
-   * trivuleInput.afterInit((input) => { console.log("After init:", input); }); // Sets a callback to execute after initializing the Trivule input
-   */
-  afterInit(callback: ITrivuleInputCallback<ITrivuleInput>): this {
-    this.addHook('after.init', callback);
-    return this;
-  }
-  /**
-   * Sets a callback function to execute when a rule fails for this input.
-   * @param rule The rule name for which the callback is set.
-   * @param callback The callback function to execute.
-   * @returns This Trivule input instance.
-   * @example
-   * const trivuleInput = new TrivuleInput();
-   * trivuleInput.onRuleFail("required", (input) => { console.log("Rule failed:", input); }); // Sets a callback for when the "required" rule fails
-   */
-  onRuleFail(
-    rule: string | Rule,
-    callback: ITrivuleInputCallback<ITrivuleInput>,
-  ): this {
-    this.addHook(`after.fails.${rule}`, callback);
-    return this;
-  }
-  /**
-   * Sets a callback function to execute when a rule passes for this input.
-   * @param rule The rule name for which the callback is set.
-   * @param callback The callback function to execute.
-   * @returns This Trivule input instance.
-   * @example
-   * const trivuleInput = new TrivuleInput();
-   * trivuleInput.onRulePass("required", (input) => { console.log("Rule passed:", input); }); // Sets a callback for when the "required" rule passes
-   */
-  onRulePass(
-    rule: string | Rule,
-    callback: ITrivuleInputCallback<ITrivuleInput>,
-  ): this {
-    this.addHook(`after.passes.${rule}`, callback);
-    return this;
-  }
-  /**
-   * Triggers the validation event manually.
-   * @param boolean A boolean value indicating whether to trigger the validation event.
-   * @returns This Trivule input instance.
-   * @example
-   * const trivuleInput = new TrivuleInput();
-   * trivuleInput.triggerValidateEvent(true); // Manually triggers the validation event
-   */
-  triggerValidateEvent(boolean: boolean = true): this {
-    this.emitOnValidate = boolean;
-    return this;
-  }
-  /**
-   * Sets whether validation should stop after the first error is encountered.
-  /**
-   * Gets the feedback element associated with this Trivule input.
-   * @returns The feedback element if set, otherwise null.
-   */
+	 * Sets whether validation should stop after the first error is encountered.
+	/**
+	 * Gets the feedback element associated with this Trivule input.
+	 * @returns The feedback element if set, otherwise null.
+	 */
   getFeedbackElement() {
     return this.feedbackElement;
   }
-  getRealTimeState() {
-    return this.realTime;
-  }
-
   /**
    * Checks if the Trivule input has a specific validation rule.
    *
@@ -635,34 +442,6 @@ export class TrivuleInput {
   }
 
   /**
-   * Enables real-time validation for the Trivule input. This means that validation will be performed on any event specified in the `events` property (e.g., 'change', 'blur', 'input') as the user interacts with the input.
-   *
-   * @returns This Trivule input instance.
-   */
-  enableRealTime() {
-    this.realTime = true;
-    return this;
-  }
-  /**
-   * Disables real-time validation for the Trivule input. Validation will only be triggered manually or on form submission.
-   *
-   * @returns This Trivule input instance.
-   */
-  disableRealTime() {
-    this.realTime = false;
-    this.events = this._events;
-    return this;
-  }
-  /**
-   * Checks if real-time validation is enabled for the Trivule input.
-   *
-   * @returns True if real-time validation is enabled, false otherwise.
-   */
-  isRealTimeEnabled() {
-    return this.realTime;
-  }
-
-  /**
    * Sets the validation rules for this Trivule input instance.
    * @param rules The validation rules to set.
    * @returns This Trivule input instance.
@@ -670,33 +449,6 @@ export class TrivuleInput {
   setRules(rules: Rule[] | string[] | Rule | string) {
     this.$rules.set(rules);
     return this;
-  }
-
-  /**
-   * Sets the event listeners for the input element.
-   * This method determines which events will trigger the validation based on
-   * the parameters provided or the attributes defined on the input element.
-   *
-   * @param events - An optional array of event names to be used for validation. If not provided, it will use the default or attribute-defined events.
-   *
-   * @example
-   * // Setting custom events for validation
-   * trivuleInput._setEvent(['focus', 'blur']);
-   *
-   * // Using attribute-defined events
-   * const inputElement = document.querySelector('input[name="email"]');
-   * inputElement.setAttribute('data-tr-events', 'input|change');
-   * trivuleInput._setEvent();
-   */
-
-  protected _setEvent(events?: string[]) {
-    const ev = this.getAttrData<string | undefined>('events', undefined);
-
-    if (ev) {
-      events = ev.split('|').length ? ev.split('|') : this.param.events;
-    }
-
-    this.events = this.eventToArray(events ?? this.param.events);
   }
 
   /**
@@ -951,8 +703,6 @@ export class TrivuleInput {
 
     this._setTrValidationClass();
 
-    this._setEvent(this.param.events ?? this._events);
-
     //Set the validation rules
     const rules: string | string[] | Rule[] | undefined = this.getAttrData(
       'rules',
@@ -968,7 +718,6 @@ export class TrivuleInput {
     }
 
     this._type = (this.param.type ?? 'text') as InputType;
-    this.realTime = this.param.realTime ?? this.realTime;
   }
   /**
    * Get the name of the attribute that
@@ -984,21 +733,6 @@ export class TrivuleInput {
    */
   get messages() {
     return this.rules.getMessages();
-  }
-
-  get emitOnValidate() {
-    return this._emitOnValidate;
-  }
-
-  set emitOnValidate(value: boolean) {
-    this._emitOnValidate = value;
-  }
-  set events(value: string[]) {
-    this._events = value;
-  }
-
-  get events() {
-    return this._events;
   }
 
   protected eventToArray(value?: string | string[]) {
@@ -1020,28 +754,10 @@ export class TrivuleInput {
   }
 
   /**
-   * Adds a callback to be executed for a specific hook.
-   * @param hook The name of the hook.
-   * @param callback The callback function to be executed when the hook is triggered.
+   * Gets the input element associated with this TrivuleInput
+   * @returns The HTML input element
    */
-  private addHook(
-    hook: TrivuleHooks,
-    callback: ITrivuleInputCallback<ITrivuleInput>,
-  ): void {
-    if (!this.hooks[hook]) {
-      this.hooks[hook] = [];
-    }
-    this.hooks[hook].push(callback);
-  }
-
-  /**
-   * Execute all callbacks for a specific hook.
-   * @param hook The name of the hook.
-   */
-  private executeHooks(hook: TrivuleHooks): void {
-    const callbacks = this.hooks[hook];
-    if (callbacks) {
-      callbacks.forEach((callback) => callback(this));
-    }
+  getInputElement(): HTMLInputElement {
+    return this.inputElement;
   }
 }
