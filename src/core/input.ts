@@ -1033,4 +1033,12 @@ export class TrivuleInput {
       callbacks.forEach((callback) => callback(this));
     }
   }
+
+  /**
+   * Gets the input element associated with this TrivuleInput
+   * @returns The HTML input element
+   */
+  getInputElement(): HTMLInputElement {
+    return this.inputElement;
+  }
 }

@@ -296,4 +296,12 @@ describe('TrivuleInput', () => {
       expect(trivuleInput1.events).toEqual(['keyup']);
     });
   });
+
+  describe('getInputElement', () => {
+    test('should return the input element', () => {
+      const inputElement = document.createElement('input');
+      const trivuleInput = createTrivuleInput(inputElement);
+      expect(trivuleInput.getInputElement()).toBe(inputElement);
+    });
+  });
 });

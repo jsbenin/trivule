@@ -1044,9 +1044,22 @@ export class TrivuleForm {
         return;
       }
 
-      this.container!.addEventListener(eventType, () => {
-        this._runValidation();
-      });
+      if (eventType === 'blur') {
+        // For blur events, attach to individual inputs
+        this.each((input) => {
+          const inputElement = input.getInputElement();
+          if (inputElement) {
+            inputElement.addEventListener('blur', () => {
+              this._runValidation();
+            });
+          }
+        });
+      } else {
+        // For other events (like 'input'), attach to container
+        this.container!.addEventListener(eventType, () => {
+          this._runValidation();
+        });
+      }
     });
   }
 

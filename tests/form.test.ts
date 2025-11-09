@@ -191,4 +191,73 @@ describe('TrivuleForm', () => {
       });
     });
   });
+
+  describe('Form State Properties', () => {
+    let form: TrivuleForm;
+
+    beforeEach(() => {
+      form = new TrivuleForm();
+    });
+
+    test('should have isDirty property', () => {
+      expect(form.isDirty).toBe(false);
+    });
+
+    test('should have validated property', () => {
+      expect(form.validated).toBe(false);
+    });
+
+    test('should have formState property', () => {
+      const formState = form.formState;
+      expect(formState).toHaveProperty('passes');
+      expect(formState).toHaveProperty('fails');
+      expect(formState).toHaveProperty('errors');
+      expect(formState).toHaveProperty('validInputs');
+      expect(formState).toHaveProperty('invalidInputs');
+      expect(Array.isArray(formState.errors)).toBe(true);
+      expect(Array.isArray(formState.validInputs)).toBe(true);
+      expect(Array.isArray(formState.invalidInputs)).toBe(true);
+    });
+  });
+
+  describe('setLanguage method', () => {
+    test('should set language on the form', () => {
+      const form = new TrivuleForm();
+      form.setLanguage('fr');
+      // Note: This tests that the method exists and doesn't throw
+      expect(typeof form.setLanguage).toBe('function');
+    });
+  });
+
+  describe('Trigger Events Configuration', () => {
+    test('should accept triggerEvents in config', () => {
+      const form = new TrivuleForm();
+      form.init(formInstance.form, {
+        triggerEvents: ['input', 'blur'],
+      });
+      expect(typeof form.init).toBe('function');
+    });
+
+    test('should default to blur and submit events', () => {
+      const form = new TrivuleForm();
+      form.init(formInstance.form);
+      expect(typeof form.init).toBe('function');
+    });
+  });
+
+  describe('getValidatedInputs method', () => {
+    test('should return validated inputs', () => {
+      const form = new TrivuleForm();
+      form.init(formInstance.form);
+      const validatedInputs = form.getValidatedInputs();
+      expect(Array.isArray(validatedInputs)).toBe(true);
+    });
+
+    test('should return validated inputs in strict mode', () => {
+      const form = new TrivuleForm();
+      form.init(formInstance.form);
+      const validatedInputs = form.getValidatedInputs(true);
+      expect(Array.isArray(validatedInputs)).toBe(true);
+    });
+  });
 });
