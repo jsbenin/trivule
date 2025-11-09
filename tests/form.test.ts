@@ -90,34 +90,6 @@ describe('TrivuleForm', () => {
     expect(trivuleForm.get('age')).toBe(trInput);
   });
 
-  test('Test the make method', () => {
-    const trInput = createTrivuleInput(formInstance.ageInput);
-    trivuleForm.addTrivuleInput(trInput);
-    trivuleForm
-      .make([
-        {
-          rules: 'required|between:18,40',
-          selector: 'age', //The input name
-        },
-        {
-          rules: 'required|date',
-          selector: formInstance.birthDayInput,
-        },
-      ])
-      .make({
-        message: {
-          rules: 'required|only:string',
-        },
-      });
-
-    const birthDayInput = trivuleForm.get('birthDay');
-    expect(birthDayInput?.is(formInstance.birthDayInput)).toBe(true);
-    const ageInput = trivuleForm.get('age');
-    expect(ageInput?.hasRule('between')).toBe(true);
-    const messageInput = trivuleForm.get('message');
-    expect(messageInput?.hasRule('only')).toBe(true);
-  });
-
   describe('bind', () => {
     let trForm = new TrivuleForm();
     test('Should return null for the native element', () => {
@@ -129,66 +101,11 @@ describe('TrivuleForm', () => {
       trForm.bind(formInstance.form);
       expect(trForm.getNativeElement()).toBe(formInstance.form);
     });
-    test('Should resole inputs validations', () => {
-      trForm = new TrivuleForm();
-      trForm.make([
-        {
-          rules: 'required|between:18,40',
-          selector: 'age', //The input name
-        },
-        {
-          rules: 'required|date',
-          selector: formInstance.birthDayInput,
-        },
-      ]);
-      trForm.init({
-        element: formInstance.form,
-        realTime: false,
-      });
-      expect(trForm.getNativeElement()).toBe(formInstance.form);
-    });
+
     test('Should return the native element', () => {
       trForm = new TrivuleForm();
       trForm.init(formInstance.form);
       expect(trForm.getNativeElement()).toBe(formInstance.form);
-    });
-  });
-
-  describe('afterBinding && beforeBinding', () => {
-    let form: TrivuleForm;
-
-    beforeEach(() => {
-      form = new TrivuleForm();
-    });
-
-    describe('afterBinding', () => {
-      it('should register a callback for after binding', () => {
-        const callback = vi.fn();
-        form.afterBinding(callback);
-        form.bind(formInstance.form);
-        expect(callback).toHaveBeenCalled();
-      });
-
-      it('should allow method chaining', () => {
-        const callback = vi.fn();
-        const returnValue = form.afterBinding(callback);
-        expect(returnValue).toBe(form);
-      });
-    });
-
-    describe('beforeBinding', () => {
-      it('should register a callback for before binding', () => {
-        const callback = vi.fn();
-        form.beforeBinding(callback);
-        form.bind(formInstance.form);
-        expect(callback).toHaveBeenCalled();
-      });
-
-      it('should allow method chaining', () => {
-        const callback = vi.fn();
-        const returnValue = form.beforeBinding(callback);
-        expect(returnValue).toBe(form);
-      });
     });
   });
 
@@ -211,14 +128,6 @@ describe('TrivuleForm', () => {
       const formState = form.formState;
       expect(formState).toHaveProperty('isDirty');
       expect(formState).toHaveProperty('validated');
-      expect(formState).toHaveProperty('passes');
-      expect(formState).toHaveProperty('fails');
-      expect(formState).toHaveProperty('errors');
-      expect(formState).toHaveProperty('validInputs');
-      expect(formState).toHaveProperty('invalidInputs');
-      expect(Array.isArray(formState.errors)).toBe(true);
-      expect(Array.isArray(formState.validInputs)).toBe(true);
-      expect(Array.isArray(formState.invalidInputs)).toBe(true);
     });
   });
 

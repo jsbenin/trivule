@@ -254,6 +254,11 @@ export type TrivuleInputParms = {
   type?: string;
 
   realTime?: boolean;
+
+  /**
+   * Events that trigger validation for this input
+   */
+  triggerEvents?: ('input' | 'blur' | 'submit')[];
 };
 
 /**

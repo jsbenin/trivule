@@ -34,24 +34,12 @@ import { TrParameter } from './utils/parameter';
 export class TrivuleForm {
   private _eventCallbacks: Record<string, EventCallback[]> = {};
   private _registerInputs: Record<string | number, TrivuleInputParms> = {};
-  private _lifeCycleCallbacks: Record<
-    string,
-    TrivuleFormHandler<TrivuleForm>[]
-  > = {};
+
   private __calledCount = 0;
   /**
    * This status indicates the current state of the form
    */
   private _passed = false;
-
-  /***
-   * Check that if passes event can be emitted
-   */
-  private _emitOnPasses = true;
-  /***
-   * Check that if passes event can be emitted
-   */
-  private _emitOnFails = true;
 
   /**
    * The class that indicates the submit button is enabled
@@ -81,28 +69,19 @@ export class TrivuleForm {
    */
   parameter: TrParameter;
 
-  private _onUpdateCallbacks: TrivuleFormHandler<TrivuleForm>[] = [];
-
   private _wasInit = false;
   private _wasBound = false;
 
   /**
    * Form state properties
    */
-  private _formState = {
-    isDirty: false,
-    validated: false,
-    passes: false,
-    fails: false,
-    errors: [] as string[],
-    validInputs: [] as string[],
-    invalidInputs: [] as string[],
-  };
+  private _isDirty = false;
+  private _validated = false;
 
   /**
    * Events that trigger form validation
    */
-  private _triggerEvents: ('input' | 'blur' | 'submit')[] = ['input', 'submit'];
+  private _triggerEvents: ('input' | 'blur' | 'submit')[] = ['submit'];
 
   constructor(parameter?: TrParameter) {
     this.parameter = parameter ?? TrParameter.instance();
@@ -375,16 +354,12 @@ export class TrivuleForm {
     const validateCallback = () => {
       const results: boolean[] = [];
       this.each((trInput) => {
-        trInput.emitOnValidate = false;
         results.push(trInput.validate());
       });
 
       // Test whether each rule passed
       if (!results.every((passed) => passed)) {
         //submitEvent.preventDefault();
-        this._emitTrOnFailsEvent();
-      } else {
-        this._emitTrOnPassesEvent();
       }
 
       return this._passed;
@@ -526,7 +501,6 @@ export class TrivuleForm {
    */
   observeChanges(fn?: EventCallback): void {
     this.on('tr.form.updated', () => {
-      this.destroyInputs();
       this._initTrivuleInputs();
       this.__call(fn, this);
     });
@@ -553,7 +527,7 @@ export class TrivuleForm {
         : Array.from(
             this.container.querySelectorAll<HTMLElement>(attrSelector('rules')),
           );
-      inputs.forEach((el) => this.make([{ selector: el }]));
+      inputs.forEach((el, index) => this._bootInputs({ selector: el }, index));
     }
   }
 
@@ -565,61 +539,6 @@ export class TrivuleForm {
   private __call(fn?: CallableFunction, ...params: unknown[]) {
     if (typeof fn == 'function') {
       fn(...params);
-    }
-  }
-
-  /**
-   * Destroys the TrivuleForm instance and performs any necessary cleanup.
-   * This method removes event handlers, destroys TrivuleInput instances,
-   * and clears the internal array of TrivuleInput instances.
-   *
-   * Example:
-   * ```typescript
-   * const formElement = document.getElementById("myForm") as HTMLFormElement;
-   * const trivuleForm = new TrivuleForm();
-   * trivuleForm.setConfig(formElement);
-   * trivuleForm.init();
-   *
-   * // Use the form...
-   *
-   * // When the form is no longer needed, destroy the TrivuleForm instance
-   * trivuleForm.destroy();
-   * ```
-   */
-  destroy(): void {
-    // Remove event handlers
-    if (this.container) {
-      this.container.removeEventListener('submit', this._onSubmit);
-      this.destroyInputs();
-      this._trivuleInputs = {};
-      this.emit('tr.form.destroy');
-    }
-  }
-
-  /**
-   * Emits the "tr.form.fails" event if the form fails validation.
-   * This method is called when the form is considered invalid, meaning at least one input fails validation.
-   */
-  private _emitTrOnFailsEvent() {
-    //If tr.form.fails
-    if (this._emitOnFails) {
-      this.emit('tr.form.fails', this);
-      this._emitOnFails = false;
-      //Open _emitOnPasses, for the next tr.form.passes event
-      this._emitOnPasses = true;
-    }
-  }
-  /**
-   * Emits the "tr.form.passes" event if the form passes validation.
-   * This method is called when the form is considered valid, meaning all inputs pass validation.
-   */
-  private _emitTrOnPassesEvent() {
-    //If tr.form.passes
-    if (this._emitOnPasses) {
-      this.emit('tr.form.passes', this);
-      this._emitOnPasses = false;
-      //Open _emitOnFails, for the next tr.form.fails event
-      this._emitOnFails = true;
     }
   }
 
@@ -666,32 +585,6 @@ export class TrivuleForm {
   }
 
   /**
-   *  The onInit(fn: TrivuleFormHandler<TrivuleForm>) method registers a callback function to be executed
-   *  when the Trivule form is initialized. It listens for the 'tr.form.init'
-   * @param fn
-   */
-  onInit(fn: TrivuleFormHandler<TrivuleForm>) {
-    this.on('tr.form.init', (event: Event) => {
-      if (event instanceof CustomEvent) {
-        this.__call(fn, event.detail);
-      }
-    });
-  }
-
-  /**
-   * When any input value is updated
-   * @param fn
-   */
-  onUpdate(fn: TrivuleFormHandler<TrivuleForm>) {
-    this._onUpdateCallbacks.push(fn);
-  }
-
-  private destroyInputs() {
-    this.each((trInput) => {
-      trInput.destroy();
-    });
-  }
-  /**
    * Iterate over each TrivuleInput in the form and execute a callback function.
    * @param call The callback function to be executed for each TrivuleInput.
    */
@@ -734,64 +627,11 @@ export class TrivuleForm {
         trInput.setFeedbackElement(fds);
       }
     }
-    const oldInput = this._trivuleInputs[trInput.getName()];
-    if (oldInput) {
-      oldInput.destroy();
-    }
+
+    // Add input to the collection
     this._trivuleInputs[trInput.getName()] = trInput;
-
-    /**
-     * Listen for each input and update form state
-     *
-     */
-    trInput.onFails(() => {
-      this.valid = this.isValid();
-    });
-    trInput.onPasses(() => {
-      this.valid = this.isValid();
-    });
-
-    trInput.onUpdate(() => {
-      this._onUpdateCallbacks.forEach((fn) => {
-        this.__call(fn, this);
-      });
-    });
   }
-  /**
-   * Validate an input with validation configurations.
-   * @example
-   * ```javascript
-   *      const trInput = new TrivuleInput(formInstance.ageInput);
-   *      trivuleForm.addTrivuleInput(trInput);
-   *      trivuleForm
-   *        .make([
-   *          {
-   *            rules: 'required|between:18,40',
-   *            selector: 'age', // The input name
-   *          },
-   *          {
-   *            rules: 'required|date',
-   *            selector: formInstance.birthDayInput,
-   *          },
-   *        ])
-   *        .make({
-   *          message: {
-   *            rules: 'required|only:string',
-   *          },
-   *        });
-   * ```
-   * @param input An object containing TrivuleInputParms or an array of TrivuleInputParms.
-   * @throws Error - If the provided input argument is not a valid object.
-   * @returns This TrivuleForm instance to allow chaining method calls.
-   */
-  make(input: TrivuleInputParms[] | Record<string, TrivuleInputParms>) {
-    if (typeof input != 'object' || input === undefined || input === null) {
-      throw new Error('Invalid arguments passed to make method');
-    }
-    transformToArray(input, this._bootInputs.bind(this));
 
-    return this;
-  }
   /**
    * Set the validity state of the TrivuleForm.
    * @param boolean The boolean value indicating the validity state to set.
@@ -805,11 +645,6 @@ export class TrivuleForm {
     if (this._passed !== boolean) {
       this._passed = boolean;
       this.__calledCount++;
-      if (this._passed) {
-        this._emitTrOnPassesEvent();
-      } else {
-        this._emitTrOnFailsEvent();
-      }
     }
     this.emit('tr.form.validate', this);
   }
@@ -838,24 +673,6 @@ export class TrivuleForm {
   }
 
   /**
-   * Set the CSS class for valid inputs in the form.
-   * @param cls The CSS class to apply to valid inputs.
-   */
-  setInputValidClass(cls: string) {
-    this.each((i) => {
-      i.setValidClass(cls);
-    });
-  }
-  /**
-   * Set the CSS class for invalid inputs in the form.
-   * @param cls The CSS class to apply to invalid inputs.
-   */
-  setInputInvalidClass(cls: string) {
-    this.each((i) => {
-      i.setInvalidClass(cls);
-    });
-  }
-  /**
    * Binds the form element or selector to the TrivuleForm instance once it is an HTMLElement.
    * Can be called without argument,if argument is not provided
    * it attempts to resolve the element using the element selector indicate on the config
@@ -876,7 +693,6 @@ export class TrivuleForm {
    */
 
   bind(form?: ValidatableForm) {
-    this._executeLifeCycleCallbacks('before.binding');
     if (this._wasBound) {
       return this;
     }
@@ -900,14 +716,9 @@ export class TrivuleForm {
       this._wasBound = true;
       this._resolveInputValidation();
       this._resolveEventListeners();
-      this._setupTriggerEventListeners();
-      this._executeLifeCycleCallbacks('after.binding');
     }
   }
 
-  bindElement(form?: ValidatableForm) {
-    return this.bind(form);
-  }
   private _addEvents(string: string, call: EventCallback): void {
     if (!this._eventCallbacks[string]) {
       this._eventCallbacks[string] = [call];
@@ -976,6 +787,7 @@ export class TrivuleForm {
       invalidClass: param.invalidClass ?? this.parameter.invalidClass,
       autoValidate: param.autoValidate ?? this.parameter.auto,
       feedbackElement: param.feedbackElement ?? this.parameter.feedbackSelector,
+      triggerEvents: this._triggerEvents,
     };
 
     this.addTrivuleInput(TrivuleInput.create(mergedParams, this.parameter));
@@ -984,160 +796,24 @@ export class TrivuleForm {
   }
 
   /**
-   * Registers a callback to be executed before the form element is bound.
-   * @param fn - The callback function to be executed before binding.
-   * @returns The instance of the form to allow method chaining.
-   * @example
-   * const form = new TrivuleForm();
-   * form.beforeBinding((form) => {
-   *   console.log('Form binding is about to start.');
-   * });
-   */
-  beforeBinding(fn: TrivuleFormHandler<TrivuleForm>) {
-    this._addLifeCycleCallback('before.binding', fn);
-    return this;
-  }
-
-  /**
-   * Adds a lifecycle callback to the specified lifecycle event.
-   * @param name - The name of the lifecycle event.
-   * @param call - The callback function to be added.
-   * @private
-   */
-  private _addLifeCycleCallback(
-    name: string,
-    call: TrivuleFormHandler<TrivuleForm>,
-  ) {
-    if (!this._lifeCycleCallbacks[name]) {
-      this._lifeCycleCallbacks[name] = [call];
-    } else {
-      this._lifeCycleCallbacks[name].push(call);
-    }
-  }
-
-  /**
-   * Executes all the callbacks associated with the specified lifecycle event.
-   * @param name - The name of the lifecycle event.
-   * @private
-   */
-  private _executeLifeCycleCallbacks(name: string): void {
-    const callbacks = this._lifeCycleCallbacks[name];
-    if (callbacks) {
-      transformToArray(callbacks, (fn) => {
-        this.__call(fn, this);
-      });
-    }
-  }
-
-  /**
-   * Sets up event listeners for trigger events that will run validation
-   * @private
-   */
-  private _setupTriggerEventListeners(): void {
-    if (!this.container) return;
-
-    this._triggerEvents.forEach((eventType) => {
-      if (eventType === 'submit') {
-        // Submit events are handled separately in _onSubmit
-        return;
-      }
-
-      if (eventType === 'blur') {
-        // For blur events, attach to individual inputs
-        this.each((input) => {
-          const inputElement = input.getInputElement();
-          if (inputElement) {
-            inputElement.addEventListener('blur', () => {
-              this._runValidation();
-            });
-          }
-        });
-      } else {
-        // For other events (like 'input'), attach to container
-        this.container!.addEventListener(eventType, () => {
-          this._runValidation();
-        });
-      }
-    });
-  }
-
-  /**
-   * Runs validation and updates form state
-   * @private
-   */
-  private _runValidation(): void {
-    const isValid = this.isValid();
-    this._formState.validated = true;
-
-    // Update form state
-    this._updateFormState(isValid);
-
-    if (isValid) {
-      this._emitTrOnPassesEvent();
-    } else {
-      this._emitTrOnFailsEvent();
-    }
-  }
-
-  /**
-   * Updates the internal form state based on validation result
-   * @param isValid - Whether the form is valid
-   * @private
-   */
-  private _updateFormState(isValid: boolean): void {
-    this._formState.passes = isValid;
-    this._formState.fails = !isValid;
-    this._formState.errors = [];
-    this._formState.validInputs = [];
-    this._formState.invalidInputs = [];
-
-    this.each((input) => {
-      const name = input.getName();
-      if (input.passes()) {
-        this._formState.validInputs.push(name);
-      } else {
-        this._formState.invalidInputs.push(name);
-        // Get errors from the input's error object
-        const inputErrors = Object.values(input.errors);
-        this._formState.errors.push(...inputErrors);
-      }
-    });
-  }
-
-  /**
-   * Registers a callback to be executed after the form element has been bound.
-   * @param fn - The callback function to be executed after binding.
-   * @returns The instance of the form to allow method chaining.
-   * @example
-   * const form = new TrivuleForm();
-   * form.afterBinding((form) => {
-   *   console.log('Form has been bound.');
-   * });
-   */
-  afterBinding(fn: TrivuleFormHandler<TrivuleForm>) {
-    this._addLifeCycleCallback('after.binding', fn);
-    return this;
-  }
-
-  /**
    * Get whether the form has been interacted with
    */
   get isDirty(): boolean {
-    return this._formState.isDirty;
+    return this._isDirty;
   }
 
   /**
    * Get whether the form has been validated at least once
    */
   get validated(): boolean {
-    return this._formState.validated;
+    return this._validated;
   }
 
   /**
    * Get the current form state
    */
   get formState() {
-    return { ...this._formState };
+    return { isDirty: this._isDirty, validated: this._validated };
   }
 
   /**
