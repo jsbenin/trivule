@@ -42,8 +42,8 @@ trivuleForm.get('email');
 **Declarative Validation Approach**
 
 ```html
-<input name="email" type="text" data-tr-rules="required|email|maxlength:60" />
-<div data-tr-feedback="email" class="invalid-feedback"></div>
+<input name="email" type="text" @v:rules="required|email|maxlength:60" />
+<div @v:feedback="email" class="invalid-feedback"></div>
 ```
 
 - **HTML/CSS-Based Validation**: Perfect for quickly setting up validations using just HTML and CSS. Ideal for projects where simplicity and speed are key.
@@ -56,10 +56,10 @@ trivuleForm.get('email');
 ```js
 // Initialize Trivule globally with custom configuration
 const trivule = Trivule.init({
-  attributePrefix: '@v:', // Fixed attribute prefix
   locale: 'fr',
   invalidClass: 'is-invalid',
   validClass: 'is-valid',
+	triggerEvents: ['input', 'blur', 'submit']
 });
 ```
 
