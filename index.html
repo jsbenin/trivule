@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Example</title>
+    <title>Trivule - Test</title>
     <style>
       .is-valid {
         border-color: green;
@@ -24,7 +24,7 @@
       <div>
         <label for="email">Email:</label>
         <input
-					id="email-1"
+          id="email-1"
           type="text"
           id="email"
           name="email"
@@ -37,38 +37,7 @@
       <div>
         <label for="password">Password:</label>
         <input
-					id="password-1"
-          type="password"
-          id="password"
-          name="password"
-          @v:rules="required|min:6"
-        />
-        <p @v:feedback="password" class="is-invalid"></p>
-      </div>
-
-      <button type="submit" @v:submit>Register</button>
-    </form>
-
-<form @v:form>
-      <div>
-        <label for="email">Email:</label>
-        <input
-
-					id="email-2"
-          type="text"
-          id="email"
-          name="email"
-          @v:rules="required|email"
-          @v:msg:email="Please provide a valid email"
-        />
-        <p @v:feedback="email" class="error-message"></p>
-      </div>
-
-      <div>
-        <label for="password">Password:</label>
-        <input
-
-					id="password-2"
+          id="password-1"
           type="password"
           id="password"
           name="password"
@@ -83,13 +52,6 @@
     <script src="/src/index.ts" type="module"></script>
 
     <script type="module">
-      window.Trivule = new Trivule({
-        locale: 'en',
-        realTime: false,
-        invalidClass: 'is-invalid',
-        validClass: 'is-valid',
-      });
-
       console.log('Trivule global initialization complete');
     </script>
   </body>
