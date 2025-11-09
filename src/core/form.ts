@@ -89,9 +89,9 @@ export class TrivuleForm {
   /**
    * Form state properties
    */
-  private _isDirty = false;
-  private _validated = false;
   private _formState = {
+    isDirty: false,
+    validated: false,
     passes: false,
     fails: false,
     errors: [] as string[],
@@ -102,7 +102,7 @@ export class TrivuleForm {
   /**
    * Events that trigger form validation
    */
-  private _triggerEvents: ('input' | 'blur' | 'submit')[] = ['blur', 'submit'];
+  private _triggerEvents: ('input' | 'blur' | 'submit')[] = ['input', 'submit'];
 
   constructor(parameter?: TrParameter) {
     this.parameter = parameter ?? TrParameter.instance();
@@ -972,8 +972,6 @@ export class TrivuleForm {
     const mergedParams: TrivuleInputParms = {
       ...param,
       selector: resolvedSelector as ValidatableInput,
-      // TODO: remove this and replace it with events that can trigger the input: input | blur | submit
-      realTime: false,
       validClass: param.validClass ?? this.parameter.validClass,
       invalidClass: param.invalidClass ?? this.parameter.invalidClass,
       autoValidate: param.autoValidate ?? this.parameter.auto,
@@ -1069,7 +1067,7 @@ export class TrivuleForm {
    */
   private _runValidation(): void {
     const isValid = this.isValid();
-    this._validated = true;
+    this._formState.validated = true;
 
     // Update form state
     this._updateFormState(isValid);
@@ -1125,14 +1123,14 @@ export class TrivuleForm {
    * Get whether the form has been interacted with
    */
   get isDirty(): boolean {
-    return this._isDirty;
+    return this._formState.isDirty;
   }
 
   /**
    * Get whether the form has been validated at least once
    */
   get validated(): boolean {
-    return this._validated;
+    return this._formState.validated;
   }
 
   /**

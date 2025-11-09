@@ -209,6 +209,8 @@ describe('TrivuleForm', () => {
 
     test('should have formState property', () => {
       const formState = form.formState;
+      expect(formState).toHaveProperty('isDirty');
+      expect(formState).toHaveProperty('validated');
       expect(formState).toHaveProperty('passes');
       expect(formState).toHaveProperty('fails');
       expect(formState).toHaveProperty('errors');
@@ -238,7 +240,7 @@ describe('TrivuleForm', () => {
       expect(typeof form.init).toBe('function');
     });
 
-    test('should default to blur and submit events', () => {
+    test('should default to input and submit events', () => {
       const form = new TrivuleForm();
       form.init(formInstance.form);
       expect(typeof form.init).toBe('function');
