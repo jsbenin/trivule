@@ -29,9 +29,10 @@
           id="email"
           name="email"
           @v:rules="required|email"
-          @v:msg:email="Please provide a valid email"
+          @v:msg.required="Email obligatoire"
+          @v:msg.email="Please provide a valid email"
         />
-        <p @v:feedback="email" class="error-message"></p>
+        <p @v:feedback="email" class="is-invalid"></p>
       </div>
 
       <div>
@@ -42,6 +43,8 @@
           id="password"
           name="password"
           @v:rules="required|min:6"
+          @v:msg.required="Mot de passe obligatoire"
+          @v:msg.min="Champ obligatoire"
         />
         <p @v:feedback="password" class="is-invalid"></p>
       </div>
