@@ -9,7 +9,7 @@ import {
   TrivuleInputParms,
   ValidatableInput,
 } from '../types';
-import { getHTMLElementBySelector } from '../utils';
+import { getHTMLElementBySelector, ruleKey } from '../utils';
 import { InputRule } from './utils/input-rule';
 import { TrParameter } from './utils/parameter';
 import { validate } from './validate';
@@ -77,6 +77,8 @@ export class TrivuleInput {
    * The attribute name used in validation error messages
    */
   private _messageAttribute = '';
+
+  _validateCount = 0;
 
   private constructor(param: TrivuleInputParms, parameter: TrParameter) {
     this.parameter = parameter;
@@ -167,8 +169,6 @@ export class TrivuleInput {
     return input === this.inputElement;
   }
 
-  _validateCount = 0;
-
   /**
    * Private method to get attribute data from the input element
    * @param attribute - The TrivuleAttribute to get
@@ -177,7 +177,7 @@ export class TrivuleInput {
    * @returns The attribute value or default
    */
   private getAttrData<T = unknown>(
-    attribute: TrivuleAttribute,
+    attribute: TrivuleAttribute | `msg.${Rule}` | string,
     defaults: unknown = null,
     toJson = false,
   ): T {
@@ -418,11 +418,11 @@ export class TrivuleInput {
   }
 
   /**
-	 * Sets whether validation should stop after the first error is encountered.
-	/**
-	 * Gets the feedback element associated with this Trivule input.
-	 * @returns The feedback element if set, otherwise null.
-	 */
+		 * Sets whether validation should stop after the first error is encountered.
+		/**
+		 * Gets the feedback element associated with this Trivule input.
+		 * @returns The feedback element if set, otherwise null.
+		 */
   getFeedbackElement() {
     return this.feedbackElement;
   }
@@ -484,9 +484,11 @@ export class TrivuleInput {
   get name() {
     return this.inputElement.name ?? this.param.name ?? '';
   }
+
   get value() {
     return this.getValue();
   }
+
   set value(value) {
     this._value = value;
     if (this.autoValidate) {
@@ -686,7 +688,7 @@ export class TrivuleInput {
   /**
    * Initializes the Trivule input instance.
    * This method sets up the input element from params, feedback element,
-   * validation rules, and event listeners for the input validation.
+   * validation rules,custom messages and event listeners for the input validation.
    *
    * @throws {Error} If the input element is not valid or cannot be found.
    */
@@ -704,17 +706,17 @@ export class TrivuleInput {
     this._setTrValidationClass();
 
     //Set the validation rules
-    const rules: string | string[] | Rule[] | undefined = this.getAttrData(
-      'rules',
-      this.param.rules,
-    );
+    const rules: string = this.getAttrData('rules', this.param.rules);
 
     if (rules) {
-      const elMessages = this.getAttrData<string>(
-        'messages',
-        this.param.messages,
-      );
-      this.rules.set(rules, elMessages);
+      const customMessages: Record<string, string> | null = {};
+
+      ruleKey(rules).forEach((rule) => {
+        const message: string = this.getAttrData(`msg.${rule}`);
+        customMessages[rule] = message;
+      });
+
+      this.rules.set(rules, customMessages);
     }
 
     this._type = (this.param.type ?? 'text') as InputType;

@@ -260,10 +260,10 @@ export const escapeCssSelector = (str: string): string => {
  * @example
  * ```typescript
  * element.setAttribute(attr('rules'), 'required');
- * // Equivalent to: element.setAttribute('data-tr-rules', 'required')
+ * // Equivalent to: element.setAttribute('@v:rules', 'required')
  *
  * element.setAttribute(attr('feedback'), 'email');
- * // Equivalent to: element.setAttribute('data-tr-feedback', 'email')
+ * // Equivalent to: element.setAttribute('@v:feedback', 'email')
  * ```
  */
 export const attr = (name: string): string => {
@@ -289,4 +289,21 @@ export const attrSelector = (name: string): string => {
   const prefix = config('attributePrefix') as string;
   const escapedAttr = escapeCssSelector(`${prefix}${name}`);
   return `[${escapedAttr}]`;
+};
+
+/**
+ * Extracts rule keys from a pipe-separated rules string.
+ * @param {string} rulesString - The rules string (e.g., "required|min:6|max:20")
+ * @returns {Rule[] & string} Array of rule keys
+ * @example
+ * getRuleKey("required|min:6");
+ * // Returns: ["required", "min"]
+ *
+ * @example
+ * getRuleKey("email|min:5|max:255");
+ * // Returns: ["email", "min", "max"]
+ */
+export const ruleKey = (rulesString: string): (Rule & string)[] => {
+  return rulesString.split('|').map((rule) => rule.split(':')[0]) as (Rule &
+    string)[];
 };
