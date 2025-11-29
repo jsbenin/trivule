@@ -1,10 +1,10 @@
 import {
   CssSelector,
   EventCallback,
-  InputValueType,
   InputType,
   Rule,
   RuleCallBack,
+  TriggerEvent,
   TrivuleAttribute,
   TrivuleInputParms,
   ValidatableInput,
@@ -31,7 +31,6 @@ import { validate } from './validate';
  * ```
  */
 export class TrivuleInput {
-  protected __wasInit = false;
   /**
    * This status indicates the current state of the form
    */
@@ -69,7 +68,6 @@ export class TrivuleInput {
   protected parameter: TrParameter;
 
   autoValidate = true;
-  protected _value: InputValueType = undefined;
 
   protected _type: InputType = 'text';
 
@@ -340,16 +338,6 @@ export class TrivuleInput {
   passes() {
     return this.valid();
   }
-  /**
-   * Invokes the provided function with the given parameters if it is a valid function.
-   * @param fn - The function to be called.
-   * @param params - The parameters to be passed to the function.
-   */
-  protected __call(fn?: CallableFunction, ...params: unknown[]) {
-    if (typeof fn == 'function') {
-      fn(...params);
-    }
-  }
 
   filledErrors(errors?: Record<string, string>) {
     this.errors = errors ?? this.errors;
@@ -418,11 +406,11 @@ export class TrivuleInput {
   }
 
   /**
-		 * Sets whether validation should stop after the first error is encountered.
-		/**
-		 * Gets the feedback element associated with this Trivule input.
-		 * @returns The feedback element if set, otherwise null.
-		 */
+		   * Sets whether validation should stop after the first error is encountered.
+		  /**
+		   * Gets the feedback element associated with this Trivule input.
+		   * @returns The feedback element if set, otherwise null.
+		   */
   getFeedbackElement() {
     return this.feedbackElement;
   }
@@ -490,7 +478,10 @@ export class TrivuleInput {
   }
 
   set value(value) {
-    this._value = value;
+    // Set the value directly on the input element
+    if (this.inputElement && this.inputElement.type.toLowerCase() !== 'file') {
+      this.inputElement.value = String(value ?? '');
+    }
     if (this.autoValidate) {
       this.validate();
     }
@@ -719,7 +710,27 @@ export class TrivuleInput {
       this.rules.set(rules, customMessages);
     }
 
+    // Read trigger events from HTML attribute (e.g., @v:event="submit|input|blur")
+    this._initTriggerEvents();
+
     this._type = (this.param.type ?? 'text') as InputType;
+  }
+
+  /**
+   * Initialize trigger events from HTML attribute or params
+   * Parses @v:event="submit|input|blur" format
+   */
+  private _initTriggerEvents() {
+    const attrEvents: string | null = this.getAttrData('event', null);
+
+    if (attrEvents) {
+      const events = this.eventToArray(attrEvents).filter(
+        (e): e is TriggerEvent => ['input', 'blur', 'submit'].includes(e),
+      );
+      if (events.length > 0) {
+        this.param.triggerEvents = events;
+      }
+    }
   }
   /**
    * Get the name of the attribute that
