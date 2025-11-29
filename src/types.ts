@@ -70,7 +70,6 @@ export interface ITrConfig {
   local?: {
     lang: string;
   };
-  realTime?: boolean;
   feedbackSelector?: CssSelector;
   attributePrefix?: string;
 }
@@ -95,6 +94,12 @@ export type InputType =
   | 'number'
   | 'file'
   | 'date-local';
+
+/**
+ * Valid trigger events for validation
+ */
+export type TriggerEvent = 'input' | 'blur' | 'submit';
+
 export type ValidationState = {
   passes: boolean;
   value: unknown;
@@ -253,12 +258,10 @@ export type TrivuleInputParms = {
    */
   type?: string;
 
-  realTime?: boolean;
-
   /**
    * Events that trigger validation for this input
    */
-  triggerEvents?: ('input' | 'blur' | 'submit')[];
+  triggerEvents?: TriggerEvent[];
 };
 
 /**
@@ -294,12 +297,11 @@ export type TrivuleFormConfig = {
   invalidClass?: string;
 
   feedbackSelector?: CssSelector;
-  realTime?: boolean;
   element?: ValidatableForm;
   /**
    * Events that trigger form validation ('input', 'blur', 'submit')
    */
-  triggerEvents?: ('input' | 'blur' | 'submit')[];
+  triggerEvents?: TriggerEvent[];
 };
 
 export type TrivuleHooks = 'before.init' | 'after.init' | 'destroy' | string;
@@ -331,6 +333,7 @@ export type TrivuleServiceFunction<T = unknown> = (trivule: T) => void;
 export type TrivuleAttribute =
   | 'rules'
   | 'events'
+  | 'event'
   | 'messages'
   | 'invalid-class'
   | 'valid-class'

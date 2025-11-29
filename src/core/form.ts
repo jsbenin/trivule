@@ -1,5 +1,6 @@
 import {
   EventCallback,
+  TriggerEvent,
   TrivuleFormConfig,
   TrivuleFormHandler,
   TrivuleInputParms,
@@ -712,10 +713,36 @@ export class TrivuleForm {
     }
 
     if (this.container instanceof HTMLElement) {
+      // Read trigger events from form's @v:event attribute
+      this._initTriggerEvents();
       this._initTrivuleInputs();
       this._wasBound = true;
       this._resolveInputValidation();
       this._resolveEventListeners();
+    }
+  }
+
+  /**
+   * Initialize trigger events from form's HTML attribute
+   * Parses @v:event="submit|input|blur" format on the form element
+   */
+  private _initTriggerEvents() {
+    const attrEvents: string | null = this.getAttrData(
+      this.container,
+      'event',
+      null,
+    );
+
+    if (attrEvents) {
+      const events = attrEvents
+        .split('|')
+        .map((e) => e.trim())
+        .filter((e): e is TriggerEvent =>
+          ['input', 'blur', 'submit'].includes(e),
+        );
+      if (events.length > 0) {
+        this._triggerEvents = events;
+      }
     }
   }
 

@@ -44,7 +44,6 @@ export class TrParameter {
   validClass: string = '';
 
   // Behavior configurations
-  realTime: boolean = true;
   auto: boolean = true;
 
   // Localization configuration
@@ -100,10 +99,6 @@ export class TrParameter {
     }
     if (config.validClass !== undefined) {
       this.validClass = config.validClass;
-    }
-    // TODO: replace this attribute by those event: input | blur | submit
-    if (config.realTime !== undefined) {
-      this.realTime = config.realTime;
     }
     if (config.feedbackSelector !== undefined) {
       this.feedbackSelector = config.feedbackSelector;

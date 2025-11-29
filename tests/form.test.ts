@@ -78,7 +78,7 @@ const formInstance = new MyForm();
 describe('TrivuleForm', () => {
   const trivuleForm = new TrivuleForm();
   trivuleForm.init(formInstance.form, {
-    realTime: false,
+    triggerEvents: ['submit'],
   });
   test('Test get method', () => {
     expect(trivuleForm.get('name')).toBeInstanceOf(TrivuleInput);
@@ -169,6 +169,115 @@ describe('TrivuleForm', () => {
       form.init(formInstance.form);
       const validatedInputs = form.getValidatedInputs(true);
       expect(Array.isArray(validatedInputs)).toBe(true);
+    });
+  });
+
+  describe('Form-level event attribute', () => {
+    test('should read trigger events from @v:event attribute on form element', () => {
+      // Create a fresh form with @v:event attribute
+      const formElement = document.createElement('form');
+      formElement.setAttribute(attr('event'), 'input|blur');
+
+      const input = document.createElement('input');
+      input.name = 'testInput';
+      input.setAttribute(attr('rules'), 'required');
+      formElement.appendChild(input);
+
+      document.body.appendChild(formElement);
+
+      const form = new TrivuleForm();
+      form.init(formElement);
+
+      const trivuleInput = form.get('testInput');
+      expect(trivuleInput).not.toBeNull();
+
+      // Clean up
+      document.body.removeChild(formElement);
+    });
+
+    test('should apply form-level events to all inputs', () => {
+      const formElement = document.createElement('form');
+      formElement.setAttribute(attr('event'), 'blur');
+
+      const input1 = document.createElement('input');
+      input1.name = 'input1';
+      input1.setAttribute(attr('rules'), 'required');
+
+      const input2 = document.createElement('input');
+      input2.name = 'input2';
+      input2.setAttribute(attr('rules'), 'email');
+
+      formElement.appendChild(input1);
+      formElement.appendChild(input2);
+      document.body.appendChild(formElement);
+
+      const form = new TrivuleForm();
+      form.init(formElement);
+
+      // Both inputs should be initialized
+      expect(form.get('input1')).not.toBeNull();
+      expect(form.get('input2')).not.toBeNull();
+
+      // Clean up
+      document.body.removeChild(formElement);
+    });
+
+    test('should parse multiple events from @v:event attribute', () => {
+      const formElement = document.createElement('form');
+      formElement.setAttribute(attr('event'), 'submit|input|blur');
+
+      const input = document.createElement('input');
+      input.name = 'multiEventInput';
+      input.setAttribute(attr('rules'), 'required');
+      formElement.appendChild(input);
+      document.body.appendChild(formElement);
+
+      const form = new TrivuleForm();
+      form.init(formElement);
+
+      expect(form.get('multiEventInput')).not.toBeNull();
+
+      // Clean up
+      document.body.removeChild(formElement);
+    });
+
+    test('should use config triggerEvents when no @v:event attribute', () => {
+      const formElement = document.createElement('form');
+      // No @v:event attribute
+
+      const input = document.createElement('input');
+      input.name = 'configInput';
+      input.setAttribute(attr('rules'), 'required');
+      formElement.appendChild(input);
+      document.body.appendChild(formElement);
+
+      const form = new TrivuleForm();
+      form.init(formElement, { triggerEvents: ['input'] });
+
+      expect(form.get('configInput')).not.toBeNull();
+
+      // Clean up
+      document.body.removeChild(formElement);
+    });
+
+    test('should filter invalid event names in @v:event attribute', () => {
+      const formElement = document.createElement('form');
+      formElement.setAttribute(attr('event'), 'input|invalid|blur|unknown');
+
+      const input = document.createElement('input');
+      input.name = 'filterInput';
+      input.setAttribute(attr('rules'), 'required');
+      formElement.appendChild(input);
+      document.body.appendChild(formElement);
+
+      const form = new TrivuleForm();
+      form.init(formElement);
+
+      // Should still work with only valid events (input, blur)
+      expect(form.get('filterInput')).not.toBeNull();
+
+      // Clean up
+      document.body.removeChild(formElement);
     });
   });
 });
