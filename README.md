@@ -12,7 +12,7 @@ To get started with Trivule, please refer to the comprehensive documentation ava
 
 ```html
 <input name="email" type="text" @v:rules="required|email|maxlength:60" />
-<div @v:feedback="email" class="invalid-feedback"></div>
+<p @v:feedback="email" class="invalid-feedback"></p>
 ```
 
 - **HTML/CSS-Based Validation**: Perfect for quickly setting up validations using just HTML and CSS. Ideal for projects where simplicity and speed are key.
@@ -28,7 +28,7 @@ const trivule = Trivule.init({
   locale: 'fr',
   invalidClass: 'is-invalid',
   validClass: 'is-valid',
-	triggerEvents: ['input', 'blur', 'submit']
+  triggerEvents: ['input', 'blur', 'submit'],
 });
 ```
 
@@ -51,36 +51,40 @@ const trivule = Trivule.init({
 - **Backward Compatibility**: If no forms have the attribute, all forms are validated for existing applications.
 - **Consistent Validation Behavior**: Ensure uniform validation feedback and styling throughout your app.
 
-**Error Messaging & Localization**
-
-```js
-trivuleForm.make({
-  email: {
-    rules: ['required', 'email', 'maxlength:60'],
-    messages: [
-      'The field is required',
-      'The email is invalid',
-      'The email is too long',
-    ],
-  },
-});
-
-//Global Translation
-TrLocal.translate('es', {
-  required: 'El campo es obligatorio',
-});
-
-//Global modification of an existing message
-TrLocal.rewrite('en', 'required', 'The :field cannot be empty');
-```
+**Custom error Messaging**
 
 ```html
-<input
-  name="email"
-  type="text"
-  data-tr-rules="required|email|maxlength:60"
-  data-tr-messages="The field is required|The email is invalid|The email is too long"
-/>
+<form @v:form>
+  <div>
+    <label for="email">Email:</label>
+    <input
+      id="email-1"
+      type="text"
+      id="email"
+      name="email"
+      @v:rules="required|email"
+      @v:msg.required="Email obligatoire"
+      @v:msg.email="Please provide a valid email"
+    />
+    <p @v:feedback="email" class="is-invalid"></p>
+  </div>
+
+  <div>
+    <label for="password">Password:</label>
+    <input
+      id="password-1"
+      type="password"
+      id="password"
+      name="password"
+      @v:rules="required|min:6"
+      @v:msg.required="Mot de passe obligatoire"
+      @v:msg.min="Champ obligatoire"
+    />
+    <p @v:feedback="password" class="is-invalid"></p>
+  </div>
+
+  <button type="submit" @v:submit>Register</button>
+</form>
 ```
 
 - **Customizable Error Messages**: Tailor error messages to fit the context of your application, enhancing user guidance and experience.
@@ -102,10 +106,10 @@ const rules = ['email', 'size:1GB', 'before:now'];
 
 ### Validation Made Simple
 
-Effortlessly validate inputs using Trivule, saving valuable development time. Utilize the `data-tr-rules` attribute to define validation rules directly in your HTML:
+Effortlessly validate inputs using Trivule, saving valuable development time. Utilize the `@v:rules` attribute to define validation rules directly in your HTML:
 
 ```html
-<input type="text" data-tr-rules="required|integer|between:16,50" name="age" />
+<input type="text" @v:rules="required|integer|between:16,50" name="age" />
 ```
 
 or in javascript
@@ -118,10 +122,10 @@ trivuleForm.make({
 });
 ```
 
-Display error messages with ease using the `data-tr-feedback` attribute:
+Display error messages with ease using the `@v:feedback` attribute:
 
 ```html
-<div data-tr-feedback="age"></div>
+<div @v:feedback="age"></div>
 ```
 
 or in javascript
@@ -130,36 +134,65 @@ or in javascript
 trivuleForm.make({
   age: {
     rules: 'required|integer|between:16,50',
-    feedbackElement: '[data-tr-feedback="age"]', //or [data-tr-feedback]
+    feedbackElement: '[@v:feedback="age"]', //or [@v:feedback]
   },
 });
 ```
 
 ## Event-Based Validation
 
-Validation is triggered by configured trigger events (default: `['blur', 'submit']`). Configure trigger events globally or per form:
+Validation is triggered by configured trigger events (default: `['submit']`). Configure trigger events using `@v:event`, globally or per form.
+
+Usage Examples:
+
+```html
+<form @v:form @v:event="input|blur">
+  <input name="email" @v:rules="required|email" />
+  <input name="name" @v:rules="required|min:3" />
+</form>
+```
+
+Input-level events override form-level:
+
+```html
+<form @v:form @v:event="blur">
+  <!-- Uses form default: blur -->
+  <input name="email" @v:rules="required|email" />
+
+  <!-- Overrides with its own: input|blur -->
+  <input name="name" @v:rules="required" @v:event="input|blur" />
+</form>
+```
+
+Programmatic configuration:
 
 ```js
-// Global configuration
-const trivule = Trivule.init({
-  triggerEvents: ['blur', 'input', 'submit'],
-});
-
-// Or per form
-const trivuleForm = trivule.form('form', {
-  triggerEvents: ['blur', 'input'],
-});
+const form = new TrivuleForm();
+form.init('#myForm', { triggerEvents: ['input', 'blur'] });
 ```
+
+Priority Order:
+
+1. Input's `@v:event` attribute (highest)
+2. Form's `@v:event` attribute
+3. Config's triggerEvents option
+4. Default: `['submit']`
+
+Valid Events:
+
+- `input` - validates on every keystroke
+- `blur` - validates when input loses focus
+- `submit` - validates on form submission
 
 ### Custom Styling
 
-Style your inputs dynamically based on validation results using `data-tr-invalid-class` or `data-tr-valid-class` attributes:
+Style your inputs dynamically based on validation results using `@v:invalid-class` or `@v:valid-class` attributes:
 
 ```html
 <input
   type="text"
-  data-tr-invalid-class="error"
-  data-tr-valid-class="success"
+  @v:invalid-class="error"
+  @v:valid-class="success"
   name="age"
 />
 ```
@@ -178,13 +211,15 @@ trivuleForm.make({
 
 ### Custom Error Messages
 
-By default we provide a message for each rul e but you can customize error messages to align with your project's requirements using the `data-tr-messages` attribute:
+You can override the error message for a specific rule with `@v:msg.<rule>`.
 
 ```html
 <input
   type="text"
-  data-tr-messages="This field is required | Another message"
   name="age"
+  @v:rules="required|integer"
+  @v:msg.required="This field is required"
+  @v:msg.integer="This field must be an integer"
 />
 ```
 
@@ -230,71 +265,6 @@ npm install trivule
 
 The imperative approach provides direct control over form validation with a clean, simplified API.
 
-#### Your Framework lifecyle
-
-- **Unique Initialization**: Avoid initializing `TrivuleForm` in a frequently called hook. Prefer initializing it outside of a hook if possible to avoid repeated reinitializations.
-- **Form Element Lookup**: Use the `bind` method to locate the form element to be validated. This lookup is performed only once for optimal performance. Ensure the DOM is ready before calling this method. You can call it in a hook that indicates the form is ready.
-
-#### Form Initialization
-
-Initialize your form and define validation rules after the DOM is ready.
-
-Example:
-
-```javascript
-import TrivuleForm from 'trivule';
-
-const form = new TrivuleForm();
-
-// React
-useEffect(() => {
-  form.init('form'); // Initialize and bind to form
-  form.make({
-    fieldName: {
-      rules: "required|min:2"
-    }
-  });
-}, []);
-
-// Angular
-ngAfterViewInit() {
-  form.init('form');
-  form.make({
-    fieldName: {
-      rules: "required|min:2"
-    }
-  });
-}
-
-// Vue
-mounted() {
-  form.init('form');
-  form.make({
-    fieldName: {
-      rules: "required|min:2"
-    }
-  });
-}
-```
-
-### Important Points
-
-- `init` handles both form binding and input discovery automatically.
-- Call `init` when you are certain the form is available in the DOM.
-- Validation rules are applied immediately when defined with `make()`.
-
-### Declarative Approach
-
-Simply add validation attributes to your HTML elements. Trivule handles the rest automatically.
-
-Example:
-
-```html
-<form id="yourFormId">
-  <input type="text" name="fieldName" data-tr-rules="required|min:2" />
-</form>
-```
-
 ## Quick start
 
 - [Single Input Validation](/docs/input-validation.md)
@@ -306,9 +276,9 @@ If you would like to contribute to the development of Trivule or customize the l
 
 ### Prerequisites
 
-- Node.js >= 16
+- Node.js >= 20
 - npm installed
-- Knowledge of TypeScript
+- TypeScript
 
 ### Installation
 
@@ -327,7 +297,7 @@ To clone and install the Trivule project, follow these steps:
    ```bash
    npm run dev
    ```
-   This will start a local development server, and a link to the Trivule homepage (e.g., `http://localhost:5173`) will be displayed in your terminal. You can start testing by editing the `/src/example.ts`, which relates to the `index.html` file.
+   This will start a local development server, and a link to the Trivule homepage (e.g., `http://localhost:5173`) will be displayed in your terminal. 
 
 To create the bundles, run the following command:
 
@@ -370,4 +340,4 @@ Best regards
 
 ## Security
 
-If you discover any security-related issues, please contact me directly at [dev.claudy@gmail.com ](mailto:dev.claudy@gmail.com) instead of using the issue tracker.
+If you discover any security-related issues, please contact me directly at [dev.claudy@gmail.com](mailto:dev.claudy@gmail.com) instead of using the issue tracker.
