@@ -11,6 +11,7 @@ import {
   startWithUpper,
   stringBetween,
   url,
+  hexColor,
 } from '../../src/rules/string';
 //Email
 describe('email rule', () => {
@@ -331,5 +332,44 @@ describe('stringBetween', () => {
   it('should return false for string with length not between min and max', () => {
     const result2 = stringBetween('hello', '6, 10').passes;
     expect(result2).toBe(false);
+  });
+});
+
+describe('hexColor rule', () => {
+  it('should pass with valid 6-character hex color', () => {
+    expect(hexColor('#FFFFFF').passes).toBe(true);
+    expect(hexColor('#000000').passes).toBe(true);
+    expect(hexColor('#ff5733').passes).toBe(true);
+    expect(hexColor('#AbCdEf').passes).toBe(true);
+  });
+
+  it('should pass with valid 3-character hex color', () => {
+    expect(hexColor('#FFF').passes).toBe(true);
+    expect(hexColor('#000').passes).toBe(true);
+    expect(hexColor('#f5a').passes).toBe(true);
+  });
+
+  it('should fail without hash symbol', () => {
+    expect(hexColor('FFFFFF').passes).toBe(false);
+    expect(hexColor('FFF').passes).toBe(false);
+  });
+
+  it('should fail with invalid characters', () => {
+    expect(hexColor('#GGGGGG').passes).toBe(false);
+    expect(hexColor('#XYZ').passes).toBe(false);
+    expect(hexColor('#12345G').passes).toBe(false);
+  });
+
+  it('should fail with wrong length', () => {
+    expect(hexColor('#FF').passes).toBe(false);
+    expect(hexColor('#FFFF').passes).toBe(false);
+    expect(hexColor('#FFFFF').passes).toBe(false);
+    expect(hexColor('#FFFFFFF').passes).toBe(false);
+  });
+
+  it('should fail with non-string input', () => {
+    expect(hexColor(123).passes).toBe(false);
+    expect(hexColor(null).passes).toBe(false);
+    expect(hexColor(undefined).passes).toBe(false);
   });
 });

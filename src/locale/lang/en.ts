@@ -65,4 +65,6 @@ export const en_messages: RulesMessages = {
   gthan: 'This field must be a numeric value greater than :arg0',
   dateBetween: 'The date must be between :arg0 and :arg1',
   numberBetween: 'This field must be a numeric value between :arg0 and :arg1',
+  hexColor:
+    'The :field must be a valid hexadecimal color (e.g., #FFF or #FFFFFF)',
 };

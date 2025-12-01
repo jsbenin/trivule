@@ -480,3 +480,26 @@ export const stringBetween: RuleCallBack = (input, min_max) => {
     value: input,
   };
 };
+
+/**
+ * Validates a hexadecimal color code.
+ *
+ * @param input - The input to validate.
+ * @example
+ * ```html
+ * <input data-tr-rules="hexColor" />
+ * ```
+ */
+export const hexColor: RuleCallBack = (input) => {
+  if (typeof input !== 'string') {
+    return {
+      passes: false,
+      value: input,
+    };
+  }
+  const regex = /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/;
+  return {
+    passes: regex.test(input),
+    value: input,
+  };
+};
