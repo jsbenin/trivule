@@ -1,0 +1,38 @@
+---
+title: Intro
+description: HTML attribute-based validation library with zero dependencies
+---
+
+<div className="flex flex-col items-center justify-center py-16 text-center">
+  <Logo className="w-32 h-32 mb-8" />
+  <h1 className="text-5xl font-bold mb-4">Trivule</h1>
+  <p className="text-xl text-gray-600 mb-8 max-w-2xl">Simple form validation using HTML attributes. Define rules directly in your markup for easy, framework-agnostic validation.</p>
+</div>
+
+# Introduction
+
+Trivule is a lightweight JavaScript library for form validation using simple HTML attributes. It allows you to define validation rules directly in your markup, making it easy to integrate without heavy JavaScript configurations.
+
+## Quick Start
+
+```html
+<input type="text" data-tr-rules="required|int|min:18" name="age" />
+```
+
+Trivule parses the `data-tr-rules` attribute, validates on form submit or input events, and displays error messages.
+
+## Features
+
+- **Attribute-based rules**: Use `data-tr-rules` for validations like `required`, `email`, `min:18`, etc.
+- **Zero dependencies**: Pure vanilla JavaScript.
+- **Customizable**: Easily extend rules and error messages.
+- **Framework-agnostic**: Works with any JS setup, including React, Vue, or plain HTML.
+
+## Installation
+
+```bash
+npm install trivule
+```
+
+For more details, see the [Rules documentation](/docs/rules).
+

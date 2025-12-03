@@ -18,14 +18,15 @@ jobs:
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
-        with:
-          node-version: ${{ matrix.node-version }}
+        
+      - name: Install pnpm
+        run: npm install -g pnpm
 
       - name: Install dependencies
-        run: npm update
+        run: pnpm install
 
-      - name: Run tests
-        run: npm test
+      - name: Run tests (trivule package only)
+        run: pnpm --filter trivule test
 
-      - name: Find and fix problems
-        run: npm run lint
+      - name: Run linting (trivule package only)
+        run: pnpm --filter trivule lint
