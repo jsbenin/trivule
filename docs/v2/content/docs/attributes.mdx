@@ -2,9 +2,7 @@
 title: Attributes
 ---
 
-# Attributes
-
-Trivule utilizes HTML attributes to configure and customize form validation. These attributes, all of which start with `data-tr`, offer a simple and intuitive approach to define validation rules, events, error messages, CSS classes, and other features related to form field validation. By using these attributes, you can quickly implement form validation in your web applications without needing to write complex JavaScript code. In this documentation, we will explore the most commonly used Trivule attributes, explaining their purpose and providing examples to illustrate their usage.
+Trivule utilizes HTML attributes to configure and customize form validation. These attributes, all of which start with `@v:`, offer a simple and intuitive approach to define validation rules, events, error messages, CSS classes, and other features related to form field validation. By using these attributes, you can quickly implement form validation in your web applications without needing to write complex JavaScript code. In this documentation, we will explore the most commonly used Trivule attributes, explaining their purpose and providing examples to illustrate their usage.
 
 Trivule Attributes:
 
@@ -28,31 +26,26 @@ Trivule Attributes:
    - Use Case: When you want to apply different visual styles to a form field based on its validity.
    - Example: `<input type="text" @v:invalid-class="invalid" @v:valid-class="valid">`
 
-5. `@v:auto`:
-   - Purpose: This attribute allows you to enable or disable automatic validation during input in a form field.
-   - Use Case: When you want to validate a form field as the user types data without manually triggering validation.
-   - Example: `<input type="text" @v:auto="true">`
-
-6. `@v:feedback`:
+5. `@v:feedback`:
    - Purpose: This attribute allows you to specify a feedback element associated with a form field.
    - Use Case: When you want to display a custom feedback element for a form field, such as an icon or message.
    - Example: `<span @v:feedback class="feedback-icon"></span>`
 
-7. `@v:submit`, `@v:enabled-class`, and `@v:disabled-class`:
+6. `@v:submit`, `@v:enabled-class`, and `@v:disabled-class`:
    - Purpose: These attributes are used to configure the form submission button in relation to validation.
    - Use Case: When you want to enable or disable the submit button based on the form's validity and apply corresponding CSS styles.
    - Example: `<button type="submit" @v:submit @v:enabled-class="enabled" @v:disabled-class="disabled">Submit</button>`
 
-8. `@v:name`: 
+7. `@v:label`: 
    - Purpose: This attribute allows you to change the field's name in the error message.
    - Use Case: When you want to use a different name for a field in error messages.
-   - Example: `<input type="text" @v:name="our conditions">`
+   - Example: `<input type="text" @v:label="our conditions">`
 
-9. `@v:lang`:
+8. `@v:lang`:
    - Purpose: This attribute allows you to specify the language used for error messages and Trivule's user interface elements.
    - Use Case: When you want to customize the language of error messages and Trivule's user interface.
    - Example: `<form @v:lang="fr">...</form>`
 
-Note: Remember to include the Trivule library in your application before using these attributes. You can find the library and code examples on the [Trivule GitHub repository](https://github.com/trivule/trivule).
+Note: Remember to include the Trivule library in your application before using these attributes. You can find the library and code examples on the [Trivule GitHub repository](https://github.com/jsbenin/trivule).
 
 For more detailed information on using the attributes and other Trivule library features, please refer to the official Trivule documentation.
