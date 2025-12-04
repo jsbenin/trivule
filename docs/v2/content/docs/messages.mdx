@@ -14,21 +14,19 @@ By default, validation messages are displayed in English on an HTML element (suc
 <input
     type="file"
     @v:rules="required|mimes:text/plain"
-    @v:messages="Le fichier est requis|Le fichier doit être un fichier texte"
+    @v:msg.required="This field is required"
+    @v:msg.mimes="Provide a plain text file"
     name="file"
 />
 
-<div @v:feedback="file"></div>
+<p @v:feedback="file"></p>
 ```
 or
 ```js
-{
-	file: {
-	    rules:"required|mimes:text/plain",
-	    messages:"Le fichier est requis|Le fichier doit être un fichier texte",
-	    feedbackElement:"[@v:feedback]"
-    }
-}
+
+Trivule.message("required", "This field is required");
+Trivule.message("mimes", "Provide a plain text file");
+
 ```
 Trivule displays error messages at the nearest feedback element to the input. If you use a general selector, it will be the first encountered element around the input.
 
@@ -36,6 +34,8 @@ Trivule displays error messages at the nearest feedback element to the input. If
 >When Trivule needs to display error messages, it first determines the language in which these messages should be displayed. Here's how it works:
 
 ### Via HTML
+
+NOTE: I think that we don't need to manage the language with the lib. The use can provide a list of new message that we will use to validate our form.
 
 First, Trivule checks the language set on the `lang` attribute of the root `html` element:
 ```html
@@ -61,39 +61,24 @@ This means that error messages will be specific to each form.
 Trivule offers another way to specify the language of error messages using JavaScript:
 
 ```javascript
-TrLocal.local('es');
+Trivule.local('es');
 ```
 This tells Trivule to display messages in Spanish. This method overrides all other methods of language assignment for displaying error messages.
-
-**Note:**
-
-All language assignment methods must be used before calling the `init()` method.
-This method should be called before initialization methods, constructors, or the `init()` method.
-
-### Placeholders
-
-Suppose you have an additional validation rule for the "Email" field: it must have a minimum length of 8 characters. You want to specify a specific error message for this rule.
-
-You can use placeholders to indicate error messages in any order. Here's how you can do it:
-
-```html
-<input type="email" name="email" @v:messages="{0}Please enter a valid email address|{1}Email must be at least 8 characters long">
-```
-
-With this configuration, Trivule will display the first error message if the email address is invalid, and the second error message if the minimum length of 8 characters is not met.
 
 ## Modifying an Existing Message
 
 If you want to modify an existing message in Trivule, you can use the `rewrite(lang, rule, message)` method. For example, if you want to customize the message for the `min` rule in English, you can do the following:
 
 ```javascript
-TrLocal.rewrite('en', 'min', 'Your custom message for the min rule');
+Trivule.message('min', 'Your custom message for the min rule');
 ```
 
-You can also use the `rewriteMany(lang, rules, messages)` method to modify multiple messages at once.
 
 ```javascript
-TrLocal.rewriteMany('en', ['min', 'max'], ['Min rule message', 'Max rule message']);
+Trviules.messages({
+	required: "This field is required",
+	mimes: "Provide a plain text file"
+});
 ```
 
 It is important to provide the error messages in the respective order of the rules.
@@ -137,18 +122,3 @@ The field value must be one of the following: active, inactive, etc.
 
 By using these customizations for error messages, you can make Trivule validations more tailored to your specific translation and customization needs.
 
-## Translation
-
-By default, error messages are in English. However, you can translate these messages into your preferred language using the `TrLocal` class. Trivule natively supports two languages: French and English.
-
-To translate messages into your language, you can use the `translate(lang, messages)` method. For example, to translate messages into Spanish, you can use the following code:
-
-```javascript
-TrLocal.translate('es', {
-  min: "El campo :field debe ser menor que :arg0",
-  rule1: "Mensaje 1",
-  etc: "etc."
-});
-```
-
-Make sure to translate all messages for each rule you use; otherwise, some messages may remain in English.
