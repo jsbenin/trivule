@@ -3,9 +3,6 @@ sidebar_position: 5
 title: Form Validation
 ---
 
-# Validation
-
-## Global Validation 
 
 If you have a website or application and want to validate all forms without managing each form individually, you can use global validation with [declarative validation](/docs/validation-modes#declarative-validation).
 
@@ -17,23 +14,23 @@ To set up global validation, initialize Trivule as follows:
 
 ```html
 <script>
-  const tr = new Trivule();
-  tr.init();
-</script>
-```
+	import Trivule from  'trivule';
 
-This will activate the validation for all your forms. Trivule will validate any set of HTML fields with data-tr-rules in , whether inside a `<form>` .
+	window.Trivule = new Trivule();
+</script>```
+
+This will activate the validation for all your forms. Trivule will validate any set of HTML fields with @v:rules in , whether inside a `<form>` .
 
 ### Example
 
 #### HTML
 
 ```html
-<form>
-  <input type="text" name="username" data-tr-rules="required|minlength:5" />
-  <input type="email" name="email" data-tr-rules="required|email" />
-  <input type="password" name="password" data-tr-rules="required|minlength:8" />
-  <button type="submit">Submit</button>
+<form @v:form>
+  <input type="text" name="username" @v:rules="required|minlength:5" />
+  <input type="email" name="email" @v:rules="required|email" />
+  <input type="password" name="password" @v:rules="required|minlength:8" />
+  <button type="submit" @v:submit>Submit</button>
 </form>
 ```
 
@@ -141,7 +138,7 @@ The `bind` method can be called without a parameter. In this case, it assumes th
 -  `local` (optional): This option allows you to set the language for validation error messages. You can specify the language as a string. For example, `"fr"` for French. This option is also optional.
 -  `validClass` (optional): This is the CSS class that will be added to all the inputs in the form when they are valid. If this option is not set, no class will be added.
 -  `invalidClass` (optional): This is the CSS class that will be added to all the inputs in the form when they are invalid. If this option is not set, `is-invalid` class will be added.
--  `feedbackSelector` (optional): If this option is not specified, Trivule will first check if a selector is indicated during declaration with the `make` method, and then use that selector. In the absence of a selector, Trivule will check if the input has an associated HTML element with the `data-tr-feedback` attribute set to the input's name. If no element is found in either of these cases, no feedback message will be displayed.
+-  `feedbackSelector` (optional): If this option is not specified, Trivule will first check if a selector is indicated during declaration with the `make` method, and then use that selector. In the absence of a selector, Trivule will check if the input has an associated HTML element with the `@v:feedback` attribute set to the input's name. If no element is found in either of these cases, no feedback message will be displayed.
 -  `realTime` (optional): Enables or disables real-time validation.
 
 These options allow you to customize the validation of your form according to your specific needs.
@@ -156,7 +153,7 @@ const options = {
   }; 
   validClass: "",
   invalidClass: "is-invalid",
-  feedbackSelector: "[data-tr-feedback={name}]", //where {name} we be replaced with the input name
+  feedbackSelector: "[@v:feedback={name}]", //where {name} we be replaced with the input name
   realTime: true;
   element:null, // the css selector or html element
 };

@@ -1,0 +1,3 @@
+{
+	"pages": ["index", "installation", "form-validation", "input-validation", "attributes", "rules", "events", "messages" ]
+}
