@@ -15,23 +15,34 @@ Trivule is a lightweight JavaScript library for form validation using simple HTM
 
 ## Quick Start
 
-```html
-<input type="text" data-tr-rules="required|int|min:18" name="age" />
+```js
+<script>
+	import Trivule from  'trivule';
+
+	window.Trivule = new Trivule();
+</script>
 ```
 
-Trivule parses the `data-tr-rules` attribute, validates on form submit or input events, and displays error messages.
+
+```html
+<form @v:form>
+	<input type="text" @v:rules="required|int|min:18" name="age" />
+	<button @v:submit>Submit</button>
+</form>
+```
+
+Trivule parses the `@v:rules` attribute, validates on form submit or input events, and displays error messages.
 
 ## Features
 
-- **Attribute-based rules**: Use `data-tr-rules` for validations like `required`, `email`, `min:18`, etc.
+- **Attribute-based rules**: Use `@v:rules` for validations like `required`, `email`, `min:18`, etc.
 - **Zero dependencies**: Pure vanilla JavaScript.
 - **Customizable**: Easily extend rules and error messages.
-- **Framework-agnostic**: Works with any JS setup, including React, Vue, or plain HTML.
 
 ## Installation
 
 ```bash
-npm install trivule
+npm install trivule@2.0.0-alpha.1
 ```
 
 For more details, see the [Rules documentation](/docs/rules).
