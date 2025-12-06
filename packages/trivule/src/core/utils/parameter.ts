@@ -43,9 +43,6 @@ export class TrParameter {
   invalidClass: string = 'is-invalid';
   validClass: string = '';
 
-  // Behavior configurations
-  auto: boolean = true;
-
   // Element reference (for form-specific usage)
   element?: ValidatableForm;
 
@@ -99,9 +96,6 @@ export class TrParameter {
     }
     if (config.feedbackSelector !== undefined) {
       this.feedbackSelector = config.feedbackSelector;
-    }
-    if ('auto' in config && config.auto !== undefined) {
-      this.auto = config.auto;
     }
     if ('element' in config && config.element !== undefined) {
       this.element = config.element;

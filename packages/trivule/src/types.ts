@@ -278,11 +278,6 @@ export type EventCallback = (event: Event) => unknown;
  */
 export type EventCallbackWithDetails<T> = (details: T) => void;
 export type TrivuleFormConfig = {
-  /**
-   * Specifies whether the form will be validated as the user types in the form fields
-   */
-  auto?: boolean;
-
   local?: {
     lang?: string;
   };
@@ -305,6 +300,38 @@ export type TrivuleFormConfig = {
 };
 
 export type TrivuleHooks = 'before.init' | 'after.init' | 'destroy' | string;
+
+/**
+ * Data passed to onSuccess callback
+ */
+export type FormSuccessData = {
+  /** Object with validated input values keyed by input name */
+  values: Record<string, InputValueType>;
+};
+
+/**
+ * Error information for a single field
+ */
+export type FormFieldError = {
+  /** Name of the field that failed validation */
+  field: string;
+  /** Error message for the field */
+  message: string;
+  /** Rule that failed */
+  rule?: string;
+};
+
+/**
+ * Data passed to onError callback
+ */
+export type FormErrorData = {
+  /** Array of field errors */
+  errors: FormFieldError[];
+  /** First error for convenience */
+  firstError?: FormFieldError;
+  /** Current input values */
+  values: Record<string, InputValueType>;
+};
 
 /**
  * Handler function for TrivuleForm lifecycle events
@@ -337,7 +364,6 @@ export type TrivuleAttribute =
   | 'messages'
   | 'invalid-class'
   | 'valid-class'
-  | 'auto'
   | 'feedback'
   | 'submit'
   | 'enabled-class'

@@ -11,6 +11,10 @@ import {
   ValidatableInput,
   CssSelector,
   TrivuleAttribute,
+  FormSuccessData,
+  FormErrorData,
+  FormFieldError,
+  InputValueType,
 } from '../types';
 import { isNumber } from '../rules';
 import {
@@ -172,9 +176,6 @@ export class TrivuleForm {
 
     if (!this._wasInit) {
       this._wasInit = true;
-      if (this.parameter.auto) {
-        this.disableButton();
-      }
 
       // this.emit('tr.form.init', this);
 
@@ -191,27 +192,11 @@ export class TrivuleForm {
   }
 
   /**
-   * Disables the submit button and updates its CSS classes based on the configuration.
-   *
-   * This method checks if the submit button exists and, if the auto configuration is enabled,
-   * it disables the button by setting the 'disabled' attribute to 'true'. It also manages
-   * the CSS classes by removing the enabled classes and adding the disabled classes.
-   *
-   * @remarks
-   * - If the `auto` configuration is enabled, the submit button will be disabled.
-   * - The enabled and disabled CSS classes are managed by removing the enabled classes
-   *   and adding the disabled classes based on the configuration.
-   *
-   * @example
-   * ```typescript
-   * this.disableButton();
-   * ```
+   * Disables the submit button and updates its CSS classes.
    */
   disableButton() {
     if (this.submitButton) {
-      if (this.parameter.auto) {
-        this.submitButton.setAttribute('disabled', 'true');
-      }
+      this.submitButton.setAttribute('disabled', 'true');
       if (this._trDisabledClass) {
         //removeClass enable
         const classArrayEnabled: string[] = this._trEnabledClass.split(' ');
@@ -437,15 +422,82 @@ export class TrivuleForm {
   }
 
   /**
-   * Attaches an event listener to the "tr.form.fails" event.
-   * This event is triggered when the form fails validation.
-   * @param fn - The callback function to execute when the event occurs.
-   * Example:
+   * Attaches an event listener to handle form validation errors.
+   * @param fn - The callback function to execute when validation fails.
+   * @example
    * ```typescript
-   * trivuleForm.onFails((trivuleForm) => {
-   *   console.log("Form validation failed", trivuleForm);
+   * form.onError((data) => {
+   *   console.log(data.errors);     // [{ field: 'email', message: '...' }]
+   *   console.log(data.firstError); // { field: 'email', message: '...' }
+   *   console.log(data.values);     // Current input values
    * });
    * ```
+   */
+  onError(fn: (data: FormErrorData) => void): this {
+    this.on('tr.form.fails', () => {
+      const data = this._getErrorData();
+      fn(data);
+    });
+    return this;
+  }
+
+  /**
+   * Attaches an event listener to handle successful form validation.
+   * @param fn - The callback function to execute when validation passes.
+   * @example
+   * ```typescript
+   * form.onSuccess((data) => {
+   *   console.log(data.values); // { email: '...', password: '...' }
+   * });
+   * ```
+   */
+  onSuccess(fn: (data: FormSuccessData) => void): this {
+    this.on('tr.form.passes', () => {
+      const data = this._getSuccessData();
+      fn(data);
+    });
+    return this;
+  }
+
+  /**
+   * Get success data for callback
+   */
+  private _getSuccessData(): FormSuccessData {
+    const values: Record<string, InputValueType> = {};
+    this.each((input) => {
+      values[input.getName()] = input.getValue();
+    });
+    return { values };
+  }
+
+  /**
+   * Get error data for callback
+   */
+  private _getErrorData(): FormErrorData {
+    const values: Record<string, InputValueType> = {};
+    const errors: FormFieldError[] = [];
+
+    this.each((input) => {
+      values[input.getName()] = input.getValue();
+      if (input.fails()) {
+        const messages = input.getMessages();
+        const firstMessage = Array.isArray(messages) ? messages[0] : messages;
+        errors.push({
+          field: input.getName(),
+          message: firstMessage || 'Validation failed',
+        });
+      }
+    });
+
+    return {
+      errors,
+      firstError: errors[0],
+      values,
+    };
+  }
+
+  /**
+   * @deprecated Use onError instead
    */
   onFails(fn: TrivuleFormHandler<TrivuleForm>): void {
     this.on('tr.form.fails', (e) => {
@@ -454,15 +506,7 @@ export class TrivuleForm {
   }
 
   /**
-   * Attaches an event listener to the "tr.form.passes" event.
-   * This event is triggered when the form passes validation.
-   * @param fn - The callback function to execute when the event occurs.
-   * Example:
-   * ```typescript
-   * trivuleForm.onPasses((trivuleForm) => {
-   *   console.log("Form validation passed", trivuleForm);
-   * });
-   * ```
+   * @deprecated Use onSuccess instead
    */
   onPasses(fn: TrivuleFormHandler<TrivuleForm>): void {
     this.on('tr.form.passes', (e) => {
@@ -806,13 +850,12 @@ export class TrivuleForm {
       }
     }
 
-    // Création de l'objet mergé avec toutes les propriétés configurées
+    // Create merged params object with all configured properties
     const mergedParams: TrivuleInputParms = {
       ...param,
       selector: resolvedSelector as ValidatableInput,
       validClass: param.validClass ?? this.parameter.validClass,
       invalidClass: param.invalidClass ?? this.parameter.invalidClass,
-      autoValidate: param.autoValidate ?? this.parameter.auto,
       feedbackElement: param.feedbackElement ?? this.parameter.feedbackSelector,
       triggerEvents: this._triggerEvents,
     };

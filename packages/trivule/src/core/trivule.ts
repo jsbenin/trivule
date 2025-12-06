@@ -69,7 +69,7 @@ export class Trivule {
     );
 
     formsToValidate.forEach((formElement) => {
-      const trForm = Trivule._instance!.form(formElement, {});
+      const trForm = Trivule._instance!._form(formElement, {});
       Trivule._instance!._trForms.push(trForm);
     });
 
@@ -146,7 +146,79 @@ export class Trivule {
     return this._trForms;
   }
 
+  /**
+   * Static method to get or create a form by selector
+   * @param selector CSS selector or HTMLElement for the form
+   * @param config Optional configuration for the form
+   * @returns The TrivuleForm instance
+   * @example
+   * ```typescript
+   * Trivule.init();
+   * 
+   * const form = Trivule.form('#myForm');
+   * 
+   * form.onSuccess((data) => {
+   *   console.log(data.values);
+   * });
+   * 
+   * form.onError((data) => {
+   *   console.log(data.errors);
+   * });
+   * ```
+   */
+  static form(
+    selector: ValidatableForm,
+    config?: TrivuleFormConfig,
+  ): TrivuleForm {
+    if (!Trivule._instance) {
+      throw new Error(
+        '[Trivule] Trivule has not been initialized. Please call Trivule.init() first.'
+      );
+    }
+
+    const instance = Trivule._instance;
+
+    // Check if form already exists in _trForms
+    const existingForm = instance._trForms.find((f) => {
+      const element = f.getNativeElement();
+      if (typeof selector === 'string') {
+        return element === document.querySelector(selector);
+      }
+      return element === selector;
+    });
+
+    if (existingForm) {
+      return existingForm;
+    }
+
+    // Create new form
+    const trForm = instance._form(selector, config ?? {});
+
+    // Check if form element was found
+    if (!trForm.getNativeElement()) {
+      console.error(
+        `[Trivule] Form element not found: "${selector}". Make sure the element exists in the DOM.`
+      );
+    }
+
+    instance._trForms.push(trForm);
+    return trForm;
+  }
+
+  /**
+   * Instance method to get or create a form by selector
+   * @param selector CSS selector or HTMLElement for the form
+   * @param config Optional configuration for the form
+   * @returns The TrivuleForm instance
+   */
   form(
+    selector: ValidatableForm,
+    config?: TrivuleFormConfig,
+  ): TrivuleForm {
+    return Trivule.form(selector, config);
+  }
+
+  private _form(
     selector: ValidatableForm | TrivuleFormConfig,
     config: TrivuleFormConfig,
   ) {
