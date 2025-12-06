@@ -131,14 +131,6 @@ describe('TrivuleForm', () => {
     });
   });
 
-  describe('setLanguage method', () => {
-    test('should set language on the form', () => {
-      const form = new TrivuleForm();
-      form.setLanguage('fr');
-      // Note: This tests that the method exists and doesn't throw
-      expect(typeof form.setLanguage).toBe('function');
-    });
-  });
 
   describe('Trigger Events Configuration', () => {
     test('should accept triggerEvents in config', () => {

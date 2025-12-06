@@ -1,6 +1,7 @@
 import {
   ITrConfig,
   RuleCallBack,
+  RulesMessages,
   TrivuleFormConfig,
   TrivuleInputParms,
   ValidatableForm,
@@ -105,6 +106,40 @@ export class Trivule {
   defineRule(name: string, fn: RuleCallBack, message?: string): this {
     this.parameter.ruleRegistry.defineRule(name, fn, message);
     return this;
+  }
+
+  /**
+   * Set a custom message for a specific validation rule
+   * @param rule - The name of the validation rule
+   * @param msg - The custom message to display when validation fails
+   * @example
+   * ```typescript
+   * Trivule.message('required', 'Ce champ est obligatoire');
+   * Trivule.message('email', 'Veuillez entrer une adresse email valide');
+   * ```
+   */
+  static message(rule: string, msg: string): void {
+    const instance = Trivule._instance ?? Trivule.init();
+    instance.parameter.ruleRegistry.addMessage(rule, msg);
+  }
+
+  /**
+   * Set multiple custom messages at once
+   * @param messages - An object mapping rule names to custom messages
+   * @example
+   * ```typescript
+   * Trivule.messages({
+   *   required: 'Campo requerido',
+   *   email: 'Correo electrónico inválido',
+   *   minlength: 'Mínimo :arg0 caracteres'
+   * });
+   * ```
+   */
+  static messages(messages: RulesMessages): void {
+    const instance = Trivule._instance ?? Trivule.init();
+    for (const [rule, msg] of Object.entries(messages)) {
+      instance.parameter.ruleRegistry.addMessage(rule, msg);
+    }
   }
 
   forms(): TrivuleForm[] {

@@ -46,9 +46,6 @@ export class TrParameter {
   // Behavior configurations
   auto: boolean = true;
 
-  // Localization configuration
-  lang: string = RuleRegistry.DEFAULT_LANG;
-
   // Element reference (for form-specific usage)
   element?: ValidatableForm;
 
@@ -102,10 +99,6 @@ export class TrParameter {
     }
     if (config.feedbackSelector !== undefined) {
       this.feedbackSelector = config.feedbackSelector;
-    }
-    if (config.local?.lang) {
-      this.lang = config.local.lang;
-      this.ruleRegistry.lang = config.local.lang;
     }
     if ('auto' in config && config.auto !== undefined) {
       this.auto = config.auto;

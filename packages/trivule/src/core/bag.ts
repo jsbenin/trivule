@@ -107,29 +107,13 @@ export class RuleRegistry {
     numberBetween: numberBetween,
   };
 
-  // Localization properties (ex-TrLocal)
-  private _useLang: string | null = null;
+  // Messages storage
   public static readonly DEFAULT_LANG = 'en';
-  public lang: string = RuleRegistry.DEFAULT_LANG;
-  private _messages: Record<string, RulesMessages> = {
-    en: en_messages,
-  };
+  private _messages: RulesMessages = { ...en_messages };
 
-  /**
-   * Define a custom validation rule with optional error message
-   * @param rule - The name of the custom rule
-   * @param callback - The callback function for the custom rule
-   * @param message - The error message for the custom rule
-   * @param local - The locale for the error message
-   */
-  defineRule(
-    rule: string,
-    callback: RuleCallBack,
-    message?: string,
-    local?: string,
-  ): void {
+  defineRule(rule: string, callback: RuleCallBack, message?: string): void {
     this.rules[rule as keyof RulesBag] = callback;
-    this.addMessage(rule, message, local);
+    this.addMessage(rule, message);
   }
 
   /**
@@ -145,8 +129,8 @@ export class RuleRegistry {
     return this.rules[name as Rule];
   }
 
-  getMessage(name: string | Rule, local?: string): string {
-    const messages: Record<string | Rule, string> = this.getMessages(local);
+  getMessage(name: string | Rule): string {
+    const messages = this.getMessages();
     return messages[name] ?? messages['default'];
   }
 
@@ -154,82 +138,23 @@ export class RuleRegistry {
     return this.rules;
   }
 
-  // Localization methods (ex-TrLocal methods converted to instance methods)
-
   /**
-   * Get the messages for a specific language.
-   * If the language is not provided, the default language is used.
-   *
-   * @param local The language code (optional)
-   * @returns The messages object for the specified language
+   * Get all messages
+   * @returns The messages object
    */
-  getMessages(local?: string): RulesMessages {
-    local = local ?? RuleRegistry.DEFAULT_LANG;
-    let messages = this._messages[local];
-    if (!messages) {
-      messages = this._messages[RuleRegistry.DEFAULT_LANG];
-    }
-    return messages;
+  getMessages(): RulesMessages {
+    return this._messages;
   }
 
   /**
-   * Add or update a message for a specific rule and language.
-   * If the language is not provided, the default language is used.
-   *
+   * Add or update a message for a specific rule
    * @param rule The rule name
    * @param message The new message
-   * @param local The language code (optional)
    */
-  addMessage(rule: string, message?: string, local?: string): void {
+  addMessage(rule: string, message?: string): void {
     if (message) {
-      local = local || RuleRegistry.DEFAULT_LANG;
-      const existingMessages = this._messages[local] || {};
-      this._messages[local] = { ...existingMessages, [rule]: message };
+      this._messages[rule] = message;
     }
-  }
-
-  /**
-   * Rewrite the message for a specific rule and language.
-   * This is a shorthand method that calls `addMessage`.
-   *
-   * @param lang The language code
-   * @param rule The rule name
-   * @param message The new message
-   */
-  rewrite(lang: string, rule: string | Rule, message: string): void {
-    this.addMessage(rule, message, lang);
-  }
-
-  /**
-   * Set the current translation language to be used for displaying error messages.
-   * This method overrides all other methods of assigning the language for displaying error messages.
-   *
-   * @param lang The language code
-   */
-  setLocal(lang: string): void {
-    if (!is_string(lang) || !lang.length) {
-      throw new Error('The language must be a valid string');
-    }
-    this._useLang = lang;
-  }
-
-  /**
-   * Get the currently set translation language.
-   * If no language is set, the default language is used.
-   *
-   * @returns The currently set language code
-   */
-  getLocal(): string {
-    return this._useLang ?? this.lang;
-  }
-
-  /**
-   * Get all messages for all languages
-   * @param local The language code (optional)
-   * @returns All messages for the specified language or default language
-   */
-  allMessages(local?: string): RulesMessages {
-    return this.getMessages(local);
   }
 }
 

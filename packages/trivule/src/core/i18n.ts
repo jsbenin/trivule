@@ -5,9 +5,9 @@ import { spliteParam } from '../utils';
 export class I18nResolver {
   protected messages!: RulesMessages;
 
-  constructor(local?: string, ruleRegistry?: RuleRegistry) {
+  constructor(ruleRegistry?: RuleRegistry) {
     const registry = ruleRegistry || new RuleRegistry();
-    this.messages = registry.getMessages(local ?? registry.getLocal());
+    this.messages = registry.getMessages();
   }
   /**
 
