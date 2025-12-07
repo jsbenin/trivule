@@ -64,6 +64,19 @@ importers:
         specifier: ^5.9.2
         version: 5.9.3
 
+  examples/basic:
+    dependencies:
+      trivule:
+        specifier: workspace:*
+        version: link:../../packages/trivule
+    devDependencies:
+      typescript:
+        specifier: ^5.4.5
+        version: 5.9.3
+      vite:
+        specifier: ^4.3.2
+        version: 4.5.14(@types/node@24.3.3)(lightningcss@1.30.2)
+
   packages/trivule:
     devDependencies:
       '@commitlint/cli':
