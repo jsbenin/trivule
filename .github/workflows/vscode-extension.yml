@@ -7,6 +7,9 @@ on:
   pull_request:
     branches:
       - main
+  release:
+    types:
+      - published
 
 jobs:
   build:
@@ -33,3 +36,30 @@ jobs:
       - name: Run Tests
         run: xvfb-run -a pnpm --filter trivule-vscode-extension test
         if: runner.os == 'Linux'
+
+      - name: Compile Extension
+        run: pnpm --filter trivule-vscode-extension compile
+
+  publish:
+    needs: build
+    if: github.event_name == 'release'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
+
+      - name: Install pnpm
+        run: npm install -g pnpm
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Publish Extension
+        run: |
+          cd packages/vscode-extension
+          pnpm dlx vsce publish -p ${{ secrets.VSCE_PAT }}
