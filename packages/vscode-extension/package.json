@@ -1,9 +1,9 @@
 {
-    "name": "trivule-vscode",
+    "name": "trivule",
     "publisher": "trivule",
     "repository": {
         "type": "git",
-        "url": "https://github.com/trivule/trivule.git"
+        "url": "https://github.com/jsbenin/trivule.git"
     },
     "displayName": "Trivule VS Code Extension",
     "description": "Auto-completion for Trivule library in HTML files",
