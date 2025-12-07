@@ -1,57 +1,48 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Trivule - Test</title>
-    <style>
-      .is-valid {
-        border-color: green;
-      }
-      .is-invalid {
-        border-color: red;
-      }
-      .error-message {
-        color: red;
-        font-size: 0.9em;
-      }
-    </style>
-  </head>
-  <body>
-    <h1>Trivule Global Initialization Demo</h1>
 
-    <form @v:form @v:event="blur">
-      <div>
-        <label for="email">Email:</label>
-        <input
-          id="email-1"
-          type="text"
-          id="email"
-          name="email"
-          @v:rules="required|email"
-          @v:msg.required="Email obligatoire"
-          @v:msg.email="Please provide a valid email"
-        />
-        <p @v:feedback="email" class="is-invalid"></p>
-      </div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Trivule - Test</title>
+  <style>
+    .is-valid {
+      border-color: green;
+    }
 
-      <div>
-        <label for="password">Password:</label>
-        <input
-          id="password-1"
-          type="password"
-          id="password"
-          name="password"
-          @v:rules="required|min:6"
-          @v:msg.required="Mot de passe obligatoire"
-          @v:msg.min="Champ obligatoire"
-        />
-        <p @v:feedback="password" class="is-invalid"></p>
-      </div>
+    .is-invalid {
+      border-color: red;
+    }
 
-      <button type="submit" @v:submit>Register</button>
-    </form>
+    .error-message {
+      color: red;
+      font-size: 0.9em;
+    }
+  </style>
+</head>
 
-    <script src="./main.ts" type="module"></script>
-  </body>
+<body>
+  <h1>Trivule Global Initialization Demo</h1>
+
+  <form @v:form @v:event="blur">
+    <div>
+      <label for="email">Email:</label>
+      <input id="email-1" type="text" id="email" name="email" @v:rules="required|email"
+        @v:msg.required="Email obligatoire" @v:msg.email="Please provide a valid email" />
+      <p @v:feedback="email" class="is-invalid"></p>
+    </div>
+
+    <div>
+      <label for="password">Password:</label>
+      <input id="password-1" type="password" id="password" name="password" @v:rules="required|min:6"
+        @v:msg.required="Mot de passe obligatoire" @v:msg.min="Champ obligatoire" />
+      <p @v:feedback="password" class="is-invalid"></p>
+    </div>
+
+    <button type="submit" @v:submit>Register</button>
+  </form>
+
+  <script src="./main.ts" type="module"></script>
+</body>
+
 </html>
