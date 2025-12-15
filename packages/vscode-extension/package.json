@@ -5,9 +5,10 @@
         "type": "git",
         "url": "https://github.com/jsbenin/trivule.git"
     },
-    "displayName": "Trivule VS Code Extension",
+    "displayName": "Trivule",
     "description": "Auto-completion for Trivule library in HTML files",
-    "version": "0.0.2",
+	"icon": "icon.png",
+    "version": "0.1.1",
     "engines": {
         "vscode": "^1.80.0"
     },
@@ -23,7 +24,7 @@
             {
                 "id": "html",
                 "extensions": [
-                    ".html"
+                    ".html", ".blade.php", ".php"
                 ]
             }
         ]
