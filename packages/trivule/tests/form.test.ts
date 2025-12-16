@@ -163,11 +163,11 @@ describe('TrivuleForm', () => {
     });
   });
 
-  describe('Form-level event attribute', () => {
-    test('should read trigger events from @v:event attribute on form element', () => {
-      // Create a fresh form with @v:event attribute
+  describe('Form-level events attribute', () => {
+    test('should read trigger events from @v:events attribute on form element', () => {
+      // Create a fresh form with @v:events attribute
       const formElement = document.createElement('form');
-      formElement.setAttribute(attr('event'), 'input|blur');
+      formElement.setAttribute(attr('events'), 'input|blur');
 
       const input = document.createElement('input');
       input.name = 'testInput';
@@ -188,7 +188,7 @@ describe('TrivuleForm', () => {
 
     test('should apply form-level events to all inputs', () => {
       const formElement = document.createElement('form');
-      formElement.setAttribute(attr('event'), 'blur');
+      formElement.setAttribute(attr('events'), 'blur');
 
       const input1 = document.createElement('input');
       input1.name = 'input1';
@@ -213,9 +213,9 @@ describe('TrivuleForm', () => {
       document.body.removeChild(formElement);
     });
 
-    test('should parse multiple events from @v:event attribute', () => {
+    test('should parse multiple events from @v:events attribute', () => {
       const formElement = document.createElement('form');
-      formElement.setAttribute(attr('event'), 'submit|input|blur');
+      formElement.setAttribute(attr('events'), 'submit|input|blur');
 
       const input = document.createElement('input');
       input.name = 'multiEventInput';
@@ -232,9 +232,9 @@ describe('TrivuleForm', () => {
       document.body.removeChild(formElement);
     });
 
-    test('should use config triggerEvents when no @v:event attribute', () => {
+    test('should use config triggerEvents when no @v:events attribute', () => {
       const formElement = document.createElement('form');
-      // No @v:event attribute
+      // No @v:events attribute
 
       const input = document.createElement('input');
       input.name = 'configInput';
@@ -251,9 +251,9 @@ describe('TrivuleForm', () => {
       document.body.removeChild(formElement);
     });
 
-    test('should filter invalid event names in @v:event attribute', () => {
+    test('should filter invalid event names in @v:events attribute', () => {
       const formElement = document.createElement('form');
-      formElement.setAttribute(attr('event'), 'input|invalid|blur|unknown');
+      formElement.setAttribute(attr('events'), 'input|invalid|blur|unknown');
 
       const input = document.createElement('input');
       input.name = 'filterInput';

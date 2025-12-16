@@ -24,17 +24,17 @@
 <body>
   <h1>Trivule Global Initialization Demo</h1>
 
-  <form @v:form @v:event="blur">
+  <form @v:form @v:events="blur">
     <div>
       <label for="email">Email:</label>
-      <input id="email-1" type="text" id="email" name="email" @v:rules="required|email"
-        @v:msg.required="Email obligatoire" @v:msg.email="Please provide a valid email" />
+      <input type="text" id="email" name="email" @v:rules="required|email" @v:msg.required="Email obligatoire"
+        @v:msg.email="Please provide a valid email" />
       <p @v:feedback="email" class="is-invalid"></p>
     </div>
 
     <div>
       <label for="password">Password:</label>
-      <input id="password-1" type="password" id="password" name="password" @v:rules="required|min:6"
+      <input type="password" id="password" name="password" @v:rules="required|min:6"
         @v:msg.required="Mot de passe obligatoire" @v:msg.min="Champ obligatoire" />
       <p @v:feedback="password" class="is-invalid"></p>
     </div>

@@ -710,7 +710,7 @@ export class TrivuleInput {
       this.rules.set(rules, customMessages);
     }
 
-    // Read trigger events from HTML attribute (e.g., @v:event="submit|input|blur")
+    // Read trigger events from HTML attribute (e.g., @v:events="submit|input|blur")
     this._initTriggerEvents();
 
     this._type = (this.param.type ?? 'text') as InputType;
@@ -718,10 +718,10 @@ export class TrivuleInput {
 
   /**
    * Initialize trigger events from HTML attribute or params
-   * Parses @v:event="submit|input|blur" format
+   * Parses @v:events="submit|input|blur" format
    */
   private _initTriggerEvents() {
-    const attrEvents: string | null = this.getAttrData('event', null);
+    const attrEvents: string | null = this.getAttrData('events', null);
 
     if (attrEvents) {
       const events = this.eventToArray(attrEvents).filter(

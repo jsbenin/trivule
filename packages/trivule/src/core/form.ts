@@ -757,7 +757,7 @@ export class TrivuleForm {
     }
 
     if (this.container instanceof HTMLElement) {
-      // Read trigger events from form's @v:event attribute
+      // Read trigger events from form's @v:events attribute
       this._initTriggerEvents();
       this._initTrivuleInputs();
       this._wasBound = true;
@@ -768,12 +768,12 @@ export class TrivuleForm {
 
   /**
    * Initialize trigger events from form's HTML attribute
-   * Parses @v:event="submit|input|blur" format on the form element
+   * Parses @v:events="submit|input|blur" format on the form element
    */
   private _initTriggerEvents() {
     const attrEvents: string | null = this.getAttrData(
       this.container,
-      'event',
+      'events',
       null,
     );
 

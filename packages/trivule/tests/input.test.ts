@@ -252,10 +252,10 @@ describe('TrivuleInput', () => {
   });
 
   describe('event trigger attribute', () => {
-    test('should read trigger events from @v:event attribute', () => {
+    test('should read trigger events from @v:events attribute', () => {
       const inputElement = document.createElement('input');
       inputElement.setAttribute(attr('rules'), 'required');
-      inputElement.setAttribute(attr('event'), 'input|blur');
+      inputElement.setAttribute(attr('events'), 'input|blur');
 
       const validateSpy = vi.fn();
       const trivuleInput = createTrivuleInput(inputElement);
@@ -270,10 +270,10 @@ describe('TrivuleInput', () => {
       expect(validateSpy).toHaveBeenCalledTimes(2);
     });
 
-    test('should parse single event from @v:event attribute', () => {
+    test('should parse single event from @v:events attribute', () => {
       const inputElement = document.createElement('input');
       inputElement.setAttribute(attr('rules'), 'required');
-      inputElement.setAttribute(attr('event'), 'blur');
+      inputElement.setAttribute(attr('events'), 'blur');
 
       const validateSpy = vi.fn();
       const trivuleInput = createTrivuleInput(inputElement);
@@ -291,7 +291,7 @@ describe('TrivuleInput', () => {
     test('should ignore submit in per-input events (handled at form level)', () => {
       const inputElement = document.createElement('input');
       inputElement.setAttribute(attr('rules'), 'required');
-      inputElement.setAttribute(attr('event'), 'submit|input');
+      inputElement.setAttribute(attr('events'), 'submit|input');
 
       const validateSpy = vi.fn();
       const trivuleInput = createTrivuleInput(inputElement);
@@ -324,7 +324,7 @@ describe('TrivuleInput', () => {
     test('should filter invalid event names', () => {
       const inputElement = document.createElement('input');
       inputElement.setAttribute(attr('rules'), 'required');
-      inputElement.setAttribute(attr('event'), 'input|invalid|blur|unknown');
+      inputElement.setAttribute(attr('events'), 'input|invalid|blur|unknown');
 
       const validateSpy = vi.fn();
       const trivuleInput = createTrivuleInput(inputElement);
@@ -336,6 +336,43 @@ describe('TrivuleInput', () => {
 
       inputElement.dispatchEvent(new Event('blur'));
       expect(validateSpy).toHaveBeenCalledTimes(2);
+    });
+  });
+
+  describe('custom messages with msg attribute', () => {
+    test('should read custom messages from data-tr-msg attributes', () => {
+      const inputElement = document.createElement('input');
+      inputElement.setAttribute(attr('rules'), 'required|email|maxlength:32');
+      inputElement.setAttribute(attr('msg') + '.required', 'Ce champ est obligatoire');
+      inputElement.setAttribute(attr('msg') + '.email', 'Veuillez entrer un email valide');
+      inputElement.setAttribute(attr('msg') + '.maxlength', 'Maximum 32 caractères');
+
+      const trivuleInput = createTrivuleInput(inputElement);
+      
+      expect(trivuleInput.$rules.getMessage('required')).toBe('Ce champ est obligatoire');
+      expect(trivuleInput.$rules.getMessage('email')).toBe('Veuillez entrer un email valide');
+      expect(trivuleInput.$rules.getMessage('maxlength')).toBe('Maximum 32 caractères');
+    });
+
+    test('should use default message when custom msg attribute is not provided', () => {
+      const inputElement = document.createElement('input');
+      inputElement.setAttribute(attr('rules'), 'required|email');
+
+      const trivuleInput = createTrivuleInput(inputElement);
+      
+      // Should have default messages
+      expect(trivuleInput.$rules.getMessage('required')).toBeTruthy();
+      expect(trivuleInput.$rules.getMessage('email')).toBeTruthy();
+    });
+
+    test('should handle empty msg attributes', () => {
+      const inputElement = document.createElement('input');
+      inputElement.setAttribute(attr('rules'), 'required|email');
+      inputElement.setAttribute(attr('msg') + '.required', '');
+
+      const trivuleInput = createTrivuleInput(inputElement);
+      
+      expect(trivuleInput.$rules.getMessage('required')).toBe('');
     });
   });
 });

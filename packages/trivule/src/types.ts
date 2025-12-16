@@ -212,10 +212,7 @@ export type TrivuleInputParms = {
    * An array of rules that will be used to validate the input element.
    */
   rules?: Rule[] | string[] | Rule | string;
-  /**
-   * An object that maps rule names to error messages.
-   */
-  messages?: string[] | string | Record<string, string>;
+
   /**
    * The name of the input element.
    */
@@ -360,8 +357,7 @@ export type TrivuleServiceFunction<T = unknown> = (trivule: T) => void;
 export type TrivuleAttribute =
   | 'rules'
   | 'events'
-  | 'event'
-  | 'messages'
+  | 'msg'
   | 'invalid-class'
   | 'valid-class'
   | 'feedback'

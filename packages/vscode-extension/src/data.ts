@@ -1,7 +1,6 @@
 export const TRIVULE_ATTRIBUTES = [
     'rules',
     'events',
-    'event',
     'messages',
     'invalid-class',
     'valid-class',

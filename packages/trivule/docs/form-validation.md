@@ -17,6 +17,9 @@ Specify validation rules in the attributes of HTML fields for basic form validat
     <input
       type="text"
       data-tr-rules="required|email|maxlength:32"
+      data-tr-msg-required="L'email est obligatoire"
+      data-tr-msg-email="Veuillez entrer une adresse email valide"
+      data-tr-msg-maxlength="L'email ne doit pas dépasser 32 caractères"
       name="email"
     />
     <div data-tr-feedback="email"></div>
@@ -25,6 +28,9 @@ Specify validation rules in the attributes of HTML fields for basic form validat
     <label>Message</label>
     <textarea
       data-tr-rules="required|between:2,250|endWith:."
+      data-tr-msg-required="Le message est obligatoire"
+      data-tr-msg-between="Le message doit contenir entre 2 et 250 caractères"
+      data-tr-msg-endWith="Le message doit se terminer par un point"
       name="message"
     ></textarea>
     <div data-tr-feedback="message"></div>

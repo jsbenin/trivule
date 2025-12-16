@@ -81,6 +81,29 @@ trEmail.onFails((trEmail) => {
 });
 ```
 
+## Custom Messages
+
+You can customize error messages for individual rules using the `data-tr-msg` attribute with the rule name as a suffix.
+
+**Example:**
+
+```html
+<input 
+  name="email" 
+  type="text" 
+  data-tr-rules="required|email|maxlength:32"
+  data-tr-msg-required="L'email est obligatoire"
+  data-tr-msg-email="Veuillez entrer une adresse email valide"
+  data-tr-msg-maxlength="L'email ne doit pas dépasser 32 caractères"
+/>
+<div data-tr-feedback="email"></div>
+```
+
+Each rule can have its own custom message:
+- `data-tr-msg-required` - Custom message for the required rule
+- `data-tr-msg-email` - Custom message for the email rule
+- `data-tr-msg-maxlength` - Custom message for the maxlength rule
+
 **2. `onPasses`**
 
 - Attach a listener to the `"tr.input.passes"` event, activated upon successful validation of the input.

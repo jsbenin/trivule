@@ -86,18 +86,18 @@ Control when validation triggers. Default is `['submit']`.
 
 **Priority Order:**
 
-1. Input's `@v:event` (Highest)
-2. Form's `@v:event`
+1. Input's `@v:events` (Highest)
+2. Form's `@v:events`
 3. Global Config
 4. Default (`submit`)
 
 ```html
-<form @v:form @v:event="blur">
+<form @v:form @v:events="blur">
   <!-- Uses form default: blur -->
   <input name="email" @v:rules="required|email" />
 
   <!-- Overrides with input specific events -->
-  <input name="name" @v:rules="required" @v:event="input|blur" />
+  <input name="name" @v:rules="required" @v:events="input|blur" />
 </form>
 ```
 
