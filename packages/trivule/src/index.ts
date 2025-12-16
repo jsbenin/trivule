@@ -1,4 +1,3 @@
-
 export { Trivule } from './core/trivule';
 export { TrivuleForm } from './core/form';
 export { TrivuleInput } from './core/input';

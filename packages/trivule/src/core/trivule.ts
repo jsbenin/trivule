@@ -154,13 +154,13 @@ export class Trivule {
    * @example
    * ```typescript
    * Trivule.init();
-   * 
+   *
    * const form = Trivule.form('#myForm');
-   * 
+   *
    * form.onSuccess((data) => {
    *   console.log(data.values);
    * });
-   * 
+   *
    * form.onError((data) => {
    *   console.log(data.errors);
    * });
@@ -172,7 +172,7 @@ export class Trivule {
   ): TrivuleForm {
     if (!Trivule._instance) {
       throw new Error(
-        '[Trivule] Trivule has not been initialized. Please call Trivule.init() first.'
+        '[Trivule] Trivule has not been initialized. Please call Trivule.init() first.',
       );
     }
 
@@ -197,7 +197,7 @@ export class Trivule {
     // Check if form element was found
     if (!trForm.getNativeElement()) {
       console.error(
-        `[Trivule] Form element not found: "${selector}". Make sure the element exists in the DOM.`
+        `[Trivule] Form element not found: "${selector}". Make sure the element exists in the DOM.`,
       );
     }
 
@@ -211,10 +211,7 @@ export class Trivule {
    * @param config Optional configuration for the form
    * @returns The TrivuleForm instance
    */
-  form(
-    selector: ValidatableForm,
-    config?: TrivuleFormConfig,
-  ): TrivuleForm {
+  form(selector: ValidatableForm, config?: TrivuleFormConfig): TrivuleForm {
     return Trivule.form(selector, config);
   }
 

@@ -131,7 +131,6 @@ describe('TrivuleForm', () => {
     });
   });
 
-
   describe('Trigger Events Configuration', () => {
     test('should accept triggerEvents in config', () => {
       const form = new TrivuleForm();

@@ -570,8 +570,8 @@ export class TrivuleForm {
       inputs = inputs
         ? inputs
         : Array.from(
-          this.container.querySelectorAll<HTMLElement>(attrSelector('rules')),
-        );
+            this.container.querySelectorAll<HTMLElement>(attrSelector('rules')),
+          );
       inputs.forEach((el, index) => this._bootInputs({ selector: el }, index));
     }
   }
