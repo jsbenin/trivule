@@ -38,7 +38,7 @@ export const email: RuleCallBack = (input) => {
  *  <input data-tr-rules="minlength:8"/>
  * ```
  */
-export const minlength: RuleCallBack = (input, length) => {
+export const min_length: RuleCallBack = (input, length) => {
   return {
     passes: typeof input == 'string' ? input.length >= Number(length) : false,
     value: input,
@@ -55,7 +55,7 @@ export const minlength: RuleCallBack = (input, length) => {
  *  <input data-tr-rules="maxlength:8"/>
  * ```
  */
-export const maxlength: RuleCallBack = (input, length) => {
+export const max_length: RuleCallBack = (input, length) => {
   return {
     passes: typeof input == 'string' ? input.length <= Number(length) : true,
     value: input,
@@ -105,7 +105,7 @@ export const url: RuleCallBack = (input) => {
  *  <input data-tr-rules="startWithUpper"/>
  * ```
  */
-export const startWithUpper: RuleCallBack = (input) => {
+export const start_with_upper: RuleCallBack = (input) => {
   if (typeof input !== 'string' || input.length === 0) {
     return {
       passes: false,
@@ -129,7 +129,7 @@ export const startWithUpper: RuleCallBack = (input) => {
  * ```
  */
 
-export const startWithLower: RuleCallBack = (input) => {
+export const start_with_lower: RuleCallBack = (input) => {
   if (
     typeof input !== 'string' ||
     input.length === 0 ||
@@ -157,9 +157,9 @@ export const startWithLower: RuleCallBack = (input) => {
  * ```
  * @throws An exception with the message "Missing required argument: startWith" if the `prefix` parameter is falsy.
  */
-export const startWith: RuleCallBack = (input, prefix) => {
+export const start_with: RuleCallBack = (input, prefix) => {
   if (!prefix) {
-    throwEmptyArgsException('startWith');
+    throwEmptyArgsException('start_with');
   }
   const prefixes = spliteParam(prefix as string);
   if (typeof input !== 'string') {
@@ -185,9 +185,9 @@ export const startWith: RuleCallBack = (input, prefix) => {
  * ```
  * @throws An exception with the message "Missing required argument: endWith" if the `suffix` parameter is falsy.
  */
-export const endWith: RuleCallBack = (input, suffix) => {
+export const end_with: RuleCallBack = (input, suffix) => {
   if (!suffix) {
-    throwEmptyArgsException('endWith');
+    throwEmptyArgsException('end_with');
   }
   const suffixes = spliteParam(suffix as string);
   if (typeof input !== 'string') {
@@ -276,7 +276,7 @@ export const length: RuleCallBack = (input, size) => {
  *  <input data-tr-rules="password"/>
  * ```
  */
-export const passwordRule: RuleCallBack = (input) => {
+export const password_rule: RuleCallBack = (input) => {
   if (typeof input !== 'string') {
     return {
       passes: false,
@@ -317,7 +317,7 @@ export const passwordRule: RuleCallBack = (input) => {
  *  <input data-tr-rules="startWithString"/>
  * ```
  */
-export const startWithString: RuleCallBack = (input) => {
+export const start_with_string: RuleCallBack = (input) => {
   if (
     typeof input !== 'string' ||
     input.length === 0 ||
@@ -344,7 +344,7 @@ export const startWithString: RuleCallBack = (input) => {
  *  <input data-tr-rules="endWithString"/>
  * ```
  */
-export const endWithString: RuleCallBack = (input) => {
+export const end_with_string: RuleCallBack = (input) => {
   if (typeof input !== 'string' || input.length === 0) {
     return {
       passes: false,
@@ -367,7 +367,7 @@ export const endWithString: RuleCallBack = (input) => {
  *  <input data-tr-rules="containsLetter"/>
  * ```
  */
-export const containsLetter: RuleCallBack = (input) => {
+export const contains_letter: RuleCallBack = (input) => {
   if (typeof input !== 'string') {
     return {
       passes: false,
@@ -470,13 +470,13 @@ export const lower: RuleCallBack = (input) => {
  * <input data-tr-rules="stringBetween:2,5" />
  * ```
  */
-export const stringBetween: RuleCallBack = (input, min_max) => {
+export const string_between: RuleCallBack = (input, min_max) => {
   if (typeof min_max !== 'string') {
     throwEmptyArgsException('between');
   }
   const [min, max] = spliteParam(min_max as string);
   return {
-    passes: minlength(input, min).passes && maxlength(input, max).passes,
+    passes: min_length(input, min).passes && max_length(input, max).passes,
     value: input,
   };
 };

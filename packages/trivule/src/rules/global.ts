@@ -1,11 +1,11 @@
 import {
-  isFile,
+  is_file,
   length,
-  isNumber,
-  maxRule,
-  minRule,
-  stringBetween,
-  fileBetween,
+  is_number,
+  max_rule,
+  min_rule,
+  string_between,
+  file_between,
 } from '.';
 import { RuleCallBack } from '../types';
 import {
@@ -16,7 +16,7 @@ import {
   throwEmptyArgsException,
 } from '../utils';
 import { ArgumentParser } from '../core/utils/argument-parser';
-import { dateBetween } from './date';
+import { date_between } from './date';
 /**
  * Checks if the input is required.
  *
@@ -50,9 +50,9 @@ export const nullable: RuleCallBack = (input) => {
  * <input data-tr-rules="in:active,inactive" />
  * ```
  */
-export const inInput: RuleCallBack = (input, params) => {
+export const in_input: RuleCallBack = (input, params) => {
   if (typeof params !== 'string') {
-    throwEmptyArgsException('in');
+    throwEmptyArgsException('in_input');
   }
   if (params === '') {
     throw new Error('The in rule parameter must be a string');
@@ -77,7 +77,7 @@ export const size: RuleCallBack = (input, maxSize) => {
   if (typeof maxSize !== 'number' && typeof maxSize !== 'string') {
     throwEmptyArgsException('size');
   }
-  if (isFile(input).passes) {
+  if (is_file(input).passes) {
     let numericValue, unit;
     // eslint-disable-next-line no-useless-catch
     try {
@@ -112,7 +112,7 @@ export const size: RuleCallBack = (input, maxSize) => {
  * <input data-tr-rules="boolean" />
  * ```
  */
-export const isBoolean: RuleCallBack = (value) => {
+export const is_boolean: RuleCallBack = (value) => {
   if (typeof value === 'boolean') {
     return { passes: true, value: Boolean(value) };
   }
@@ -162,17 +162,17 @@ export const between: RuleCallBack = (input, min_max, type) => {
   //for file
   if (type === 'file') {
     return {
-      passes: fileBetween(input, min_max, type).passes,
+      passes: file_between(input, min_max, type).passes,
       value: input,
-      alias: 'fileBetween',
+      alias: 'file_between',
     };
   }
   // for date
   if (type == 'date' || type == 'date-local') {
     return {
-      passes: dateBetween(input, min_max).passes,
+      passes: date_between(input, min_max).passes,
       value: input,
-      alias: 'dateBetween',
+      alias: 'date_between',
     };
   }
 
@@ -180,26 +180,26 @@ export const between: RuleCallBack = (input, min_max, type) => {
     min = Number(min);
     max = Number(max);
     if (input !== undefined && input !== '') {
-      if (isNumber(min).passes && isNumber(max).passes) {
-        if (!isNumber(input).passes) {
+      if (is_number(min).passes && is_number(max).passes) {
+        if (!is_number(input).passes) {
           return {
             passes: false,
             value: input,
           };
         }
         return {
-          passes: maxRule(input, max).passes && minRule(input, min).passes,
+          passes: max_rule(input, max).passes && min_rule(input, min).passes,
           value: Number(input),
-          alias: 'numberBetween',
+          alias: 'number_between',
         };
       }
     }
   }
 
   return {
-    passes: stringBetween(input, min_max).passes,
+    passes: string_between(input, min_max).passes,
     value: input,
-    alias: 'stringBetween',
+    alias: 'string_between',
   };
 };
 /**
@@ -243,7 +243,7 @@ export const only: RuleCallBack = (input, param) => {
     }
   } else {
     if (param === 'digit') {
-      passes = isNumber(input).passes;
+      passes = is_number(input).passes;
     }
   }
 
@@ -263,12 +263,12 @@ export const only: RuleCallBack = (input, param) => {
  * <input data-tr-rules="digit:8"/>
  * ```
  */
-export const digitRule: RuleCallBack = (input, digitCount) => {
-  if (!isNumber(digitCount).passes) {
+export const digit_rule: RuleCallBack = (input, digitCount) => {
+  if (!is_number(digitCount).passes) {
     throw new Error('Digit rule parameter must be a number');
   }
   let passes = false;
-  if (isNumber(input).passes) {
+  if (is_number(input).passes) {
     const inputralue = String(input);
     passes =
       /^\d+$/.test(inputralue) && inputralue.length === Number(digitCount);
@@ -290,13 +290,13 @@ export const digitRule: RuleCallBack = (input, digitCount) => {
  * <input data-tr-rules="max_digit:10"/>
  * ```
  */
-export const maxDigitRule: RuleCallBack = (input, maxDigitCount) => {
-  if (!isNumber(maxDigitCount).passes) {
-    throw new Error('Max_digit rule parameter must be a number');
+export const max_digit_rule: RuleCallBack = (input, maxDigitCount) => {
+  if (!is_number(maxDigitCount).passes) {
+    throw new Error('Max_digit_rule parameter must be a number');
   }
 
   let passes = false;
-  if (isNumber(input).passes) {
+  if (is_number(input).passes) {
     const inputralue = String(input);
     passes =
       /^\d+$/.test(inputralue) && inputralue.length <= Number(maxDigitCount);
@@ -318,13 +318,13 @@ export const maxDigitRule: RuleCallBack = (input, maxDigitCount) => {
  * <input data-tr-rules="min_digit:5"/>
  * ```
  */
-export const minDigitRule: RuleCallBack = (input, minDigitCount) => {
-  if (!isNumber(minDigitCount).passes) {
-    throw new Error('Min_digit rule parameter must be a number');
+export const min_digit_rule: RuleCallBack = (input, minDigitCount) => {
+  if (!is_number(minDigitCount).passes) {
+    throw new Error('Min_digit_rule parameter must be a number');
   }
 
   let passes = false;
-  if (isNumber(input).passes) {
+  if (is_number(input).passes) {
     const inputralue = String(input);
     passes =
       /^\d+$/.test(inputralue) && inputralue.length >= Number(minDigitCount);
@@ -353,7 +353,7 @@ export const equals: RuleCallBack = (input, expected) => {
   }
 
   let passes = false;
-  if (isNumber(input).passes && isNumber(expected).passes) {
+  if (is_number(input).passes && is_number(expected).passes) {
     passes = Number(input) === Number(expected);
   } else {
     passes = String(input) === String(expected);
@@ -376,13 +376,13 @@ export const equals: RuleCallBack = (input, expected) => {
  * <input data-tr-rules="notEquals:admin" />
  * ```
  */
-export const notEquals: RuleCallBack = (input, unexpected) => {
+export const not_equals: RuleCallBack = (input, unexpected) => {
   if (typeof unexpected !== 'number' && typeof unexpected !== 'string') {
-    throwEmptyArgsException('notEquals');
+    throwEmptyArgsException('not_equals');
   }
 
   let equalsValue = false;
-  if (isNumber(input).passes && isNumber(unexpected).passes) {
+  if (is_number(input).passes && is_number(unexpected).passes) {
     equalsValue = Number(input) === Number(unexpected);
   } else {
     equalsValue = String(input) === String(unexpected);

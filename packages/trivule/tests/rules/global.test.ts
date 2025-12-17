@@ -3,13 +3,13 @@ import {
   between,
   required,
   regex,
-  inInput,
+  in_input,
   only,
-  minDigitRule,
-  maxDigitRule,
-  digitRule,
+  min_digit_rule,
+  max_digit_rule,
+  digit_rule,
   equals,
-  notEquals,
+  not_equals,
 } from '../../src/rules';
 
 describe('required', () => {
@@ -49,22 +49,22 @@ describe('equals', () => {
   });
 });
 
-describe('notEquals', () => {
+describe('not_equals', () => {
   it('should return true when values are different', () => {
-    expect(notEquals('user', 'admin').passes).toBe(true);
-    expect(notEquals(49, 50).passes).toBe(true);
+    expect(not_equals('user', 'admin').passes).toBe(true);
+    expect(not_equals(49, 50).passes).toBe(true);
   });
 
   it('should return false when input equals the provided string param', () => {
-    expect(notEquals('admin', 'admin').passes).toBe(false);
+    expect(not_equals('admin', 'admin').passes).toBe(false);
   });
 
   it('should return false when input numeric equals the provided numeric string param', () => {
-    expect(notEquals(50, '50').passes).toBe(false);
+    expect(not_equals(50, '50').passes).toBe(false);
   });
 
   it('should throw an error when parameter is missing or invalid', () => {
-    expect(() => notEquals('x')).toThrow();
+    expect(() => not_equals('x')).toThrow();
   });
 });
 
@@ -135,25 +135,25 @@ describe('regex', () => {
   });
 });
 
-describe('inInput rule callback', () => {
+describe('in_input rule callback', () => {
   it('should return true if the input is in the list', () => {
     const input = 'active';
     const params = 'active, inactive, suspended';
-    const result = inInput(input, params).passes;
+    const result = in_input(input, params).passes;
     expect(result).toBe(true);
   });
 
   it('should return false if the input is not in the list', () => {
     const input = 'pending';
     const params = 'active, inactive, suspended';
-    const result = inInput(input, params).passes;
+    const result = in_input(input, params).passes;
     expect(result).toBe(false);
   });
 
   it('should throw an error if params argument is empty', () => {
     const input = 'active';
     const params = '';
-    expect(() => inInput(input, params)).toThrow();
+    expect(() => in_input(input, params)).toThrow();
   });
 });
 
@@ -194,73 +194,73 @@ describe('only', () => {
   });
 });
 
-describe('min_digitRule', () => {
+describe('min_digit_rule', () => {
   it('should return true when input is a number with digits greater than or equal to minDigitCount', () => {
-    expect(minDigitRule(12345, 5).passes).toBe(true);
-    expect(minDigitRule(123, 3).passes).toBe(true);
-    expect(minDigitRule(0, 1).passes).toBe(true);
+    expect(min_digit_rule(12345, 5).passes).toBe(true);
+    expect(min_digit_rule(123, 3).passes).toBe(true);
+    expect(min_digit_rule(0, 1).passes).toBe(true);
   });
 
   it('should return false when input is not a number', () => {
-    expect(minDigitRule('abc', 2).passes).toBe(false);
-    expect(minDigitRule(true, 1).passes).toBe(false);
+    expect(min_digit_rule('abc', 2).passes).toBe(false);
+    expect(min_digit_rule(true, 1).passes).toBe(false);
   });
 
   it('should return false when input is a number with digits less than minDigitCount', () => {
-    expect(minDigitRule(123, 4).passes).toBe(false);
-    expect(minDigitRule(5, 2).passes).toBe(false);
+    expect(min_digit_rule(123, 4).passes).toBe(false);
+    expect(min_digit_rule(5, 2).passes).toBe(false);
   });
 
   it('should throw an error if minDigitCount is not a number', () => {
-    expect(() => minDigitRule(123, 'abc')).toThrowError(
+    expect(() => min_digit_rule(123, 'abc')).toThrowError(
       'Min_digit rule parameter must be a number',
     );
   });
 });
 
-describe('maxDigitRule', () => {
+describe('max_digit_rule', () => {
   it('should return true when input is a number with digits less than or equal to maxDigitCount', () => {
-    expect(maxDigitRule(12345, 5).passes).toBe(true);
-    expect(maxDigitRule(123, 3).passes).toBe(true);
-    expect(maxDigitRule(0, 1).passes).toBe(true);
+    expect(max_digit_rule(12345, 5).passes).toBe(true);
+    expect(max_digit_rule(123, 3).passes).toBe(true);
+    expect(max_digit_rule(0, 1).passes).toBe(true);
   });
 
   it('should return false when input is not a number', () => {
-    expect(maxDigitRule('abc', 2).passes).toBe(false);
-    expect(maxDigitRule(true, 1).passes).toBe(false);
+    expect(max_digit_rule('abc', 2).passes).toBe(false);
+    expect(max_digit_rule(true, 1).passes).toBe(false);
   });
 
   it('should return false when input is a number with digits greater than maxDigitCount', () => {
-    expect(maxDigitRule(123, 2).passes).toBe(false);
-    expect(maxDigitRule(12345, 4).passes).toBe(false);
+    expect(max_digit_rule(123, 2).passes).toBe(false);
+    expect(max_digit_rule(12345, 4).passes).toBe(false);
   });
 
   it('should throw an error if maxDigitCount is not a number', () => {
-    expect(() => maxDigitRule(123, 'abc')).toThrowError(
+    expect(() => max_digit_rule(123, 'abc')).toThrowError(
       'Max_digit rule parameter must be a number',
     );
   });
 });
 
-describe('digitRule', () => {
+describe('digit_rule', () => {
   it('should return true when input is a number with digits equal to digitCount', () => {
-    expect(digitRule(12345678, 8).passes).toBe(true);
-    expect(digitRule(98765432, 8).passes).toBe(true);
-    expect(digitRule(0, 1).passes).toBe(true);
+    expect(digit_rule(12345678, 8).passes).toBe(true);
+    expect(digit_rule(98765432, 8).passes).toBe(true);
+    expect(digit_rule(0, 1).passes).toBe(true);
   });
 
   it('should return false when input is not a number', () => {
-    expect(digitRule('abc', 3).passes).toBe(false);
-    expect(digitRule(true, 1).passes).toBe(false);
+    expect(digit_rule('abc', 3).passes).toBe(false);
+    expect(digit_rule(true, 1).passes).toBe(false);
   });
 
   it('should return false when input is a number with digits not equal to digitCount', () => {
-    expect(digitRule(123, 4).passes).toBe(false);
-    expect(digitRule(12345, 6).passes).toBe(false);
+    expect(digit_rule(123, 4).passes).toBe(false);
+    expect(digit_rule(12345, 6).passes).toBe(false);
   });
 
   it('should throw an error if digitCount is not a number', () => {
-    expect(() => digitRule(123, 'abc')).toThrowError(
+    expect(() => digit_rule(123, 'abc')).toThrowError(
       'Digit rule parameter must be a number',
     );
   });

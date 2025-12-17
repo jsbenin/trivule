@@ -1,4 +1,4 @@
-import { maxlength, minlength } from './string';
+import { max_length, min_length } from './string';
 import { isFile, maxFileSize, minFileSize } from './file';
 import { spliteParam } from '../utils';
 import { RuleCallBack } from '../types';
@@ -12,9 +12,9 @@ import { RuleCallBack } from '../types';
  *  <input tr-rules="min:2"/>
  * ```
  */
-export const minRule: RuleCallBack = (input, min, type) => {
-  if (!isNumber(min).passes) {
-    throw new Error('Min rule parameter must be an integer');
+export const min_rule: RuleCallBack = (input, min, type) => {
+  if (!is_number(min).passes) {
+    throw new Error('Min_rule parameter must be an integer');
   }
   if (isFile(input).passes || type == 'file') {
     return {
@@ -26,14 +26,14 @@ export const minRule: RuleCallBack = (input, min, type) => {
     input = 0;
   }
 
-  if (isNumber(input).passes) {
+  if (is_number(input).passes) {
     return {
       passes: Number(input) >= Number(min),
       value: Number(input),
     };
   } else {
     return {
-      passes: minlength(input, min).passes,
+      passes: min_length(input, min).passes,
       value: input,
       alias: 'minlength',
     };
@@ -50,9 +50,9 @@ export const minRule: RuleCallBack = (input, min, type) => {
  *  <input tr-rules="max:20"/>
  * ```
  */
-export const maxRule: RuleCallBack = (input, max, type) => {
-  if (!isNumber(max).passes) {
-    throw new Error('Min rule parameter must be an integer');
+export const max_rule: RuleCallBack = (input, max, type) => {
+  if (!is_number(max).passes) {
+    throw new Error('Max_rule parameter must be an integer');
   }
   if (isFile(input).passes || type == 'file') {
     return {
@@ -65,14 +65,14 @@ export const maxRule: RuleCallBack = (input, max, type) => {
   if (input === undefined || input === null) {
     input = 0;
   }
-  if (isNumber(input).passes) {
+  if (is_number(input).passes) {
     return {
       passes: Number(input) <= Number(max),
       value: Number(input),
     };
   } else {
     return {
-      passes: maxlength(input, max).passes,
+      passes: max_length(input, max).passes,
       value: input,
       alias: 'maxlength',
     };
@@ -89,7 +89,7 @@ export const maxRule: RuleCallBack = (input, max, type) => {
  * ```
  */
 export const integer: RuleCallBack = (input) => {
-  const numberRule = isNumber(input);
+  const numberRule = is_number(input);
   if (numberRule.passes) {
     const passes = Number.isInteger(numberRule.value);
     return {
@@ -112,7 +112,7 @@ export const integer: RuleCallBack = (input) => {
  *  <input tr-rules="number"/>
  * ```
  */
-export const isNumber: RuleCallBack = (input) => {
+export const is_number: RuleCallBack = (input) => {
   if (input === '' || input === null || input === undefined) {
     return {
       passes: false,
@@ -154,11 +154,11 @@ export const isNumber: RuleCallBack = (input) => {
  * ```
  */
 export const modulo: RuleCallBack = (input, mod) => {
-  if (!isNumber(mod).passes) {
+  if (!is_number(mod).passes) {
     throw new Error('Modulo rule parameter must be an integer');
   }
 
-  if (isNumber(input).passes) {
+  if (is_number(input).passes) {
     return {
       passes: Number(input) % Number(mod) === 0,
       value: Number(input),
@@ -181,12 +181,12 @@ export const modulo: RuleCallBack = (input, mod) => {
  * <input tr-rules="lessThan:10"/>
  * ```
  */
-export const lessthan: RuleCallBack = (input, threshold) => {
-  if (!isNumber(threshold).passes) {
-    throw new Error('Lessthan rule parameter must be a number');
+export const less_than: RuleCallBack = (input, threshold) => {
+  if (!is_number(threshold).passes) {
+    throw new Error('Less_than rule parameter must be a number');
   }
 
-  if (isNumber(input).passes) {
+  if (is_number(input).passes) {
     return {
       passes: Number(input) < Number(threshold),
       value: input,
@@ -209,12 +209,12 @@ export const lessthan: RuleCallBack = (input, threshold) => {
  * <input tr-rules="greaterThan:5"/>
  * ```
  */
-export const greaterthan: RuleCallBack = (input, threshold) => {
-  if (!isNumber(threshold).passes) {
-    throw new Error('Greaterthan rule parameter must be a number');
+export const greater_than: RuleCallBack = (input, threshold) => {
+  if (!is_number(threshold).passes) {
+    throw new Error('Greater_than rule parameter must be a number');
   }
 
-  if (isNumber(input).passes) {
+  if (is_number(input).passes) {
     return {
       passes: Number(input) > Number(threshold),
       value: input,
@@ -237,8 +237,8 @@ export const greaterthan: RuleCallBack = (input, threshold) => {
  * <input data-tr-rules="numberBetween:1,10"/>
  * ```
  */
-export const numberBetween: RuleCallBack = (input, params) => {
-  if (!isNumber(input).passes) {
+export const number_between: RuleCallBack = (input, params) => {
+  if (!is_number(input).passes) {
     return {
       passes: false,
       value: input,
@@ -248,7 +248,7 @@ export const numberBetween: RuleCallBack = (input, params) => {
   const [min, max] = spliteParam(params as string);
   const inputValue = Number(input);
 
-  const passes = minRule(input, min).passes && maxRule(input, max).passes;
+  const passes = min_rule(input, min).passes && max_rule(input, max).passes;
   return {
     passes: passes,
     value: inputValue,

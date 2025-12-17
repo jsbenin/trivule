@@ -9,7 +9,7 @@ import { now, spliteParam, throwEmptyArgsException } from '../utils';
  * <input type="date-local" data-tr-rules="date" />
  * ```
  */
-export const isDate: RuleCallBack = (input) => {
+export const is_date: RuleCallBack = (input) => {
   if (!input) {
     return {
       passes: false,
@@ -42,19 +42,19 @@ export const isDate: RuleCallBack = (input) => {
  * <input type="date-local" data-tr-rules="before:2020-11-11" />
  * ```
  */
-export const dateBefore: RuleCallBack = (input, date) => {
+export const date_before: RuleCallBack = (input, date) => {
   if (date === 'now') {
     date = now();
   }
-  if (!isDate(input).passes) {
+  if (!is_date(input).passes) {
     return {
       passes: false,
       value: input,
     };
   }
 
-  if (!isDate(date).passes) {
-    throw new Error('Pease provide a valid argument for dateBefore rule');
+  if (!is_date(date).passes) {
+    throw new Error('Pease provide a valid argument for date_before rule');
   }
   return {
     passes:
@@ -78,25 +78,25 @@ export const dateBefore: RuleCallBack = (input, date) => {
  * <input data-tr-rules="after:now" />
  * ```
  */
-export const dateAfter: RuleCallBack = (input, date) => {
+export const date_after: RuleCallBack = (input, date) => {
   if (date === 'now') {
     date = now();
   }
 
-  if (!isDate(input).passes) {
+  if (!is_date(input).passes) {
     return {
       passes: false,
       value: input,
     };
   }
 
-  if (!isDate(date).passes) {
-    throw new Error('Pease provide a valid argument for dateAfter rule');
+  if (!is_date(date).passes) {
+    throw new Error('Pease provide a valid argument for date_after rule');
   }
   return {
     passes:
       new Date(input as string).getTime() > new Date(date as string).getTime(),
-    value: isDate(input).value,
+    value: is_date(input).value,
   };
 };
 
@@ -110,14 +110,14 @@ export const dateAfter: RuleCallBack = (input, date) => {
  * ```
  * @throws An exception with the message "Missing required argument: dateBetween" if the `date` parameter is falsy.
  */
-export const dateBetween: RuleCallBack = (input, date) => {
+export const date_between: RuleCallBack = (input, date) => {
   if (!date) {
-    throwEmptyArgsException('dateBetween');
+    throwEmptyArgsException('date_between');
   }
   const [startDate, endDate] = spliteParam(date as string);
   return {
     passes:
-      dateAfter(input, startDate).passes && dateBefore(input, endDate).passes,
+      date_after(input, startDate).passes && date_before(input, endDate).passes,
     value: input,
   };
 };
@@ -137,7 +137,7 @@ export const dateBetween: RuleCallBack = (input, date) => {
  * ```
  *
  */
-export const isTime: RuleCallBack = (input) => {
+export const is_time: RuleCallBack = (input) => {
   if (typeof input !== 'string') {
     return {
       passes: false,
