@@ -274,7 +274,7 @@ trivuleInput.prependRule({
 });
 
 // Insert a new validation rule after an existing rule
-trivuleInput.insertAfterRule("minlength",{ 
+trivuleInput.insertAfterRule("min_length",{ 
   rule: "customRule",
   validate: (value) => {
     return {
@@ -286,7 +286,7 @@ trivuleInput.insertAfterRule("minlength",{
 });
 
 // Insert a new validation rule before an existing rule
-trivuleInput.insertBeforeRule("maxlength",{ 
+trivuleInput.insertBeforeRule("max_length",{ 
   rule: "customRule",
   validate: (value) => {
     return {

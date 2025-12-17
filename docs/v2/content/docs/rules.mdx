@@ -18,37 +18,37 @@ The `email` rule validates an email address.
 
 **Usage:** Ensure that an email address entered by the user is valid.
 
-### `minlength`
+### `min_length`
 
-The `minlength` rule validates the minimum length of a string.
+The `min_length` rule validates the minimum length of a string.
 
 **Usage:** Ensure that a string entered by the user has a specified minimum length.
 
 **Example:**
 ```html
-<input data-tr-rules="minlength:8" /> 
+<input data-tr-rules="min_length:8" /> 
 ```
 or in JavaScript
 ```js
 {
-    rules:"minlength:8"
+    rules:"min_length:8"
 }
 ```
 
-### `maxlength`
+### `max_length`
 
-The `maxlength` rule validates the maximum length of a string.
+The `max_length` rule validates the maximum length of a string.
 
 **Usage:** Ensure that a string entered by the user has a specified maximum length.
 
 **Example:**
 ```html
-<input data-tr-rules="maxlength:8" /> 
+<input data-tr-rules="max_length:8" /> 
 ```
 or in JavaScript
 ```js
 {
-    rules:"maxlength:8"
+    rules:"max_length:8"
 }
 ```  
 
@@ -57,7 +57,7 @@ or in JavaScript
 The `url` rule validates a URL.
 Ensure that a URL entered by the user is valid.
 
-### `startWithUpper`
+### `start_with_upper`
 
  Ensure that a string entered by the user starts with an uppercase letter.
 
@@ -91,20 +91,20 @@ If you want to exclude spaces, you should use the special character `&esp;` inst
 <input data-tr-rules="excludes:-,@,&esp;" />
 ``` 
 
-### `stringBetween`
+### `string_between`
 
 This rule verifies that the length of a given string falls within the specified minimum and maximum values.
 
 **Usage:**
 
-Use the `stringBetween` rule when you want to ensure that the length of a string is within a specific range.
+Use the `string_between` rule when you want to ensure that the length of a string is within a specific range.
 
 **Example:**
 
-Suppose you have a form that requires a password field, and you want to impose a minimum and maximum length for the password. You can apply the `stringBetween` rule to the password input field to validate it.
+Suppose you have a form that requires a password field, and you want to impose a minimum and maximum length for the password. You can apply the `string_between` rule to the password input field to validate it.
 
 ```html
-<input data-tr-rules="stringBetween:8,20" />
+<input data-tr-rules="string_between:8,20" />
 ```
 
 This will ensure that the value entered in the field has a length between 8 and 20 characters (inclusive). If the length of the input is less than 8 or more than 20, the validation will fail.
@@ -167,34 +167,34 @@ The `modulo` rule, also known as its alias `mod`, allows you to check if a numbe
 ``` 
  
 
-### `numberBetween` 
+### `number_between` 
 
-The `numberBetween` rule allows you to check if a number falls within a specified range.
+The `number_between` rule allows you to check if a number falls within a specified range.
  
 **Example:**
 ```html
-<input data-tr-rules="numberBetween:10,20"/>
+<input data-tr-rules="number_between:10,20"/>
 ```
 
-### `lessThan` 
+### `less_than` 
 
-The `lessThan` rule, also known by its alias `lthan`, allows you to check if a number is less than a specified value. 
+The `less_than` rule, also known by its alias `lthan`, allows you to check if a number is less than a specified value. 
 
 **Example:**
 ```html
-<input data-tr-rules="lessThan:100"/>
+<input data-tr-rules="less_than:100"/>
 <!-- Alias -->
 <input data-tr-rules="lthan:100"/>
 ```
 
-### `greaterThan` 
+### `greater_than` 
 
-The `greaterThan` rule, also known by its alias `gthan`, allows you to check if a number is greater than a specified value.
+The `greater_than` rule, also known by its alias `gthan`, allows you to check if a number is greater than a specified value.
  
 
 **Example:**
 ```html
-<input data-tr-rules="greaterThan:0"/>
+<input data-tr-rules="greater_than:0"/>
 <!-- Alias -->
 <input data-tr-rules="gthan:0"/> 
 ```
@@ -232,13 +232,13 @@ This rule checks if the entered date is after a specified date.
 <input type="date" data-tr-rules="after:now" />
 ```
 
-### `dateBetween`
+### `date_between`
 
 This rule checks if the entered date falls between two other dates.
 
 **Example:**
 ```html
-<input type="date" data-tr-rules="dateBetween:2020-11-11,now" />
+<input type="date" data-tr-rules="date_between:2020-11-11,now" />
 ```
 
 ### `time`
@@ -262,28 +262,28 @@ This rule checks if the input value is a `File` or `Blob` or `FileList` object.
 ```
  
 
-###  `maxFileSize`
+###  `max_file_size`
 
 This rule checks if the file size is less than or equal to a given maximum size.
 
 ```html
-<input data-tr-rules="maxFileSize:1MB" />
+<input data-tr-rules="max_file_size:1MB" />
 ``` 
 
-### `minFileSize`
+### `min_file_size`
 
 This rule checks if the file size  is greater than or equal to a given minimum size.
 
 ```html
-<input data-tr-rules="minFileSize:1MB" />
+<input data-tr-rules="min_file_size:1MB" />
 ```
  
-### `fileBetween`
+### `file_between`
 
 This rule checks if the file size falls between specified minimum and maximum values.
 
 ```html
-<input data-tr-rules="fileBetween:1MB,5MB" />
+<input data-tr-rules="file_between:1MB,5MB" />
 ```
  
 
@@ -496,20 +496,20 @@ or
 <input type="text" data-tr-rules="digit:6" />
 ```
  
-###  `minDigit`
+###  `min_digit`
 
-The `minDigit` rule checks if the input contains a minimum number of digits.
+The `min_digit` rule checks if the input contains a minimum number of digits.
 
 ```html
-<input type="text" data-tr-rules="minDigit:3" />
+<input type="text" data-tr-rules="min_digit:3" />
 ```
  
-###  `maxDigit`
+###  `max_digit`
 
-The `maxDigit` rule checks if the input contains a maximum number of digits.
+The `max_digit` rule checks if the input contains a maximum number of digits.
 
 ```html
-<input type="text" data-tr-rules="maxDigit:10" />
+<input type="text" data-tr-rules="max_digit:10" />
 ```
  
 
@@ -523,20 +523,20 @@ or
 <input type="text" data-tr-rules="len:5" />
 ``` 
 
-### `startWithString`
+### `start_with_string`
 
-The `startWithString` rule verifies if the input string starts with a specified substring.
+The `start_with_string` rule verifies if the input string starts with a specified substring.
 
 ```html
-<input type="text" data-tr-rules="startWithString:prefix" />
+<input type="text" data-tr-rules="start_with_string:prefix" />
 ```
 
-###  `endWithString`
+###  `end_with_string`
 
-The `endWithString` rule checks if the input string ends with a specified substring.
+The `end_with_string` rule checks if the input string ends with a specified substring.
 
 ```html
-<input type="text" data-tr-rules="endWithString:suffix" />
+<input type="text" data-tr-rules="end_with_string:suffix" />
 ``` 
 
 ## Add or modify a new rule in Trivule?
@@ -567,7 +567,7 @@ This method takes four parameters, two of which are required:
 }
 ```
 Explanation on `alias`:
-When we take the `min` rule, it is a general rule that validates numbers, strings, file sizes, etc. When the data type to be validated is a `string`, the rule simply calls the `minlength` rule to avoid rewriting another logic.
+When we take the `min` rule, it is a general rule that validates numbers, strings, file sizes, etc. When the data type to be validated is a `string`, the rule simply calls the `min_length` rule to avoid rewriting another logic.
 
 - **message**: The message to display when the rule fails.
 - **locale**: The language of the message if it was not in English .

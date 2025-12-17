@@ -35,7 +35,7 @@ export const minRule: RuleCallBack = (input, min, type) => {
     return {
       passes: minlength(input, min).passes,
       value: input,
-      alias: 'minlength',
+      alias: 'min_length',
     };
   }
 };
@@ -58,7 +58,7 @@ export const maxRule: RuleCallBack = (input, max, type) => {
     return {
       passes: maxFileSize(input, max).passes,
       value: input,
-      alias: 'maxFileSize',
+      alias: 'max_file_size',
     };
   }
 
@@ -74,7 +74,7 @@ export const maxRule: RuleCallBack = (input, max, type) => {
     return {
       passes: maxlength(input, max).passes,
       value: input,
-      alias: 'maxlength',
+      alias: 'max_length',
     };
   }
 };

@@ -43,8 +43,8 @@ describe('email rule', () => {
     });
   });
 });
-//minlength
-describe('minlength rule', () => {
+//min_length
+describe('min_length rule', () => {
   it('should return false if input is undefined', () => {
     expect(minlength(undefined, '5').passes).toBe(false);
   });
@@ -70,16 +70,16 @@ describe('minlength rule', () => {
   });
 });
 
-//maxlength
-test('maxlength should return true for a string input shorter than the max length', () => {
+//max_length
+test('max_length should return true for a string input shorter than the max length', () => {
   expect(maxlength('hello', '10').passes).toBe(true);
 });
 
-test('maxlength should return false for a string input longer than the max length', () => {
+test('max_length should return false for a string input longer than the max length', () => {
   expect(maxlength('Long string', '5').passes).toBe(false);
 });
 
-test('maxlength should return true for null or undefined input', () => {
+test('max_length should return true for null or undefined input', () => {
   expect(maxlength(null, '0').passes).toBe(true);
   expect(maxlength(undefined, '0').passes).toBe(true);
 });
@@ -102,7 +102,7 @@ describe('url validation', () => {
   });
 });
 
-describe('startWithUpper', () => {
+describe('start_with_upper', () => {
   test('should return true if input starts with uppercase', () => {
     expect(startWithUpper('Hello').passes).toBe(true);
     expect(startWithUpper('A').passes).toBe(true);

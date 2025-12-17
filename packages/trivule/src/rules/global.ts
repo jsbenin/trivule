@@ -164,7 +164,7 @@ export const between: RuleCallBack = (input, min_max, type) => {
     return {
       passes: fileBetween(input, min_max, type).passes,
       value: input,
-      alias: 'fileBetween',
+      alias: 'file_between',
     };
   }
   // for date
@@ -172,7 +172,7 @@ export const between: RuleCallBack = (input, min_max, type) => {
     return {
       passes: dateBetween(input, min_max).passes,
       value: input,
-      alias: 'dateBetween',
+      alias: 'date_between',
     };
   }
 
@@ -190,7 +190,7 @@ export const between: RuleCallBack = (input, min_max, type) => {
         return {
           passes: maxRule(input, max).passes && minRule(input, min).passes,
           value: Number(input),
-          alias: 'numberBetween',
+          alias: 'number_between',
         };
       }
     }
@@ -199,7 +199,7 @@ export const between: RuleCallBack = (input, min_max, type) => {
   return {
     passes: stringBetween(input, min_max).passes,
     value: input,
-    alias: 'stringBetween',
+      alias: 'string_between',
   };
 };
 /**

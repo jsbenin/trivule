@@ -106,7 +106,7 @@ export class InputRule {
     const registry = this.ruleRegistry || TrParameter.instance().ruleRegistry;
 
     if (!message) {
-      message = registry.getMessage(ruleName, local) ?? '';
+      message = registry.getMessage(ruleName) ?? '';
     }
     const ruleCallback = registry.getRule(ruleName);
     validate = validate ?? ruleCallback;

@@ -16,7 +16,7 @@ Trivule provides simple, declarative form validation. Define rules in HTML and h
   <input name="email" @v:rules="required|email" />
   <div @v:feedback="email"></div>
   
-  <input name="message" @v:rules="required|minlength:10" />
+  <input name="message" @v:rules="required|min_length:10" />
   <div @v:feedback="message"></div>
   
   <button @v:submit>Submit</button>

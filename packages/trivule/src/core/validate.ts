@@ -88,7 +88,6 @@ export function validate(
 
       // Create I18n resolver for message interpolation
       const trMessages = new I18nResolver(
-        undefined,
         parameter.ruleRegistry,
       ).setMessages(ruleMessages as RulesMessages);
 

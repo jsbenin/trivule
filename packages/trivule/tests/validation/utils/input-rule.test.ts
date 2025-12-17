@@ -8,10 +8,10 @@ describe('InputRule', () => {
 
   beforeEach(() => {
     inputRule = new InputRule(
-      ['required', 'minlength:8'],
+      ['required', 'min_length:8'],
       {
         required: 'This field is required',
-        minlength: 'This field must be at least 8 characters',
+        min_length: 'This field must be at least 8 characters',
       },
       undefined,
       parameter.ruleRegistry,
@@ -33,7 +33,7 @@ describe('InputRule', () => {
         params: undefined,
       },
       {
-        name: 'minlength',
+        name: 'min_length',
         params: '8',
       },
       {
@@ -58,7 +58,7 @@ describe('InputRule', () => {
   });
 
   it('should remove a rule', () => {
-    inputRule.remove('email').remove('minlength');
+    inputRule.remove('email').remove('min_length');
     const received = inputRule.all().map((rule) => {
       return {
         name: rule.name,
@@ -80,7 +80,7 @@ describe('InputRule', () => {
     const messages = inputRule.getMessages();
     expect(messages).toEqual({
       required: 'This field is required',
-      minlength: 'This field must be at least 8 characters',
+      min_length: 'This field must be at least 8 characters',
       email: 'Email message',
       max: 'Max message',
       file: 'File message',

@@ -37,9 +37,9 @@ describe('TrValidation', () => {
 
   test('validate() should work with different rules', () => {
     const newInputRule = new InputRule(
-      ['minlength:8'],
+      ['min_length:8'],
       {
-        minlength: 'The input must be at least 8 characters long',
+        min_length: 'The input must be at least 8 characters long',
       },
       undefined,
       parameter.ruleRegistry,
@@ -55,11 +55,11 @@ describe('TrValidation', () => {
       };
     });
 
-    expect(rules).toEqual([
-      {
-        name: 'minlength',
-        param: '8',
-      },
-    ]);
+      expect(rules).toEqual([
+        {
+          name: 'min_length',
+          param: '8',
+        },
+      ]);
   });
 });

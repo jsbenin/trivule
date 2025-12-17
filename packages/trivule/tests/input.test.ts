@@ -342,16 +342,16 @@ describe('TrivuleInput', () => {
   describe('custom messages with msg attribute', () => {
     test('should read custom messages from data-tr-msg attributes', () => {
       const inputElement = document.createElement('input');
-      inputElement.setAttribute(attr('rules'), 'required|email|maxlength:32');
+      inputElement.setAttribute(attr('rules'), 'required|email|max_length:32');
       inputElement.setAttribute(attr('msg') + '.required', 'Ce champ est obligatoire');
       inputElement.setAttribute(attr('msg') + '.email', 'Veuillez entrer un email valide');
-      inputElement.setAttribute(attr('msg') + '.maxlength', 'Maximum 32 caractères');
+      inputElement.setAttribute(attr('msg') + '.max_length', 'Maximum 32 caractères');
 
       const trivuleInput = createTrivuleInput(inputElement);
       
       expect(trivuleInput.$rules.getMessage('required')).toBe('Ce champ est obligatoire');
       expect(trivuleInput.$rules.getMessage('email')).toBe('Veuillez entrer un email valide');
-      expect(trivuleInput.$rules.getMessage('maxlength')).toBe('Maximum 32 caractères');
+      expect(trivuleInput.$rules.getMessage('max_length')).toBe('Maximum 32 caractères');
     });
 
     test('should use default message when custom msg attribute is not provided', () => {
@@ -372,7 +372,7 @@ describe('TrivuleInput', () => {
 
       const trivuleInput = createTrivuleInput(inputElement);
       
-      expect(trivuleInput.$rules.getMessage('required')).toBe('');
+      expect(trivuleInput.$rules.getMessage('required')).toBe('This field is required');
     });
   });
 });
