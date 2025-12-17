@@ -16,19 +16,19 @@ import {
  * <input data-tr-rules="file" />
  * ```
  */
-export const is_file: RuleCallBack = (value) => {
-  const _is_file = (f: unknown) => {
+export const isFile: RuleCallBack = (value) => {
+  const _isFile = (f: unknown) => {
     return f instanceof File || f instanceof Blob || f instanceof FileList;
   };
   let passes = false;
   if (
     Array.isArray(value) &&
     !!value.length &&
-    value.every((f) => _is_file(f))
+    value.every((f) => _isFile(f))
   ) {
     passes = true;
   }
-  passes = _is_file(value) || passes;
+  passes = _isFile(value) || passes;
 
   return {
     passes: passes,
@@ -47,7 +47,7 @@ export const is_file: RuleCallBack = (value) => {
  * ```
  * @throws If the `maxSize` parameter is not in a valid format, an error is thrown.
  */
-export const max_file_size: RuleCallBack = (input, maxSize) => {
+export const maxFileSize: RuleCallBack = (input, maxSize) => {
   const files = fileToArray(input);
 
   if (!files.length) {
@@ -57,7 +57,7 @@ export const max_file_size: RuleCallBack = (input, maxSize) => {
     };
   }
   const passes = files.every((input) => {
-    if (is_file(input).passes) {
+    if (isFile(input).passes) {
       let numericValue, unit;
       // eslint-disable-next-line no-useless-catch
       try {
@@ -90,7 +90,7 @@ export const max_file_size: RuleCallBack = (input, maxSize) => {
  *
  * @throws An error if the minSize parameter is not a valid string in the format '<number><unit>'.
  */
-export const min_file_size: RuleCallBack = (input, minSize) => {
+export const minFileSize: RuleCallBack = (input, minSize) => {
   const files = fileToArray(input);
   if (!files.length) {
     return {
@@ -100,12 +100,12 @@ export const min_file_size: RuleCallBack = (input, minSize) => {
   }
   if (typeof minSize !== 'number' && typeof minSize !== 'string') {
     throwEmptyArgsException(
-      'min_file_size',
+      'minFileSize',
       'The minimum size rule argument is required',
     );
   }
   const passses = files.every((input) => {
-    if (is_file(input).passes) {
+    if (isFile(input).passes) {
       let numericValue, unit;
       // eslint-disable-next-line no-useless-catch
       try {
@@ -136,7 +136,7 @@ export const min_file_size: RuleCallBack = (input, minSize) => {
  * <input data-tr-rules="fileBetween:1MB,5MB" />
  * ```
  */
-export const file_between: RuleCallBack = (input, min_max) => {
+export const fileBetween: RuleCallBack = (input, min_max) => {
   if (typeof min_max !== 'string') {
     throwEmptyArgsException('between');
   }
@@ -149,7 +149,7 @@ export const file_between: RuleCallBack = (input, min_max) => {
     };
   }
   const passes = files.every((input) => {
-    return max_file_size(input, max).passes && min_file_size(input, min).passes;
+    return maxFileSize(input, max).passes && minFileSize(input, min).passes;
   });
   return {
     passes: passes,
@@ -168,12 +168,12 @@ export const file_between: RuleCallBack = (input, min_max) => {
  * <input type="file" data-tr-rules="mimes:.pdf"
  * ```
  */
-export const is_mimes: RuleCallBack = (input, param) => {
+export const isMimes: RuleCallBack = (input, param) => {
   if (typeof param !== 'string') {
-    throwEmptyArgsException('is_mimes');
+    throwEmptyArgsException('mimes');
   }
   if (param === '') {
-    throwEmptyArgsException('is_mimes');
+    throwEmptyArgsException('mimes');
   }
 
   const files = fileToArray(input);
@@ -185,7 +185,7 @@ export const is_mimes: RuleCallBack = (input, param) => {
   }
 
   const passes = files.every((input) => {
-    if (is_file(input).passes) {
+    if (isFile(input).passes) {
       const file = input as File;
 
       const allowedMimes =

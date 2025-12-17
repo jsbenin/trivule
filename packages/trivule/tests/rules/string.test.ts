@@ -1,15 +1,15 @@
-import { contains, end_with, start_with, length } from '../../src/rules';
+import { contains, endWith, startWith, length } from '../../src/rules';
 import {
   email,
   excludes,
-  max_length,
-  min_length,
-  password_rule,
-  start_with_string,
-  end_with_string,
-  start_with_lower,
-  start_with_upper,
-  string_between,
+  maxlength,
+  minlength,
+  passwordRule,
+  startWithString,
+  endWithString,
+  startWithLower,
+  startWithUpper,
+  stringBetween,
   url,
 } from '../../src/rules/string';
 //Email
@@ -43,45 +43,45 @@ describe('email rule', () => {
     });
   });
 });
-//min_length
-describe('min_length rule', () => {
+//minlength
+describe('minlength rule', () => {
   it('should return false if input is undefined', () => {
-    expect(min_length(undefined, '5').passes).toBe(false);
+    expect(minlength(undefined, '5').passes).toBe(false);
   });
 
   it('should return false if input is null', () => {
-    expect(min_length(null, '5').passes).toBe(false);
+    expect(minlength(null, '5').passes).toBe(false);
   });
 
   it('should return false if input is an empty string', () => {
-    expect(min_length('', '5').passes).toBe(false);
+    expect(minlength('', '5').passes).toBe(false);
   });
 
   it('should return false if input is shorter than the minimum length', () => {
-    expect(min_length('hello', '10').passes).toBe(false);
+    expect(minlength('hello', '10').passes).toBe(false);
   });
 
   it('should return true if input is longer than the minimum length', () => {
-    expect(min_length('hello world', '5').passes).toBe(true);
+    expect(minlength('hello world', '5').passes).toBe(true);
   });
 
   it('should return true if input is exactly the minimum length', () => {
-    expect(min_length('hello', '5').passes).toBe(true);
+    expect(minlength('hello', '5').passes).toBe(true);
   });
 });
 
-//max_length
-test('max_length should return true for a string input shorter than the max length', () => {
-  expect(max_length('hello', '10').passes).toBe(true);
+//maxlength
+test('maxlength should return true for a string input shorter than the max length', () => {
+  expect(maxlength('hello', '10').passes).toBe(true);
 });
 
-test('max_length should return false for a string input longer than the max length', () => {
-  expect(max_length('Long string', '5').passes).toBe(false);
+test('maxlength should return false for a string input longer than the max length', () => {
+  expect(maxlength('Long string', '5').passes).toBe(false);
 });
 
-test('max_length should return true for null or undefined input', () => {
-  expect(max_length(null, '0').passes).toBe(true);
-  expect(max_length(undefined, '0').passes).toBe(true);
+test('maxlength should return true for null or undefined input', () => {
+  expect(maxlength(null, '0').passes).toBe(true);
+  expect(maxlength(undefined, '0').passes).toBe(true);
 });
 
 describe('url validation', () => {
@@ -102,174 +102,174 @@ describe('url validation', () => {
   });
 });
 
-describe('start_with_upper', () => {
+describe('startWithUpper', () => {
   test('should return true if input starts with uppercase', () => {
-    expect(start_with_upper('Hello').passes).toBe(true);
-    expect(start_with_upper('A').passes).toBe(true);
-    expect(start_with_upper('Test123').passes).toBe(true);
+    expect(startWithUpper('Hello').passes).toBe(true);
+    expect(startWithUpper('A').passes).toBe(true);
+    expect(startWithUpper('Test123').passes).toBe(true);
   });
 
   test('should return false if input does not start with uppercase', () => {
-    expect(start_with_upper('hello').passes).toBe(false);
-    expect(start_with_upper('1test').passes).toBe(false);
-    expect(start_with_upper(' test').passes).toBe(false);
+    expect(startWithUpper('hello').passes).toBe(false);
+    expect(startWithUpper('1test').passes).toBe(false);
+    expect(startWithUpper(' test').passes).toBe(false);
   });
 
   test('should return false for empty input', () => {
-    expect(start_with_upper('').passes).toBe(false);
+    expect(startWithUpper('').passes).toBe(false);
   });
 
   test('should return false for non-string input', () => {
-    expect(start_with_upper(123).passes).toBe(false);
-    expect(start_with_upper(null).passes).toBe(false);
-    expect(start_with_upper(undefined).passes).toBe(false);
-    expect(start_with_upper(true).passes).toBe(false);
+    expect(startWithUpper(123).passes).toBe(false);
+    expect(startWithUpper(null).passes).toBe(false);
+    expect(startWithUpper(undefined).passes).toBe(false);
+    expect(startWithUpper(true).passes).toBe(false);
   });
 });
 
-describe('start_with_string', () => {
+describe('startWithString', () => {
   test('should return true if input starts with letter', () => {
-    expect(start_with_string('Hello').passes).toBe(true);
-    expect(start_with_string('-test').passes).toBe(true);
+    expect(startWithString('Hello').passes).toBe(true);
+    expect(startWithString('-test').passes).toBe(true);
   });
 
   test('should return false if input does not start with letter', () => {
-    expect(start_with_string('1hello').passes).toBe(false);
-    expect(start_with_string(' test').passes).toBe(false);
+    expect(startWithString('1hello').passes).toBe(false);
+    expect(startWithString(' test').passes).toBe(false);
   });
 
   test('should return false for empty input', () => {
-    expect(start_with_string('').passes).toBe(false);
+    expect(startWithString('').passes).toBe(false);
   });
 
   test('should return false for non-string input', () => {
-    expect(start_with_string(123).passes).toBe(false);
-    expect(start_with_string(null).passes).toBe(false);
-    expect(start_with_string(undefined).passes).toBe(false);
-    expect(start_with_string(true).passes).toBe(false);
+    expect(startWithString(123).passes).toBe(false);
+    expect(startWithString(null).passes).toBe(false);
+    expect(startWithString(undefined).passes).toBe(false);
+    expect(startWithString(true).passes).toBe(false);
   });
 });
 
-describe('end_with_string', () => {
+describe('endWithString', () => {
   test('should return true if input ends with letter', () => {
-    expect(end_with_string('Hello').passes).toBe(true);
+    expect(endWithString('Hello').passes).toBe(true);
   });
 
   test('should return false if input does not end with letter', () => {
-    expect(start_with_upper('hello1').passes).toBe(false);
-    expect(start_with_upper('test-').passes).toBe(false);
-    expect(start_with_upper('test ').passes).toBe(false);
+    expect(startWithUpper('hello1').passes).toBe(false);
+    expect(startWithUpper('test-').passes).toBe(false);
+    expect(startWithUpper('test ').passes).toBe(false);
   });
 
   test('should return false for empty input', () => {
-    expect(end_with_string('').passes).toBe(false);
+    expect(endWithString('').passes).toBe(false);
   });
 
   test('should return false for non-string input', () => {
-    expect(end_with_string(123).passes).toBe(false);
-    expect(end_with_string(null).passes).toBe(false);
-    expect(end_with_string(undefined).passes).toBe(false);
-    expect(end_with_string(true).passes).toBe(false);
+    expect(endWithString(123).passes).toBe(false);
+    expect(endWithString(null).passes).toBe(false);
+    expect(endWithString(undefined).passes).toBe(false);
+    expect(endWithString(true).passes).toBe(false);
   });
 });
 
-describe('start_with_lower', () => {
+describe('startWithLower', () => {
   test('should return true for valid input', () => {
-    expect(start_with_lower('hello').passes).toBe(true);
-    expect(start_with_lower('world').passes).toBe(true);
-    expect(start_with_lower('*').passes).toBe(true);
-    expect(start_with_lower('1').passes).toBe(true);
+    expect(startWithLower('hello').passes).toBe(true);
+    expect(startWithLower('world').passes).toBe(true);
+    expect(startWithLower('*').passes).toBe(true);
+    expect(startWithLower('1').passes).toBe(true);
   });
 
   test('should return false for invalid input', () => {
-    expect(start_with_lower('Hello').passes).toBe(false);
-    expect(start_with_lower('World').passes).toBe(false);
-    expect(start_with_lower(' ').passes).toBe(false);
-    expect(start_with_lower('').passes).toBe(false);
-    expect(start_with_lower(null).passes).toBe(false);
-    expect(start_with_lower(undefined).passes).toBe(false);
-    expect(start_with_lower(123).passes).toBe(false);
+    expect(startWithLower('Hello').passes).toBe(false);
+    expect(startWithLower('World').passes).toBe(false);
+    expect(startWithLower(' ').passes).toBe(false);
+    expect(startWithLower('').passes).toBe(false);
+    expect(startWithLower(null).passes).toBe(false);
+    expect(startWithLower(undefined).passes).toBe(false);
+    expect(startWithLower(123).passes).toBe(false);
   });
 });
 
 describe('Password Rule', () => {
   it('should return true for valid password', () => {
     const password = 'Abc12345@';
-    const result = password_rule(password).passes;
+    const result = passwordRule(password).passes;
     expect(result).toBe(true);
   });
 
   it('should return false for password with less than 8 characters', () => {
     const password = 'Abc123@';
-    const result = password_rule(password).passes;
+    const result = passwordRule(password).passes;
     expect(result).toBe(false);
   });
 
   it('should return false for password without uppercase letter', () => {
     const password = 'abc12345@';
-    const result = password_rule(password).passes;
+    const result = passwordRule(password).passes;
     expect(result).toBe(false);
   });
 
   it('should return false for password without lowercase letter', () => {
     const password = 'ABC12345@';
-    const result = password_rule(password).passes;
+    const result = passwordRule(password).passes;
     expect(result).toBe(false);
   });
 
   it('should return false for password without digit', () => {
     const password = 'Abcdefgh@';
-    const result = password_rule(password).passes;
+    const result = passwordRule(password).passes;
     expect(result).toBe(false);
   });
 
   it('should return false for password without special character', () => {
     const password = 'Abc12345';
-    const result = password_rule(password).passes;
+    const result = passwordRule(password).passes;
     expect(result).toBe(false);
   });
 });
 
-describe('start_with function', () => {
+describe('startWith function', () => {
   it('should return true if the input starts with the prefix', () => {
     const input = 'hello world';
     const prefix = 'hello';
-    const result = start_with(input, prefix).passes;
+    const result = startWith(input, prefix).passes;
     expect(result).toBe(true);
   });
 
   it('should return false if the input does not start with the prefix', () => {
     const input = 'hello world';
     const prefix = 'world';
-    const result = start_with(input, prefix).passes;
+    const result = startWith(input, prefix).passes;
     expect(result).toBe(false);
   });
 
   it('should return false if the input is not a string or an array', () => {
     const input = { foo: 'bar' };
     const prefix = 'foo';
-    const result = start_with(input, prefix).passes;
+    const result = startWith(input, prefix).passes;
     expect(result).toBe(false);
   });
 });
 
-describe('end_with', () => {
+describe('endWith', () => {
   it('should return true if input string ends with suffix', () => {
-    expect(end_with('hello world', 'world').passes).toBe(true);
-    expect(end_with('hello world!', '!').passes).toBe(true);
-    expect(end_with('hello world', 'ld').passes).toBe(true);
+    expect(endWith('hello world', 'world').passes).toBe(true);
+    expect(endWith('hello world!', '!').passes).toBe(true);
+    expect(endWith('hello world', 'ld').passes).toBe(true);
   });
 
   it('should return false if input string/array does not end with suffix', () => {
-    expect(end_with('hello world', 'hello').passes).toBe(false);
-    expect(end_with('hello world', 'wolrd').passes).toBe(false);
+    expect(endWith('hello world', 'hello').passes).toBe(false);
+    expect(endWith('hello world', 'wolrd').passes).toBe(false);
   });
 
   it('should return false if input is not a string or an array', () => {
-    expect(end_with(123, 'world').passes).toBe(false);
-    expect(end_with(null, 'world').passes).toBe(false);
-    expect(end_with(undefined, 'world').passes).toBe(false);
-    expect(end_with({}, 'world').passes).toBe(false);
+    expect(endWith(123, 'world').passes).toBe(false);
+    expect(endWith(null, 'world').passes).toBe(false);
+    expect(endWith(undefined, 'world').passes).toBe(false);
+    expect(endWith({}, 'world').passes).toBe(false);
   });
 });
 describe('contains', () => {
@@ -322,14 +322,14 @@ describe('length', () => {
     expect(length(true, '0').passes).toBe(false);
   });
 });
-describe('string_between', () => {
+describe('stringBetween', () => {
   it('should return true for string with length between min and max', () => {
-    const result1 = string_between('hello', '2, 5').passes;
+    const result1 = stringBetween('hello', '2, 5').passes;
     expect(result1).toBe(true);
   });
 
   it('should return false for string with length not between min and max', () => {
-    const result2 = string_between('hello', '6, 10').passes;
+    const result2 = stringBetween('hello', '6, 10').passes;
     expect(result2).toBe(false);
   });
 });

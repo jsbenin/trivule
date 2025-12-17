@@ -1,51 +1,51 @@
 import {
-  greater_than,
+  greaterthan,
   integer,
-  is_number,
-  less_than,
-  max_rule,
-  min_rule,
+  isNumber,
+  lessthan,
+  maxRule,
+  minRule,
   modulo,
-  number_between,
+  numberBetween,
 } from '../../src/rules/number';
 
-test('min_rule should return true when input is greater than or equal to min', () => {
+test('minRule should return true when input is greater than or equal to min', () => {
   // Test with a string input
-  expect(min_rule('test', '3').passes).toBe(true);
-  expect(min_rule('test', '5').passes).toBe(false);
+  expect(minRule('test', '3').passes).toBe(true);
+  expect(minRule('test', '5').passes).toBe(false);
   // Test with a number input
-  expect(min_rule(5, '4').passes).toBe(true);
-  expect(min_rule(5, '6').passes).toBe(false);
+  expect(minRule(5, '4').passes).toBe(true);
+  expect(minRule(5, '6').passes).toBe(false);
 
   //undefinded and null
 
-  expect(min_rule(undefined, '4').passes).toBe(false);
-  expect(min_rule(null, '6').passes).toBe(false);
+  expect(minRule(undefined, '4').passes).toBe(false);
+  expect(minRule(null, '6').passes).toBe(false);
 });
 
-describe('max_rule', () => {
+describe('maxRule', () => {
   test('should return true when input is a number and less than max', () => {
-    expect(max_rule(5, '10').passes).toBe(true);
+    expect(maxRule(5, '10').passes).toBe(true);
   });
 
   test('should return false when input is a number and greater than max', () => {
-    expect(max_rule(10, '5').passes).toBe(false);
+    expect(maxRule(10, '5').passes).toBe(false);
   });
 
   test('should return true when input is a string and length is less than or equal to max', () => {
-    expect(max_rule('hello', '10').passes).toBe(true);
+    expect(maxRule('hello', '10').passes).toBe(true);
   });
 
   test('should return false when input is a string and length is greater than max', () => {
-    expect(max_rule('hello world', '5').passes).toBe(false);
+    expect(maxRule('hello world', '5').passes).toBe(false);
   });
 
   test('should return false when input is undefined', () => {
-    expect(max_rule(undefined, '10').passes).toBe(true);
+    expect(maxRule(undefined, '10').passes).toBe(true);
   });
 
   test('should return false when input is null', () => {
-    expect(max_rule(null, '10').passes).toBe(true);
+    expect(maxRule(null, '10').passes).toBe(true);
   });
 });
 
@@ -67,19 +67,19 @@ describe('integer', () => {
 
 describe('number', () => {
   it('should return true for number input', () => {
-    expect(is_number(42).passes).toBe(true);
-    expect(is_number(-100).passes).toBe(true);
-    expect(is_number(0).passes).toBe(true);
+    expect(isNumber(42).passes).toBe(true);
+    expect(isNumber(-100).passes).toBe(true);
+    expect(isNumber(0).passes).toBe(true);
 
-    expect(is_number('42').passes).toBe(true);
-    expect(is_number('-100').passes).toBe(true);
-    expect(is_number('0').passes).toBe(true);
+    expect(isNumber('42').passes).toBe(true);
+    expect(isNumber('-100').passes).toBe(true);
+    expect(isNumber('0').passes).toBe(true);
   });
 
   it('should return false for number input', () => {
-    expect(is_number('').passes).toBe(false);
-    expect(is_number(undefined).passes).toBe(false);
-    expect(is_number(null).passes).toBe(false);
+    expect(isNumber('').passes).toBe(false);
+    expect(isNumber(undefined).passes).toBe(false);
+    expect(isNumber(null).passes).toBe(false);
   });
 });
 
@@ -103,61 +103,61 @@ describe('modulo', () => {
   });
 });
 
-describe('less_than Rule', () => {
+describe('lessthan Rule', () => {
   it('should return true when input is a number less than the threshold', () => {
-    expect(less_than(5, 10).passes).toBe(true);
-    expect(less_than(-5, 0).passes).toBe(true);
+    expect(lessthan(5, 10).passes).toBe(true);
+    expect(lessthan(-5, 0).passes).toBe(true);
   });
 
   it('should return false when input is not a number', () => {
-    expect(less_than('abc', 10).passes).toBe(false);
-    expect(less_than(true, 5).passes).toBe(false);
+    expect(lessthan('abc', 10).passes).toBe(false);
+    expect(lessthan(true, 5).passes).toBe(false);
   });
 
   it('should return false when input is a number greater than or equal to the threshold', () => {
-    expect(less_than(10, 10).passes).toBe(false);
-    expect(less_than(15, 10).passes).toBe(false);
+    expect(lessthan(10, 10).passes).toBe(false);
+    expect(lessthan(15, 10).passes).toBe(false);
   });
 
   it('should throw an error if threshold is not a number', () => {
-    expect(() => less_than(5, 'abc')).toThrowError(
+    expect(() => lessthan(5, 'abc')).toThrowError(
       'Lessthan rule parameter must be a number',
     );
   });
 });
 
-describe('greater_than Rule', () => {
+describe('greaterthan Rule', () => {
   it('should return true when input is a number greater than the threshold', () => {
-    expect(greater_than(10, 5).passes).toBe(true);
-    expect(greater_than(0, -5).passes).toBe(true);
+    expect(greaterthan(10, 5).passes).toBe(true);
+    expect(greaterthan(0, -5).passes).toBe(true);
   });
 
   it('should return false when input is not a number', () => {
-    expect(greater_than('abc', 10).passes).toBe(false);
-    expect(greater_than(true, 5).passes).toBe(false);
+    expect(greaterthan('abc', 10).passes).toBe(false);
+    expect(greaterthan(true, 5).passes).toBe(false);
   });
 
   it('should return false when input is a number less than or equal to the threshold', () => {
-    expect(greater_than(5, 5).passes).toBe(false);
-    expect(greater_than(-2, 0).passes).toBe(false);
+    expect(greaterthan(5, 5).passes).toBe(false);
+    expect(greaterthan(-2, 0).passes).toBe(false);
   });
 
   it('should throw an error if threshold is not a number', () => {
-    expect(() => greater_than(5, 'abc')).toThrowError(
+    expect(() => greaterthan(5, 'abc')).toThrowError(
       'Greaterthan rule parameter must be a number',
     );
   });
 });
 
-describe('number_between', () => {
+describe('numberBetween', () => {
   it('Must passes if the input number is between the specified minimum and maximum values', () => {
     let input = '5';
     const params = '1,10';
-    let result = number_between(input, params);
+    let result = numberBetween(input, params);
     expect(result.passes).toBe(true);
 
     input = '1';
-    result = number_between(input, params);
+    result = numberBetween(input, params);
     expect(result.passes).toBe(true);
     expect(result.value).toBe(1);
   });
@@ -166,7 +166,7 @@ describe('number_between', () => {
     const input = '0';
     const params = '1,10';
 
-    const result = number_between(input, params);
+    const result = numberBetween(input, params);
     expect(result.passes).toBe(false);
     expect(result.value).toBe(0);
   });
@@ -175,7 +175,7 @@ describe('number_between', () => {
     const input = '15';
     const params = '1,10';
 
-    const result = number_between(input, params);
+    const result = numberBetween(input, params);
     expect(result.passes).toBe(false);
   });
 
@@ -184,7 +184,7 @@ describe('number_between', () => {
     const input = 'not a number';
     const params = '1,10';
 
-    const result = number_between(input, params);
+    const result = numberBetween(input, params);
 
     expect(result.passes).toBe(false);
     expect(result.value).toBe('not a number');
