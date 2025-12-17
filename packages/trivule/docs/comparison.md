@@ -21,7 +21,7 @@ $('form').validate({
     },
   },
   errorPlacement: function (error, element) {
-    var resumeError = $('[data-tr-feedback="resume"]');
+    var resumeError = $('[@v:feedback="resume"]');
     resumeError.text(error.text());
   },
 });
@@ -39,8 +39,8 @@ new TrivuleInput('input', {
 #### Declarative Validation with Trivule
 
 ```html
-<input name="resume" type="file" data-tr-rules="required|mimes:.pdf|size:5MB" />
-<div data-tr-feedback="resume"></div>
+<input name="resume" type="file" @v:rules="required|mimes:.pdf|size:5MB" />
+<div @v:feedback="resume"></div>
 ```
 
 ### Comparison

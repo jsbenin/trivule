@@ -11,12 +11,12 @@ Both rules accept either string or numeric values. If both the input and the par
 
 ```html
 <!-- equals -->
-<input type="text" name="points" data-tr-rules="equals:50" />
-<div data-tr-feedback="points"></div>
+<input type="text" name="points" @v:rules="equals:50" />
+<div @v:feedback="points"></div>
 
 <!-- notEquals -->
-<input type="text" name="username" data-tr-rules="notEquals:admin" />
-<div data-tr-feedback="username"></div>
+<input type="text" name="username" @v:rules="notEquals:admin" />
+<div @v:feedback="username"></div>
 ```
 
 ## Imperative usage
@@ -29,11 +29,11 @@ form.setConfig('form');
 form.make({
   points: {
     rules: 'equals:50',
-    feedbackElement: '[data-tr-feedback="points"]',
+    feedbackElement: '[@v:feedback="points"]',
   },
   username: {
     rules: 'notEquals:admin',
-    feedbackElement: '[data-tr-feedback="username"]',
+    feedbackElement: '[@v:feedback="username"]',
   },
 });
 ```

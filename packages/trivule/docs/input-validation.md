@@ -5,8 +5,8 @@ Trivule offers the capability to validate a single form field.
 ### Validation in Declarative Mode
 
 ```html
-<input name="email" type="text" data-tr-rules="required|email" />
-<div data-tr-feedback="email"></div>
+<input name="email" type="text" @v:rules="required|email" />
+<div @v:feedback="email"></div>
 ```
 
 ```js
@@ -83,7 +83,7 @@ trEmail.onFails((trEmail) => {
 
 ## Custom Messages
 
-You can customize error messages for individual rules using the `data-tr-msg` attribute with the rule name as a suffix.
+You can customize error messages for individual rules using the `@v:msg` attribute with the rule name as a suffix.
 
 **Example:**
 
@@ -91,18 +91,18 @@ You can customize error messages for individual rules using the `data-tr-msg` at
 <input 
   name="email" 
   type="text" 
-  data-tr-rules="required|email|maxlength:32"
-  data-tr-msg-required="L'email est obligatoire"
-  data-tr-msg-email="Veuillez entrer une adresse email valide"
-  data-tr-msg-maxlength="L'email ne doit pas dépasser 32 caractères"
+  @v:rules="required|email|maxlength:32"
+  @v:msg-required="L'email est obligatoire"
+  @v:msg-email="Veuillez entrer une adresse email valide"
+  @v:msg-maxlength="L'email ne doit pas dépasser 32 caractères"
 />
-<div data-tr-feedback="email"></div>
+<div @v:feedback="email"></div>
 ```
 
 Each rule can have its own custom message:
-- `data-tr-msg-required` - Custom message for the required rule
-- `data-tr-msg-email` - Custom message for the email rule
-- `data-tr-msg-maxlength` - Custom message for the maxlength rule
+- `@v:msg-required` - Custom message for the required rule
+- `@v:msg-email` - Custom message for the email rule
+- `@v:msg-maxlength` - Custom message for the maxlength rule
 
 **2. `onPasses`**
 

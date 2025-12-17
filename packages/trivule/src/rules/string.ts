@@ -2,6 +2,7 @@ import { isNumber } from '.';
 import { RuleCallBack } from '../types';
 import { spliteParam, throwEmptyArgsException } from '../utils';
 import { ArgumentParser } from '../core/utils/argument-parser';
+
 /**
  * Validates an email address.
  *
@@ -10,22 +11,22 @@ import { ArgumentParser } from '../core/utils/argument-parser';
  *  @param param - The parameter specifying the expected type ("string" or "number").
  * @example
  *  ```html
- *  <input data-tr-rules="email"/>
+ *  <input @v:rules="email"/>
  * ```
  */
 export const email: RuleCallBack = (input) => {
-  const emailRegex =
-    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  if (typeof input !== 'string') {
-    return {
-      passes: false,
-      value: input,
-    };
-  }
-  return {
-    passes: emailRegex.test(input),
-    value: input,
-  };
+	const emailRegex =
+		/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+	if (typeof input !== 'string') {
+		return {
+			passes: false,
+			value: input,
+		};
+	}
+	return {
+		passes: emailRegex.test(input),
+		value: input,
+	};
 };
 
 /**
@@ -35,14 +36,14 @@ export const email: RuleCallBack = (input) => {
  * @param length The minimum length.
  * @example
  *  ```html
- *  <input data-tr-rules="minlength:8"/>
+ *  <input @v:rules="min_length:8"/>
  * ```
  */
 export const minlength: RuleCallBack = (input, length) => {
-  return {
-    passes: typeof input == 'string' ? input.length >= Number(length) : false,
-    value: input,
-  };
+	return {
+		passes: typeof input == 'string' ? input.length >= Number(length) : false,
+		value: input,
+	};
 };
 
 /**
@@ -52,14 +53,14 @@ export const minlength: RuleCallBack = (input, length) => {
  * @param length The maximum length.
  * @example
  *  ```html
- *  <input data-tr-rules="maxlength:8"/>
+ *  <input @v:rules="maxlength:8"/>
  * ```
  */
 export const maxlength: RuleCallBack = (input, length) => {
-  return {
-    passes: typeof input == 'string' ? input.length <= Number(length) : true,
-    value: input,
-  };
+	return {
+		passes: typeof input == 'string' ? input.length <= Number(length) : true,
+		value: input,
+	};
 };
 /**
  * Checks if the input is a string.
@@ -67,10 +68,10 @@ export const maxlength: RuleCallBack = (input, length) => {
  * @param val The input to check.
  */
 export const is_string: RuleCallBack = (val) => {
-  return {
-    passes: typeof val === 'string',
-    value: val,
-  };
+	return {
+		passes: typeof val === 'string',
+		value: val,
+	};
 };
 
 /**
@@ -79,21 +80,21 @@ export const is_string: RuleCallBack = (val) => {
  * @param input The URL to validate.
  *  @example
  *  ```html
- *  <input data-tr-rules="url"/>
+ *  <input @v:rules="url"/>
  * ```
  */
 export const url: RuleCallBack = (input) => {
-  const urlRegex = /^(ftp|http|https):\/\/[^ "]+$/;
-  if (typeof input !== 'string') {
-    return {
-      passes: false,
-      value: input,
-    };
-  }
-  return {
-    passes: urlRegex.test(input),
-    value: input,
-  };
+	const urlRegex = /^(ftp|http|https):\/\/[^ "]+$/;
+	if (typeof input !== 'string') {
+		return {
+			passes: false,
+			value: input,
+		};
+	}
+	return {
+		passes: urlRegex.test(input),
+		value: input,
+	};
 };
 
 /**
@@ -102,21 +103,21 @@ export const url: RuleCallBack = (input) => {
  * @param input The input to check.
  *  @example
  *  ```html
- *  <input data-tr-rules="startWithUpper"/>
+ *  <input @v:rules="start_with_upper"/>
  * ```
  */
 export const startWithUpper: RuleCallBack = (input) => {
-  if (typeof input !== 'string' || input.length === 0) {
-    return {
-      passes: false,
-      value: input,
-    };
-  }
-  const regex = /^[A-Z]/;
-  return {
-    passes: regex.test(input),
-    value: input,
-  };
+	if (typeof input !== 'string' || input.length === 0) {
+		return {
+			passes: false,
+			value: input,
+		};
+	}
+	const regex = /^[A-Z]/;
+	return {
+		passes: regex.test(input),
+		value: input,
+	};
 };
 
 /**
@@ -125,25 +126,25 @@ export const startWithUpper: RuleCallBack = (input) => {
  * @param input The input to check.
  *  @example
  *  ```html
- *  <input data-tr-rules="startWithLower"/>
+ *  <input @v:rules="startWithLower"/>
  * ```
  */
 
 export const startWithLower: RuleCallBack = (input) => {
-  if (
-    typeof input !== 'string' ||
-    input.length === 0 ||
-    input.charAt(0) === ' '
-  ) {
-    return {
-      passes: false,
-      value: input,
-    };
-  }
-  return {
-    passes: input[0] == input[0].toLocaleLowerCase(),
-    value: input,
-  };
+	if (
+		typeof input !== 'string' ||
+		input.length === 0 ||
+		input.charAt(0) === ' '
+	) {
+		return {
+			passes: false,
+			value: input,
+		};
+	}
+	return {
+		passes: input[0] == input[0].toLocaleLowerCase(),
+		value: input,
+	};
 };
 
 /**
@@ -153,25 +154,25 @@ export const startWithLower: RuleCallBack = (input) => {
  * @param prefix - The prefixes to check for, as a comma-separated list of strings.
  *  @example
  *  ```html
- *  <input data-tr-rules="startWith"/>
+ *  <input @v:rules="start_with"/>
  * ```
  * @throws An exception with the message "Missing required argument: startWith" if the `prefix` parameter is falsy.
  */
 export const startWith: RuleCallBack = (input, prefix) => {
-  if (!prefix) {
-    throwEmptyArgsException('startWith');
-  }
-  const prefixes = spliteParam(prefix as string);
-  if (typeof input !== 'string') {
-    return {
-      passes: false,
-      value: input,
-    };
-  }
-  return {
-    passes: prefixes.some((p) => input.startsWith(p as string)),
-    value: input,
-  };
+	if (!prefix) {
+		throwEmptyArgsException('startWith');
+	}
+	const prefixes = spliteParam(prefix as string);
+	if (typeof input !== 'string') {
+		return {
+			passes: false,
+			value: input,
+		};
+	}
+	return {
+		passes: prefixes.some((p) => input.startsWith(p as string)),
+		value: input,
+	};
 };
 
 /**
@@ -181,25 +182,25 @@ export const startWith: RuleCallBack = (input, prefix) => {
  * @param suffix - A comma-separated list of suffixes to check against.
  *  @example
  *  ```html
- *  <input data-tr-rules="endWith"/>
+ *  <input @v:rules="end_with"/>
  * ```
  * @throws An exception with the message "Missing required argument: endWith" if the `suffix` parameter is falsy.
  */
 export const endWith: RuleCallBack = (input, suffix) => {
-  if (!suffix) {
-    throwEmptyArgsException('endWith');
-  }
-  const suffixes = spliteParam(suffix as string);
-  if (typeof input !== 'string') {
-    return {
-      passes: false,
-      value: input,
-    };
-  }
-  return {
-    passes: suffixes.some((s) => input.endsWith(s as string)),
-    value: input,
-  };
+	if (!suffix) {
+		throwEmptyArgsException('endWith');
+	}
+	const suffixes = spliteParam(suffix as string);
+	if (typeof input !== 'string') {
+		return {
+			passes: false,
+			value: input,
+		};
+	}
+	return {
+		passes: suffixes.some((s) => input.endsWith(s as string)),
+		value: input,
+	};
 };
 
 /**
@@ -209,28 +210,28 @@ export const endWith: RuleCallBack = (input, suffix) => {
  * @param substrings - A comma-separated  substrings to check for.
  *  @example
  *  ```html
- *  <input data-tr-rules="contains:thanks,yes"/>
+ *  <input @v:rules="contains:thanks,yes"/>
  * ```
  * @throws An exception with the message "Missing required argument: contains" if the `substrings` parameter is falsy.
  */
 export const contains: RuleCallBack = (input, substring) => {
-  if (!substring) {
-    throwEmptyArgsException('contains');
-  }
-  const substrs = spliteParam(substring as string);
-  if (typeof input !== 'string') {
-    return {
-      passes: false,
-      value: input,
-    };
-  }
-  const passes = substrs.every((substr) => {
-    return input.includes(new ArgumentParser(substr as string).replaceSpaces());
-  });
-  return {
-    passes: passes,
-    value: input,
-  };
+	if (!substring) {
+		throwEmptyArgsException('contains');
+	}
+	const substrs = spliteParam(substring as string);
+	if (typeof input !== 'string') {
+		return {
+			passes: false,
+			value: input,
+		};
+	}
+	const passes = substrs.every((substr) => {
+		return input.includes(new ArgumentParser(substr as string).replaceSpaces());
+	});
+	return {
+		passes: passes,
+		value: input,
+	};
 };
 
 /**
@@ -240,30 +241,30 @@ export const contains: RuleCallBack = (input, substring) => {
  * @param size - The desired length of the input.
  * @example
  *  ```html
- *  <input data-tr-rules="length:9"/>
- *  <input data-tr-rules="len:9"/>
+ *  <input @v:rules="length:9"/>
+ *  <input @v:rules="len:9"/>
  * ```
  * @throws An exception with the message "The length rule argument must be an integer" if the `size` parameter is not an integer.
  */
 export const length: RuleCallBack = (input, size) => {
-  let inputs: string[] = [];
-  if (!isNumber(size).passes) {
-    throw new Error('The length rule argument must be an integer');
-  }
-  size = parseInt(size as string);
-  if (typeof input == 'string' || typeof input == 'number') {
-    inputs = input.toString().split('');
-  } else {
-    return {
-      passes: false,
-      value: input,
-    };
-  }
+	let inputs: string[] = [];
+	if (!isNumber(size).passes) {
+		throw new Error('The length rule argument must be an integer');
+	}
+	size = parseInt(size as string);
+	if (typeof input == 'string' || typeof input == 'number') {
+		inputs = input.toString().split('');
+	} else {
+		return {
+			passes: false,
+			value: input,
+		};
+	}
 
-  return {
-    passes: inputs.length === size,
-    value: input,
-  };
+	return {
+		passes: inputs.length === size,
+		value: input,
+	};
 };
 /**
  * Checks if the input is a valid password.
@@ -273,39 +274,39 @@ export const length: RuleCallBack = (input, size) => {
  * @param input - The input to check.
  * @example
  *  ```html
- *  <input data-tr-rules="password"/>
+ *  <input @v:rules="password"/>
  * ```
  */
 export const passwordRule: RuleCallBack = (input) => {
-  if (typeof input !== 'string') {
-    return {
-      passes: false,
-      value: input,
-    };
-  }
-  const minLength = 8;
-  const hasUppercase = /[A-Z]/.test(input);
-  const hasLowercase = /[a-z]/.test(input);
-  const hasNumber = /\d/.test(input);
-  const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(input);
+	if (typeof input !== 'string') {
+		return {
+			passes: false,
+			value: input,
+		};
+	}
+	const minLength = 8;
+	const hasUppercase = /[A-Z]/.test(input);
+	const hasLowercase = /[a-z]/.test(input);
+	const hasNumber = /\d/.test(input);
+	const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(input);
 
-  if (
-    input.length < minLength ||
-    !hasUppercase ||
-    !hasLowercase ||
-    !hasNumber ||
-    !hasSpecialChar
-  ) {
-    return {
-      passes: false,
-      value: input,
-    };
-  }
+	if (
+		input.length < minLength ||
+		!hasUppercase ||
+		!hasLowercase ||
+		!hasNumber ||
+		!hasSpecialChar
+	) {
+		return {
+			passes: false,
+			value: input,
+		};
+	}
 
-  return {
-    passes: true,
-    value: input,
-  };
+	return {
+		passes: true,
+		value: input,
+	};
 };
 
 /**
@@ -314,25 +315,25 @@ export const passwordRule: RuleCallBack = (input) => {
  * @param input - The input to check.
  * @example
  *  ```html
- *  <input data-tr-rules="startWithString"/>
+ *  <input @v:rules="start_with_string"/>
  * ```
  */
 export const startWithString: RuleCallBack = (input) => {
-  if (
-    typeof input !== 'string' ||
-    input.length === 0 ||
-    input.charAt(0) === ' '
-  ) {
-    return {
-      passes: false,
-      value: input,
-    };
-  }
-  const regex = /^[0-9]/;
-  return {
-    passes: !regex.test(input),
-    value: input,
-  };
+	if (
+		typeof input !== 'string' ||
+		input.length === 0 ||
+		input.charAt(0) === ' '
+	) {
+		return {
+			passes: false,
+			value: input,
+		};
+	}
+	const regex = /^[0-9]/;
+	return {
+		passes: !regex.test(input),
+		value: input,
+	};
 };
 
 /**
@@ -341,21 +342,21 @@ export const startWithString: RuleCallBack = (input) => {
  * @param input - The input to check.
  * @example
  *  ```html
- *  <input data-tr-rules="endWithString"/>
+ *  <input @v:rules="end_with_string"/>
  * ```
  */
 export const endWithString: RuleCallBack = (input) => {
-  if (typeof input !== 'string' || input.length === 0) {
-    return {
-      passes: false,
-      value: input,
-    };
-  }
-  const regex = /[0-9]$/;
-  return {
-    passes: !regex.test(input),
-    value: input,
-  };
+	if (typeof input !== 'string' || input.length === 0) {
+		return {
+			passes: false,
+			value: input,
+		};
+	}
+	const regex = /[0-9]$/;
+	return {
+		passes: !regex.test(input),
+		value: input,
+	};
 };
 
 /**
@@ -364,21 +365,21 @@ export const endWithString: RuleCallBack = (input) => {
  * @param input - The input to check.
  * @example
  *  ```html
- *  <input data-tr-rules="containsLetter"/>
+ *  <input @v:rules="contains_letter"/>
  * ```
  */
 export const containsLetter: RuleCallBack = (input) => {
-  if (typeof input !== 'string') {
-    return {
-      passes: false,
-      value: input,
-    };
-  }
-  const letterRegex = /^[0-9]$/;
-  return {
-    passes: !letterRegex.test(input),
-    value: input,
-  };
+	if (typeof input !== 'string') {
+		return {
+			passes: false,
+			value: input,
+		};
+	}
+	const letterRegex = /^[0-9]$/;
+	return {
+		passes: !letterRegex.test(input),
+		value: input,
+	};
 };
 
 /**
@@ -388,30 +389,30 @@ export const containsLetter: RuleCallBack = (input) => {
  * @param excludedChars - The characters to exclude, separated by comma.
  *  @example
  *  ```html
- *  <input data-tr-rules="excludes:-,@,&esp;"/>
+ *  <input @v:rules="excludes:-,@,&esp;"/>
  * ```
  */
 export const excludes: RuleCallBack = (input, excludedChars) => {
-  if (typeof excludedChars !== 'string' && typeof excludedChars !== 'number') {
-    throwEmptyArgsException('excludes');
-  }
-  const chars = spliteParam(excludedChars as string);
-  if (!chars.length) {
-    throwEmptyArgsException('excludes');
-  }
-  if (typeof input !== 'string') {
-    return {
-      passes: true,
-      value: input,
-    };
-  }
+	if (typeof excludedChars !== 'string' && typeof excludedChars !== 'number') {
+		throwEmptyArgsException('excludes');
+	}
+	const chars = spliteParam(excludedChars as string);
+	if (!chars.length) {
+		throwEmptyArgsException('excludes');
+	}
+	if (typeof input !== 'string') {
+		return {
+			passes: true,
+			value: input,
+		};
+	}
 
-  return {
-    passes: !chars.some((char) => {
-      return input.includes(new ArgumentParser(char as string).replaceSpaces());
-    }),
-    value: input,
-  };
+	return {
+		passes: !chars.some((char) => {
+			return input.includes(new ArgumentParser(char as string).replaceSpaces());
+		}),
+		value: input,
+	};
 };
 
 /**
@@ -421,20 +422,20 @@ export const excludes: RuleCallBack = (input, excludedChars) => {
  * @param param - The locale to use.
  *   @example
  *  ```html
- *  <input data-tr-rules="upper"/>
+ *  <input @v:rules="upper"/>
  * ```
  */
 export const upper: RuleCallBack = (input) => {
-  if (typeof input !== 'string') {
-    return {
-      passes: false,
-      value: input,
-    };
-  }
-  return {
-    passes: input === input.toLocaleUpperCase(),
-    value: input,
-  };
+	if (typeof input !== 'string') {
+		return {
+			passes: false,
+			value: input,
+		};
+	}
+	return {
+		passes: input === input.toLocaleUpperCase(),
+		value: input,
+	};
 };
 
 /**
@@ -444,20 +445,20 @@ export const upper: RuleCallBack = (input) => {
  * @param param - The locale to use.
  *   @example
  *  ```html
- *  <input data-tr-rules="lower"/>
+ *  <input @v:rules="lower"/>
  * ```
  */
 export const lower: RuleCallBack = (input) => {
-  if (typeof input !== 'string') {
-    return {
-      passes: false,
-      value: input,
-    };
-  }
-  return {
-    passes: input === input.toLocaleLowerCase(),
-    value: input,
-  };
+	if (typeof input !== 'string') {
+		return {
+			passes: false,
+			value: input,
+		};
+	}
+	return {
+		passes: input === input.toLocaleLowerCase(),
+		value: input,
+	};
 };
 
 /**
@@ -467,16 +468,16 @@ export const lower: RuleCallBack = (input) => {
  * @param min_max - The string containing the minimum and maximum values, separated by a delimiter.
  * @example
  * ```html
- * <input data-tr-rules="stringBetween:2,5" />
+ * <input @v:rules="string_between:2,5" />
  * ```
  */
 export const stringBetween: RuleCallBack = (input, min_max) => {
-  if (typeof min_max !== 'string') {
-    throwEmptyArgsException('between');
-  }
-  const [min, max] = spliteParam(min_max as string);
-  return {
-    passes: minlength(input, min).passes && maxlength(input, max).passes,
-    value: input,
-  };
+	if (typeof min_max !== 'string') {
+		throwEmptyArgsException('between');
+	}
+	const [min, max] = spliteParam(min_max as string);
+	return {
+		passes: minlength(input, min).passes && maxlength(input, max).passes,
+		value: input,
+	};
 };

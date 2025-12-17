@@ -86,8 +86,8 @@ This guide helps you migrate from previous versions of Trivule to the latest ver
 
 ```javascript
 // Built-in phone validation
-<input data-tr-rules="phone" />
-<input data-tr-rules="phone:US,FR,BJ" />
+<input @v:rules="phone" />
+<input @v:rules="phone:US,FR,BJ" />
 ```
 
 **After (✅ Use external libraries):**
@@ -135,7 +135,7 @@ trivule.defineRule(
 
    ```html
    <!-- Remove this -->
-   <input data-tr-rules="phone" />
+   <input @v:rules="phone" />
    ```
 
 2. **Install a phone validation library** (recommended):
@@ -167,7 +167,7 @@ trivule.defineRule(
 
 4. **Update your forms**:
    ```html
-   <input data-tr-rules="phone:US" />
+   <input @v:rules="phone:US" />
    ```
 
 ### Constructor Access (Previous versions)

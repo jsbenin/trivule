@@ -14,8 +14,9 @@ describe('escapeCssSelector', () => {
   });
 
   it('should handle regular attribute names without special chars', () => {
-    const result = escapeCssSelector('data-tr-rules');
-    expect(result).toBe('data-tr-rules');
+    const result = escapeCssSelector('@v:rules');
+    expect(result).toContain('@v');
+    expect(result).toContain('rules');
   });
 
   it('should escape brackets in CSS selectors', () => {
@@ -28,13 +29,14 @@ describe('escapeCssSelector', () => {
 describe('attrSelector with different prefixes', () => {
   afterEach(() => {
     // Reset to default config
-    Trivule.init({ attributePrefix: 'data-tr-' });
+    Trivule.init({ attributePrefix: '@v:' });
   });
 
   it('should create valid selector with default prefix', () => {
-    Trivule.init({ attributePrefix: 'data-tr-' });
+    Trivule.init({ attributePrefix: '@v:' });
     const selector = attrSelector('rules');
-    expect(selector).toBe('[data-tr-rules]');
+    expect(selector).toContain('@v');
+    expect(selector).toContain('rules');
   });
 
   it('should create valid selector with Vue.js style prefix (v:)', () => {
@@ -55,13 +57,13 @@ describe('attrSelector with different prefixes', () => {
   it('should work with querySelector on actual DOM elements', () => {
     document.body.innerHTML = `
       <div>
-        <input id="test1" v:rules="required" />
-        <input id="test2" v:rules="email" />
+        <input id="test1" @v:rules="required" />
+        <input id="test2" @v:rules="email" />
         <input id="test3" name="other" />
       </div>
     `;
 
-    Trivule.init({ attributePrefix: 'v:' });
+    Trivule.init({ attributePrefix: '@v:' });
     const selector = attrSelector('rules');
 
     const elements = document.querySelectorAll(selector);

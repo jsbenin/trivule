@@ -340,7 +340,7 @@ describe('TrivuleInput', () => {
   });
 
   describe('custom messages with msg attribute', () => {
-    test('should read custom messages from data-tr-msg attributes', () => {
+    test('should read custom messages from @v:msg attributes', () => {
       const inputElement = document.createElement('input');
       inputElement.setAttribute(attr('rules'), 'required|email|max_length:32');
       inputElement.setAttribute(attr('msg') + '.required', 'Ce champ est obligatoire');

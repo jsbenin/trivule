@@ -8,20 +8,21 @@ import { TrParameter } from './core/utils/parameter';
  * @returns An object containing the rule name and parameters.
  */
 export const getRule = (
-  rule: string,
+	rule: string,
 ): { ruleName: Rule; params: RuleParam } => {
-  const regex = /^(\w+):(.+)$/;
-  const match = rule.match(regex);
+	const regex = /^(\w+):(.+)$/;
+	const match = rule.match(regex);
 
-  if (match) {
-    const ruleName = match[1] as Rule;
-    const params = match[2];
-    return { ruleName, params };
-  } else {
-    const [ruleName, params] = rule.split(':') as [Rule, string | undefined];
-    return { ruleName, params };
-  }
+	if (match) {
+		const ruleName = match[1] as Rule;
+		const params = match[2];
+		return { ruleName, params };
+	} else {
+		const [ruleName, params] = rule.split(':') as [Rule, string | undefined];
+		return { ruleName, params };
+	}
 };
+
 /**
  * Splits a string into an array of values using a specified delimiter.
  * @param value - The string to be split.
@@ -29,14 +30,14 @@ export const getRule = (
  * @returns An array containing the split values.
  */
 export const spliteParam = (
-  value: string,
-  carac: string = ',',
+	value: string,
+	carac: string = ',',
 ): RuleParam[] => {
-  if (typeof value !== 'string') {
-    return [];
-  }
+	if (typeof value !== 'string') {
+		return [];
+	}
 
-  return value.split(carac).map((v) => v.trim());
+	return value.split(carac).map((v) => v.trim());
 };
 
 /**
@@ -45,9 +46,9 @@ export const spliteParam = (
  * @throws An error with a message indicating that arguments are empty.
  */
 export const throwEmptyArgsException = (fnc: string, message?: string) => {
-  throw new Error(
-    message ?? `Please provide a valid <<${fnc}>> rule arguments`,
-  );
+	throw new Error(
+		message ?? `Please provide a valid <<${fnc}>> rule arguments`,
+	);
 };
 
 /**
@@ -55,8 +56,8 @@ export const throwEmptyArgsException = (fnc: string, message?: string) => {
  * @returns The current date and time as a string in ISO 8601 format.
  */
 export function now(): string {
-  const now = new Date();
-  return now.toISOString();
+	const now = new Date();
+	return now.toISOString();
 }
 
 /**
@@ -68,150 +69,150 @@ export function now(): string {
  * @returns true if sub is a sub-object of obj, false otherwise.
  */
 export function isSubObject(
-  sub: Record<string, unknown>,
-  obj: Record<string, unknown>,
+	sub: Record<string, unknown>,
+	obj: Record<string, unknown>,
 ): boolean {
-  if (typeof sub !== 'object' || sub === null || Array.isArray(sub)) {
-    return false;
-  }
+	if (typeof sub !== 'object' || sub === null || Array.isArray(sub)) {
+		return false;
+	}
 
-  if (typeof obj !== 'object' || obj === null || Array.isArray(obj)) {
-    return false;
-  }
+	if (typeof obj !== 'object' || obj === null || Array.isArray(obj)) {
+		return false;
+	}
 
-  for (const key in sub) {
-    if (!(key in obj) || sub[key] !== obj[key]) {
-      return false;
-    }
-  }
+	for (const key in sub) {
+		if (!(key in obj) || sub[key] !== obj[key]) {
+			return false;
+		}
+	}
 
-  return true;
+	return true;
 }
 
 export function getAttrData<T = unknown>(
-  element: HTMLElement | null | undefined,
-  name: TrivuleAttribute,
-  defaults: unknown = null,
-  toJson = false,
+	element: HTMLElement | null | undefined,
+	name: TrivuleAttribute,
+	defaults: unknown = null,
+	toJson = false,
 ): T {
-  if (!element) {
-    return defaults as T;
-  }
-  const attributte = TrParameter.instance().get('attribute');
-  let value = element.getAttribute(`${attributte}${name}`);
-  if (!!value && toJson) {
-    try {
-      value = JSON.parse(value);
-    } catch (error) {
-      return defaults as T;
-    }
-  }
+	if (!element) {
+		return defaults as T;
+	}
+	const attributte = TrParameter.instance().get('attribute');
+	let value = element.getAttribute(`${attributte}${name}`);
+	if (!!value && toJson) {
+		try {
+			value = JSON.parse(value);
+		} catch (error) {
+			return defaults as T;
+		}
+	}
 
-  return (
-    !!value || (is_string(value) && !!value?.length) ? value : defaults
-  ) as T;
+	return (
+		!!value || (is_string(value) && !!value?.length) ? value : defaults
+	) as T;
 }
 
 export function calculateFileSize(file: unknown): number {
-  const files = fileToArray(file);
-  let count = 0;
-  if (!files.length) {
-    return count;
-  }
+	const files = fileToArray(file);
+	let count = 0;
+	if (!files.length) {
+		return count;
+	}
 
-  for (const input of files) {
-    if (isFile(input).passes) {
-      const file = input as File;
-      count += file.size;
-    } else {
-      count += 0;
-    }
-  }
+	for (const input of files) {
+		if (isFile(input).passes) {
+			const file = input as File;
+			count += file.size;
+		} else {
+			count += 0;
+		}
+	}
 
-  return count;
+	return count;
 }
 
 export function fileToArray(file: unknown) {
-  if (Array.isArray(file)) {
-    return file;
-  } else if (file instanceof FileList) {
-    return Array.from(file);
-  } else if (file instanceof File || file instanceof Blob) {
-    return [file];
-  }
+	if (Array.isArray(file)) {
+		return file;
+	} else if (file instanceof FileList) {
+		return Array.from(file);
+	} else if (file instanceof File || file instanceof Blob) {
+		return [file];
+	}
 
-  return [];
+	return [];
 }
 export function convertFileSize(numericValue: number, unit: string) {
-  unit = unit.toUpperCase();
-  numericValue = Number(numericValue);
+	unit = unit.toUpperCase();
+	numericValue = Number(numericValue);
 
-  // Convert minSize to bytes based on unit
-  if (unit == 'KB') {
-    numericValue = numericValue * 1024;
-  } else if (unit == 'MB') {
-    numericValue = numericValue * 1024 * 1024;
-  } else if (unit == 'GB') {
-    numericValue = numericValue * 1024 * 1024 * 1024;
-  }
-  return numericValue;
+	// Convert minSize to bytes based on unit
+	if (unit == 'KB') {
+		numericValue = numericValue * 1024;
+	} else if (unit == 'MB') {
+		numericValue = numericValue * 1024 * 1024;
+	} else if (unit == 'GB') {
+		numericValue = numericValue * 1024 * 1024 * 1024;
+	}
+	return numericValue;
 }
 
 export function explodeFileParam(value: string) {
-  const match = value.match(/^(\d+(\.\d+)?)\s*(B|KB|MB|GB)$/i);
+	const match = value.match(/^(\d+(\.\d+)?)\s*(B|KB|MB|GB)$/i);
 
-  if (!match) {
-    throw new Error(
-      "Invalid size format. Please use valid format like '1KB', '1MB', etc.",
-    );
-  }
+	if (!match) {
+		throw new Error(
+			"Invalid size format. Please use valid format like '1KB', '1MB', etc.",
+		);
+	}
 
-  const numericValue = parseFloat(match[1]);
-  const unit = match[3].toUpperCase();
-  return [numericValue, unit];
+	const numericValue = parseFloat(match[1]);
+	const unit = match[3].toUpperCase();
+	return [numericValue, unit];
 }
 
 export function getHTMLElementBySelector<T>(
-  selector: CssSelector,
-  from?: HTMLElement | null,
+	selector: CssSelector,
+	from?: HTMLElement | null,
 ): T | null {
-  const parent = from ?? document;
+	const parent = from ?? document;
 
-  if (typeof selector === 'string') {
-    try {
-      return parent.querySelector<HTMLElement>(selector) as T;
-    } catch (error) {
-      return selector as T;
-    }
-  }
-  if (selector instanceof HTMLElement) {
-    return selector as T;
-  }
+	if (typeof selector === 'string') {
+		try {
+			return parent.querySelector<HTMLElement>(selector) as T;
+		} catch (error) {
+			return selector as T;
+		}
+	}
+	if (selector instanceof HTMLElement) {
+		return selector as T;
+	}
 
-  return null;
+	return null;
 }
 
 type TransformCallback<T, R> = (p: T, key: string | number) => R;
 
 export function transformToArray<T, R = T>(
-  p: T[] | Record<string | number, T>,
-  call: TransformCallback<T, R>,
+	p: T[] | Record<string | number, T>,
+	call: TransformCallback<T, R>,
 ): R[] {
-  const result: R[] = [];
-  if (Array.isArray(p)) {
-    for (let i = 0; i < p.length; i++) {
-      const it = p[i];
-      result.push(call(it, i));
-    }
-  } else {
-    for (const key in p) {
-      if (Object.prototype.hasOwnProperty.call(p, key)) {
-        const i = p[key];
-        result.push(call(i, key));
-      }
-    }
-  }
-  return result;
+	const result: R[] = [];
+	if (Array.isArray(p)) {
+		for (let i = 0; i < p.length; i++) {
+			const it = p[i];
+			result.push(call(it, i));
+		}
+	} else {
+		for (const key in p) {
+			if (Object.prototype.hasOwnProperty.call(p, key)) {
+				const i = p[key];
+				result.push(call(i, key));
+			}
+		}
+	}
+	return result;
 }
 
 /**
@@ -221,13 +222,13 @@ export function transformToArray<T, R = T>(
  *
  * @example
  * ```typescript
- * const prefix = config('attributePrefix'); // Returns 'data-tr-'
+ * const prefix = config('attributePrefix'); // Returns '@v:'
  * const invalidClass = config('invalidClass'); // Returns 'is-invalid'
  * ```
  */
 export const config = (key: string): unknown => {
-  const param = TrParameter.instance() as unknown as Record<string, unknown>;
-  return param[key];
+	const param = TrParameter.instance() as unknown as Record<string, unknown>;
+	return param[key];
 };
 
 /**
@@ -238,24 +239,24 @@ export const config = (key: string): unknown => {
  * @example
  * ```typescript
  * escapeCssSelector('@v:rules') // Returns '\\@v\\:rules'
- * escapeCssSelector('data-tr-rules') // Returns 'data-tr-rules'
+ * escapeCssSelector('@v:rules') // Returns '\\@v\\:rules'
  * ```
  */
 export const escapeCssSelector = (str: string): string => {
-  // Use native CSS.escape if available
-  if (typeof CSS !== 'undefined' && CSS.escape) {
-    return CSS.escape(str);
-  }
+	// Use native CSS.escape if available
+	if (typeof CSS !== 'undefined' && CSS.escape) {
+		return CSS.escape(str);
+	}
 
-  // Fallback: manually escape special CSS characters
-  // Characters that need escaping: : . [ ] # , ; ( ) { } + > ~ * = ^ $ | " ' \
-  return str.replace(/([:.[\]#,;(){}+>~*=^$|"'\\@])/g, '\\$1');
+	// Fallback: manually escape special CSS characters
+	// Characters that need escaping: : . [ ] # , ; ( ) { } + > ~ * = ^ $ | " ' \
+	return str.replace(/([:.[\]#,;(){}+>~*=^$|"'\\@])/g, '\\$1');
 };
 
 /**
  * Build a complete attribute name using the configured attribute prefix
  * @param name The attribute name without prefix (e.g., 'rules', 'messages', 'feedback')
- * @returns The full attribute name with prefix (e.g., 'data-tr-rules')
+ * @returns The full attribute name with prefix (e.g., '@v:rules')
  *
  * @example
  * ```typescript
@@ -267,28 +268,28 @@ export const escapeCssSelector = (str: string): string => {
  * ```
  */
 export const attr = (name: string): string => {
-  return `${config('attributePrefix')}${name}`;
+	return `${config('attributePrefix')}${name}`;
 };
 
 /**
  * Build a CSS attribute selector using the configured attribute prefix
  * Automatically escapes special CSS characters in the prefix
  * @param name The attribute name without prefix (e.g., 'rules', 'submit')
- * @returns A valid CSS attribute selector (e.g., '[data-tr-rules]', '[v\\:rules]')
+ * @returns A valid CSS attribute selector (e.g., '[@v:rules]', '[v-rules]')
  *
  * @example
  * ```typescript
- * // With default prefix 'data-tr-'
- * attrSelector('rules') // Returns '[data-tr-rules]'
+ * // With default prefix '@v:'
+ * attrSelector('rules') // Returns '[@v:rules]'
  *
- * // With custom prefix 'v:'
- * attrSelector('rules') // Returns '[v\\:rules]'
+ * // With custom prefix 'v-'
+ * attrSelector('rules') // Returns '[v-rules]'
  * ```
  */
 export const attrSelector = (name: string): string => {
-  const prefix = config('attributePrefix') as string;
-  const escapedAttr = escapeCssSelector(`${prefix}${name}`);
-  return `[${escapedAttr}]`;
+	const prefix = config('attributePrefix') as string;
+	const escapedAttr = escapeCssSelector(`${prefix}${name}`);
+	return `[${escapedAttr}]`;
 };
 
 /**
@@ -304,6 +305,6 @@ export const attrSelector = (name: string): string => {
  * // Returns: ["email", "min", "max"]
  */
 export const ruleKey = (rulesString: string): (Rule & string)[] => {
-  return rulesString.split('|').map((rule) => rule.split(':')[0]) as (Rule &
-    string)[];
+	return rulesString.split('|').map((rule) => rule.split(':')[0]) as (Rule &
+		string)[];
 };
