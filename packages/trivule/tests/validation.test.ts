@@ -20,16 +20,16 @@ describe('TrValidation', () => {
   });
 
   test('validate() should return errors object for an invalid value', () => {
-    const result = validate(inputRule.all(), '');
-    expect(result).not.toBe(true);
-    expect(typeof result).toBe('object');
-    expect(result).toHaveProperty('required');
-    expect(result).toHaveProperty('email');
+    const { valid, errors } = validate(inputRule.all(), '');
+    expect(valid).not.toBe(true);
+    expect(typeof errors).toBe('object');
+    expect(errors).toHaveProperty('required');
+    expect(errors).toHaveProperty('email');
   });
 
   test('Validation failed messages', () => {
-    const received = validate(inputRule.all(), '');
-    expect(received).toEqual({
+    const { valid, errors } = validate(inputRule.all(), '');
+    expect(errors).toEqual({
       required: 'This field is required',
       email: 'Invalid email format',
     });
@@ -44,9 +44,9 @@ describe('TrValidation', () => {
       undefined,
       parameter.ruleRegistry,
     );
-    const result = validate(newInputRule.all(), 'short');
-    expect(result).not.toBe(true);
-    expect(typeof result).toBe('object');
+    const {valid, errors } = validate(newInputRule.all(), 'short');
+    expect(valid).not.toBe(true);
+    expect(typeof errors).toBe('object');
 
     const rules = newInputRule.all().map((rule) => {
       return {

@@ -308,8 +308,8 @@ export class TrivuleForm {
    */
   private getInputsMap(trivuleInput: TrivuleInput): ITrivuleInputObject {
     return {
-      name: trivuleInput.getName(),
-      value: trivuleInput.getValue(),
+      name: trivuleInput.name,
+      value: trivuleInput.value,
     };
   }
 
@@ -465,7 +465,7 @@ export class TrivuleForm {
   private _getSuccessData(): FormSuccessData {
     const values: Record<string, InputValueType> = {};
     this.each((input) => {
-      values[input.getName()] = input.getValue();
+      values[input.name] = input.value;
     });
     return { values };
   }
@@ -478,12 +478,12 @@ export class TrivuleForm {
     const errors: FormFieldError[] = [];
 
     this.each((input) => {
-      values[input.getName()] = input.getValue();
+      values[input.name] = input.value;
       if (input.fails()) {
-        const messages = input.getMessages();
+        const messages = input.messages;
         const firstMessage = Array.isArray(messages) ? messages[0] : messages;
         errors.push({
-          field: input.getName(),
+          field: input.name,
           message: firstMessage || 'Validation failed',
         });
       }
@@ -570,8 +570,8 @@ export class TrivuleForm {
       inputs = inputs
         ? inputs
         : Array.from(
-            this.container.querySelectorAll<HTMLElement>(attrSelector('rules')),
-          );
+          this.container.querySelectorAll<HTMLElement>(attrSelector('rules')),
+        );
       inputs.forEach((el, index) => this._bootInputs({ selector: el }, index));
     }
   }
@@ -666,7 +666,7 @@ export class TrivuleForm {
     const inputFeedback = trInput.getFeedbackElement();
 
     if (!inputFeedback) {
-      const fds = this.parameter.getFeedbackSelector(trInput.getName());
+      const fds = this.parameter.getFeedbackSelector(trInput.name);
 
       if (fds) {
         trInput.setFeedbackElement(fds);
@@ -674,7 +674,7 @@ export class TrivuleForm {
     }
 
     // Add input to the collection
-    this._trivuleInputs[trInput.getName()] = trInput;
+    this._trivuleInputs[trInput.name] = trInput;
   }
 
   /**

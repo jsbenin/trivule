@@ -54,13 +54,13 @@ describe('TrivuleInput', () => {
       const inputElement = document.createElement('input'); // Create an input element
       inputElement.setAttribute(attr('rules'), 'required|min:30');
       const validator = createTrivuleInput(inputElement);
-      expect(validator.hasRules()).toBe(true);
+      expect(validator.$rules.length > 0).toBe(true);
     });
 
     test('should return false if rules are empty', () => {
       const inputElement = document.createElement('input');
       const validator = createTrivuleInput(inputElement);
-      expect(validator.hasRules()).toBe(false); // Assert that the result is an empty array
+      expect(validator.$rules.length > 0).toBe(false); // Assert that the result is an empty array
     });
   });
 
@@ -74,7 +74,7 @@ describe('TrivuleInput', () => {
         failsOnfirst: false,
       });
       validator.validate();
-      const received = validator.getMessages();
+      const received = validator.messages;
       expect(received).toEqual({
         required: 'Required message',
         min: 'Min message',
@@ -86,7 +86,7 @@ describe('TrivuleInput', () => {
       const inputElement = document.createElement('input');
       const validator = createTrivuleInput(inputElement);
 
-      expect(validator.hasRules()).toBe(false);
+      expect(validator.$rules.length > 0).toBe(false);
     });
   });
   describe('valid', () => {
@@ -100,7 +100,7 @@ describe('TrivuleInput', () => {
       inputElement.value = 'Js'; // Set the input value
       const validator = createTrivuleInput(inputElement);
 
-      expect(validator.valid()).toBe(true); // Assert that the input is valid
+      expect(validator.validate()).toBe(true); // Assert that the input is valid
     });
 
     test('should return false if input is invalid', () => {
@@ -110,7 +110,7 @@ describe('TrivuleInput', () => {
       inputElement.value = ''; // Set the input value to empty
       const validator = createTrivuleInput(inputElement);
 
-      expect(validator.valid()).toBe(false); // Assert that the input is invalid
+      expect(validator.validate()).toBe(false); // Assert that the input is invalid
     });
   });
 
@@ -122,7 +122,7 @@ describe('TrivuleInput', () => {
       inputElement.value = 'test'; // Set the input value
       const validator = createTrivuleInput(inputElement);
       vi.spyOn(validator as any, 'setValidationClass').mockImplementation(
-        () => {},
+        () => { },
       ); // Mock setValidationClass to prevent side effects
 
       const result = validator.validate();
@@ -137,7 +137,7 @@ describe('TrivuleInput', () => {
       inputElement.value = ''; // Set the input value to empty
       const validator = createTrivuleInput(inputElement);
       vi.spyOn(validator as any, 'setValidationClass').mockImplementation(
-        () => {},
+        () => { },
       ); // Mock setValidationClass to prevent side effects
 
       // Act
@@ -159,7 +159,7 @@ describe('TrivuleInput', () => {
       const validator = createTrivuleInput(inputElement);
 
       vi.spyOn(validator as any, 'setValidationClass').mockImplementation(
-        () => {},
+        () => { },
       ); // Mock setValidationClass to prevent side effects
 
       validator.validate();
@@ -181,7 +181,7 @@ describe('TrivuleInput', () => {
       const validator = createTrivuleInput(inputElement);
 
       vi.spyOn(validator as any, 'setValidationClass').mockImplementation(
-        () => {},
+        () => { },
       ); // Mock setValidationClass to prevent side effects
 
       validator.validate();
@@ -348,7 +348,7 @@ describe('TrivuleInput', () => {
       inputElement.setAttribute(attr('msg') + '.max_length', 'Maximum 32 caractères');
 
       const trivuleInput = createTrivuleInput(inputElement);
-      
+
       expect(trivuleInput.$rules.getMessage('required')).toBe('Ce champ est obligatoire');
       expect(trivuleInput.$rules.getMessage('email')).toBe('Veuillez entrer un email valide');
       expect(trivuleInput.$rules.getMessage('max_length')).toBe('Maximum 32 caractères');
@@ -359,7 +359,7 @@ describe('TrivuleInput', () => {
       inputElement.setAttribute(attr('rules'), 'required|email');
 
       const trivuleInput = createTrivuleInput(inputElement);
-      
+
       // Should have default messages
       expect(trivuleInput.$rules.getMessage('required')).toBeTruthy();
       expect(trivuleInput.$rules.getMessage('email')).toBeTruthy();
@@ -371,7 +371,7 @@ describe('TrivuleInput', () => {
       inputElement.setAttribute(attr('msg') + '.required', '');
 
       const trivuleInput = createTrivuleInput(inputElement);
-      
+
       expect(trivuleInput.$rules.getMessage('required')).toBe('This field is required');
     });
   });
