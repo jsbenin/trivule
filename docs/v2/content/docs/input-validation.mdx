@@ -43,9 +43,28 @@ The `TrivuleInput` class allows for personalized validation behavior through the
 
 - **`type` (optional):** Specifies the input element type for type-specific validation rules or behavior.
 
+- **`debounce` (optional):** Time in milliseconds to delay validation after an event. Especially useful for **async validation** (explained below).
+
 - **`realTime` (optional):** Enables real-time validation during user input, providing immediate feedback as users interact with the form.
 
 These options empower developers to tailor validation behavior to suit their application's needs, enhancing user experience and error handling.
+
+## Optimization with Debounce
+
+The `debounce` option (or `@v:debounce` attribute) is crucial when dealing with real-time validation and **async rules**. 
+
+Without debouncing, validation triggers on every keystroke. If your rule performs an expensive operation or an API call (like checking username availability), this can lead to performance issues or server overloading.
+
+```html
+<!-- Validate 500ms after the user stops typing -->
+<input 
+  name="username" 
+  @v:rules="required|min:3|check_unique" 
+  @v:debounce="500" 
+/>
+```
+
+By adding a debounce, you ensure that the validation logic only runs after the user has paused typing for the specified duration.
 
 ## Handling Validation Status
 

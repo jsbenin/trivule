@@ -46,6 +46,11 @@ Trivule Attributes:
    - Use Case: When you want to customize the language of error messages and Trivule's user interface.
    - Example: `<form @v:lang="fr">...</form>`
 
+9. `@v:debounce`:
+   - Purpose: This attribute allows you to set a delay (in milliseconds) before the validation is executed after an event is triggered.
+   - Use Case: Highly useful for performance optimization and **async validation** (e.g., checking if an email is already taken) to avoid sending too many requests to the server while the user is still typing.
+   - Example: `<input type="text" @v:rules="required|email" @v:debounce="500">`
+
 Note: Remember to include the Trivule library in your application before using these attributes. You can find the library and code examples on the [Trivule GitHub repository](https://github.com/jsbenin/trivule).
 
 For more detailed information on using the attributes and other Trivule library features, please refer to the official Trivule documentation.

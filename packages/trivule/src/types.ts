@@ -256,6 +256,11 @@ export type TrivuleInputParms = {
 	 * Events that trigger validation for this input
 	 */
 	triggerEvents?: TriggerEvent[];
+
+	/**
+	 * Time in milliseconds to debounce validation
+	 */
+	debounce?: number;
 };
 
 /**
@@ -361,4 +366,5 @@ export type TrivuleAttribute =
 	| 'name'
 	| 'lang'
 	| 'show'
+	| 'debounce'
 	| 'form';

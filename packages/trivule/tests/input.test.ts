@@ -375,4 +375,55 @@ describe('TrivuleInput', () => {
       expect(trivuleInput.$rules.getMessage('required')).toBe('This field is required');
     });
   });
+  describe('optimization and cleanup', () => {
+    test('destroy() should remove event listeners', () => {
+      const inputElement = document.createElement('input');
+      inputElement.setAttribute(attr('rules'), 'required');
+      const validateSpy = vi.fn();
+      const trivuleInput = createTrivuleInput(inputElement, { triggerEvents: ['input'] });
+      vi.spyOn(trivuleInput, 'validate').mockImplementation(validateSpy);
+
+      trivuleInput.destroy();
+      inputElement.dispatchEvent(new Event('input'));
+      expect(validateSpy).not.toHaveBeenCalled();
+    });
+
+    test('debounce should delay validation', async () => {
+      vi.useFakeTimers();
+      const inputElement = document.createElement('input');
+      inputElement.setAttribute(attr('rules'), 'required');
+      const validateSpy = vi.fn();
+      const trivuleInput = createTrivuleInput(inputElement, {
+        triggerEvents: ['input'],
+        debounce: 500
+      });
+      vi.spyOn(trivuleInput, 'validate').mockImplementation(validateSpy);
+
+      inputElement.dispatchEvent(new Event('input'));
+      expect(validateSpy).not.toHaveBeenCalled();
+
+      vi.advanceTimersByTime(500);
+      expect(validateSpy).toHaveBeenCalledTimes(1);
+      vi.useRealTimers();
+    });
+
+    test('should read debounce from @v:debounce attribute', async () => {
+      vi.useFakeTimers();
+      const inputElement = document.createElement('input');
+      inputElement.setAttribute(attr('rules'), 'required');
+      inputElement.setAttribute(attr('debounce'), '300');
+      const validateSpy = vi.fn();
+      const trivuleInput = createTrivuleInput(inputElement, {
+        triggerEvents: ['input']
+      });
+      vi.spyOn(trivuleInput, 'validate').mockImplementation(validateSpy);
+
+      inputElement.dispatchEvent(new Event('input'));
+      expect(validateSpy).not.toHaveBeenCalled();
+
+      vi.advanceTimersByTime(300);
+      expect(validateSpy).toHaveBeenCalledTimes(1);
+      vi.useRealTimers();
+    });
+  });
 });

@@ -25,6 +25,7 @@ npm install trivule
 - **HTML/CSS-Based Validation**: Perfect for quickly setting up validations using just HTML and CSS.
 - **Time Efficiency**: Minimize scripting time. Set up once, and let Trivule handle the rest.
 - **Intuitive Syntax**: User-friendly attributes make implementing validation rules straightforward.
+- **Debounced Validation**: Built-in support to delay validation, optimized for **async operations**.
 - **Conditional Validation**: Easily handle complex scenarios.
 - **Localization Support**: Built-in support for multiple languages.
 - **Extensible**: Add or customize rules as your application requirements grow.

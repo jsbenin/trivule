@@ -72,11 +72,23 @@ export class TrivuleInput {
 	protected _type: InputType = 'text';
 
 	/**
+	 * Map to store attached event listeners for proper cleanup
+	 */
+	private _eventListeners = new Map<string, EventListener>();
+
+	/**
+	 * Cache for data-attributes read from the DOM
+	 */
+	private _attributeCache = new Map<string, unknown>();
+
+	/**
 	 * The attribute name used in validation error messages
 	 */
 	private _messageAttribute = '';
 
 	_validateCount = 0;
+
+	private _debounceTimer: ReturnType<typeof setTimeout> | null = null;
 
 	private constructor(param: TrivuleInputParms, parameter: TrParameter) {
 		this.parameter = parameter;
@@ -117,11 +129,44 @@ export class TrivuleInput {
 		if (this.param.triggerEvents) {
 			this.param.triggerEvents.forEach((event) => {
 				if (event === 'submit') return;
-				this.inputElement.addEventListener(event, () => {
-					this.validate();
-				});
+
+				const listener = () => {
+					const delay = this.param.debounce ?? 0;
+					if (delay > 0) {
+						this._debounce(() => this.validate(), delay);
+					} else {
+						this.validate();
+					}
+				};
+
+				this.inputElement.addEventListener(event, listener);
+				this._eventListeners.set(event, listener);
 			});
 		}
+	}
+
+	/**
+	 * Properly removes all event listeners and cleans up the instance.
+	 */
+	destroy() {
+		this._eventListeners.forEach((listener, event) => {
+			this.inputElement.removeEventListener(event, listener);
+		});
+		this._eventListeners.clear();
+		this._attributeCache.clear();
+		if (this._debounceTimer) {
+			clearTimeout(this._debounceTimer);
+		}
+	}
+
+	/**
+	 * Internal debounce implementation
+	 */
+	private _debounce(fn: () => void, delay: number) {
+		if (this._debounceTimer) {
+			clearTimeout(this._debounceTimer);
+		}
+		this._debounceTimer = setTimeout(fn, delay);
 	}
 	/**
 	 * Defines a new custom validation rule
@@ -179,6 +224,10 @@ export class TrivuleInput {
 			return defaults as T;
 		}
 
+		if (this._attributeCache.has(attribute)) {
+			return this._attributeCache.get(attribute) as T;
+		}
+
 		const attributePrefix = this.parameter.get('attribute');
 		let value = this.inputElement.getAttribute(
 			`${attributePrefix}${attribute}`,
@@ -191,7 +240,11 @@ export class TrivuleInput {
 				value = defaults as string;
 			}
 		}
-		return (value ?? defaults) as T;
+
+		const result = (value ?? defaults) as T;
+		this._attributeCache.set(attribute, result);
+
+		return result;
 	}
 
 	/**
@@ -573,6 +626,12 @@ export class TrivuleInput {
 
 		this._setTrValidationClass();
 
+		// Read debounce from HTML attribute
+		const debounce = this.getAttrData<string | number>('debounce');
+		if (debounce !== null) {
+			this.param.debounce = Number(debounce);
+		}
+
 		//Set the validation rules
 		const rules: string = this.getAttrData('rules', this.param.rules);
 
@@ -590,7 +649,7 @@ export class TrivuleInput {
 		// Read trigger events from HTML attribute (e.g., @v:events="submit|input|blur")
 		this._initTriggerEvents();
 
-		this._type = (this.param.type ?? 'text') as InputType;
+		this._type = (this.param.type ?? (this.inputElement as HTMLInputElement).type ?? 'text') as InputType;
 	}
 
 	/**
