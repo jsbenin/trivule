@@ -8,6 +8,12 @@ importers:
 
   .:
     devDependencies:
+      '@commitlint/cli':
+        specifier: ^20.0.0
+        version: 20.1.0(@types/node@24.3.3)(typescript@5.9.3)
+      '@commitlint/config-conventional':
+        specifier: ^20.0.0
+        version: 20.0.0
       husky:
         specifier: ^9.1.7
         version: 9.1.7
@@ -2983,6 +2989,7 @@ packages:
   next@15.5.3:
     resolution: {integrity: sha512-r/liNAx16SQj4D+XH/oI1dlpv9tdKJ6cONYPwwcCC46f2NjpaRWY+EKCzULfgQYV6YKXjHBchff2IZBSlZmJNw==}
     engines: {node: ^18.18.0 || ^19.8.0 || >= 20.0.0}
+    deprecated: This version has a security vulnerability. Please upgrade to a patched version. See https://nextjs.org/blog/CVE-2025-66478 for more details.
     hasBin: true
     peerDependencies:
       '@opentelemetry/api': ^1.1.0
@@ -5010,7 +5017,7 @@ snapshots:
 
   '@types/conventional-commits-parser@5.0.2':
     dependencies:
-      '@types/node': 24.3.3
+      '@types/node': 18.19.130
 
   '@types/debug@4.1.12':
     dependencies:
