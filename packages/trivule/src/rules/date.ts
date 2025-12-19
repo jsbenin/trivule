@@ -10,26 +10,26 @@ import { now, spliteParam, throwEmptyArgsException } from '../utils';
  * ```
  */
 export const isDate: RuleCallBack = (input) => {
-	if (!input) {
-		return {
-			passes: false,
-			value: input,
-		};
-	}
-	const date = new Date(input.toString());
-	const isValid = !isNaN(date.getTime());
+  if (!input) {
+    return {
+      passes: false,
+      value: input,
+    };
+  }
+  const date = new Date(input.toString());
+  const isValid = !isNaN(date.getTime());
 
-	if (isValid) {
-		return {
-			passes: true,
-			value: date.toISOString(),
-			type: 'date',
-		};
-	}
-	return {
-		passes: false,
-		value: input,
-	};
+  if (isValid) {
+    return {
+      passes: true,
+      value: date.toISOString(),
+      type: 'date',
+    };
+  }
+  return {
+    passes: false,
+    value: input,
+  };
 };
 
 /**
@@ -43,24 +43,24 @@ export const isDate: RuleCallBack = (input) => {
  * ```
  */
 export const dateBefore: RuleCallBack = (input, date) => {
-	if (date === 'now') {
-		date = now();
-	}
-	if (!isDate(input).passes) {
-		return {
-			passes: false,
-			value: input,
-		};
-	}
+  if (date === 'now') {
+    date = now();
+  }
+  if (!isDate(input).passes) {
+    return {
+      passes: false,
+      value: input,
+    };
+  }
 
-	if (!isDate(date).passes) {
-		throw new Error('Pease provide a valid argument for dateBefore rule');
-	}
-	return {
-		passes:
-			new Date(input as string).getTime() < new Date(date as string).getTime(),
-		value: input,
-	};
+  if (!isDate(date).passes) {
+    throw new Error('Pease provide a valid argument for dateBefore rule');
+  }
+  return {
+    passes:
+      new Date(input as string).getTime() < new Date(date as string).getTime(),
+    value: input,
+  };
 };
 
 /**
@@ -79,25 +79,25 @@ export const dateBefore: RuleCallBack = (input, date) => {
  * ```
  */
 export const dateAfter: RuleCallBack = (input, date) => {
-	if (date === 'now') {
-		date = now();
-	}
+  if (date === 'now') {
+    date = now();
+  }
 
-	if (!isDate(input).passes) {
-		return {
-			passes: false,
-			value: input,
-		};
-	}
+  if (!isDate(input).passes) {
+    return {
+      passes: false,
+      value: input,
+    };
+  }
 
-	if (!isDate(date).passes) {
-		throw new Error('Pease provide a valid argument for dateAfter rule');
-	}
-	return {
-		passes:
-			new Date(input as string).getTime() > new Date(date as string).getTime(),
-		value: isDate(input).value,
-	};
+  if (!isDate(date).passes) {
+    throw new Error('Pease provide a valid argument for dateAfter rule');
+  }
+  return {
+    passes:
+      new Date(input as string).getTime() > new Date(date as string).getTime(),
+    value: isDate(input).value,
+  };
 };
 
 /**
@@ -111,15 +111,15 @@ export const dateAfter: RuleCallBack = (input, date) => {
  * @throws An exception with the message "Missing required argument: dateBetween" if the `date` parameter is falsy.
  */
 export const dateBetween: RuleCallBack = (input, date) => {
-	if (!date) {
-		throwEmptyArgsException('dateBetween');
-	}
-	const [startDate, endDate] = spliteParam(date as string);
-	return {
-		passes:
-			dateAfter(input, startDate).passes && dateBefore(input, endDate).passes,
-		value: input,
-	};
+  if (!date) {
+    throwEmptyArgsException('dateBetween');
+  }
+  const [startDate, endDate] = spliteParam(date as string);
+  return {
+    passes:
+      dateAfter(input, startDate).passes && dateBefore(input, endDate).passes,
+    value: input,
+  };
 };
 
 /**
@@ -138,21 +138,21 @@ export const dateBetween: RuleCallBack = (input, date) => {
  *
  */
 export const isTime: RuleCallBack = (input) => {
-	if (typeof input !== 'string') {
-		return {
-			passes: false,
-			value: input,
-		};
-	}
-	// If the input does not have three parts separated by colons (H:m:i)
-	if (input.toString().split(':').length < 3) {
-		// Complete the input with ":00" until it has the format H:m:i
-		while (input.split(':').length < 3) {
-			input += ':00';
-		}
-	}
-	return {
-		passes: /^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$/.test(input),
-		value: input,
-	};
+  if (typeof input !== 'string') {
+    return {
+      passes: false,
+      value: input,
+    };
+  }
+  // If the input does not have three parts separated by colons (H:m:i)
+  if (input.toString().split(':').length < 3) {
+    // Complete the input with ":00" until it has the format H:m:i
+    while (input.split(':').length < 3) {
+      input += ':00';
+    }
+  }
+  return {
+    passes: /^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$/.test(input),
+    value: input,
+  };
 };

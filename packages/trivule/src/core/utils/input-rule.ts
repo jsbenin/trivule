@@ -98,7 +98,6 @@ export class InputRule {
     message?: string | null,
     param?: RuleParam,
     validate?: RuleCallBack,
-    local?: string,
   ): RuleType {
     const { ruleName, params } = getRule(originaleRule);
 

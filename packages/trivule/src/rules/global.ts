@@ -1,19 +1,19 @@
 import {
-	isFile,
-	length,
-	isNumber,
-	maxRule,
-	minRule,
-	stringBetween,
-	fileBetween,
+  isFile,
+  length,
+  isNumber,
+  maxRule,
+  minRule,
+  stringBetween,
+  fileBetween,
 } from '.';
 import { RuleCallBack } from '../types';
 import {
-	calculateFileSize,
-	convertFileSize,
-	explodeFileParam,
-	spliteParam,
-	throwEmptyArgsException,
+  calculateFileSize,
+  convertFileSize,
+  explodeFileParam,
+  spliteParam,
+  throwEmptyArgsException,
 } from '../utils';
 import { ArgumentParser } from '../core/utils/argument-parser';
 import { dateBetween } from './date';
@@ -28,17 +28,17 @@ import { dateBetween } from './date';
  * @param options - Optional parameters.
  */
 export const required: RuleCallBack = (input) => {
-	return {
-		passes: !!input && input != '',
-		value: input,
-	};
+  return {
+    passes: !!input && input != '',
+    value: input,
+  };
 };
 
 export const nullable: RuleCallBack = (input) => {
-	return {
-		passes: true,
-		value: input,
-	};
+  return {
+    passes: true,
+    value: input,
+  };
 };
 
 /**
@@ -51,17 +51,17 @@ export const nullable: RuleCallBack = (input) => {
  * ```
  */
 export const inInput: RuleCallBack = (input, params) => {
-	if (typeof params !== 'string') {
-		throwEmptyArgsException('in');
-	}
-	if (params === '') {
-		throw new Error('The in rule parameter must be a string');
-	}
-	const list = spliteParam(params as string);
-	return {
-		passes: list.includes(input as string | number),
-		value: input,
-	};
+  if (typeof params !== 'string') {
+    throwEmptyArgsException('in');
+  }
+  if (params === '') {
+    throw new Error('The in rule parameter must be a string');
+  }
+  const list = spliteParam(params as string);
+  return {
+    passes: list.includes(input as string | number),
+    value: input,
+  };
 };
 /**
  * Checks if the input is at most the specified size.
@@ -74,34 +74,34 @@ export const inInput: RuleCallBack = (input, params) => {
  * ```
  */
 export const size: RuleCallBack = (input, maxSize) => {
-	if (typeof maxSize !== 'number' && typeof maxSize !== 'string') {
-		throwEmptyArgsException('size');
-	}
-	if (isFile(input).passes) {
-		let numericValue, unit;
-		// eslint-disable-next-line no-useless-catch
-		try {
-			[numericValue, unit] = explodeFileParam(maxSize as string);
-		} catch (error) {
-			throw error;
-		}
-		let fileSize = calculateFileSize(input);
+  if (typeof maxSize !== 'number' && typeof maxSize !== 'string') {
+    throwEmptyArgsException('size');
+  }
+  if (isFile(input).passes) {
+    let numericValue, unit;
+    // eslint-disable-next-line no-useless-catch
+    try {
+      [numericValue, unit] = explodeFileParam(maxSize as string);
+    } catch (error) {
+      throw error;
+    }
+    let fileSize = calculateFileSize(input);
 
-		if (isNaN(fileSize)) {
-			fileSize = 0;
-		}
-		numericValue = convertFileSize(numericValue as number, unit as string);
-		return {
-			passes: fileSize <= numericValue,
-			value: input,
-		};
-	} else {
-		return {
-			passes: length(input, maxSize).passes,
-			value: input,
-			alias: 'length',
-		}; // Apply length rule for non-file inputs
-	}
+    if (isNaN(fileSize)) {
+      fileSize = 0;
+    }
+    numericValue = convertFileSize(numericValue as number, unit as string);
+    return {
+      passes: fileSize <= numericValue,
+      value: input,
+    };
+  } else {
+    return {
+      passes: length(input, maxSize).passes,
+      value: input,
+      alias: 'length',
+    }; // Apply length rule for non-file inputs
+  }
 };
 /**
  * Checks if the input is a boolean value.
@@ -113,29 +113,29 @@ export const size: RuleCallBack = (input, maxSize) => {
  * ```
  */
 export const isBoolean: RuleCallBack = (value) => {
-	if (typeof value === 'boolean') {
-		return { passes: true, value: Boolean(value) };
-	}
-	if (typeof value === 'string') {
-		value = value.toLowerCase();
-		if (
-			value === 'true' ||
-			value === 'false' ||
-			value === '0' ||
-			value === '1' ||
-			value === 'yes' ||
-			value === 'no'
-		) {
-			return {
-				passes: true,
-				value: value == 'true' || value == '1' || value == 'yes' ? true : false,
-			};
-		}
-	}
-	return {
-		passes: false,
-		value: value,
-	};
+  if (typeof value === 'boolean') {
+    return { passes: true, value: Boolean(value) };
+  }
+  if (typeof value === 'string') {
+    value = value.toLowerCase();
+    if (
+      value === 'true' ||
+      value === 'false' ||
+      value === '0' ||
+      value === '1' ||
+      value === 'yes' ||
+      value === 'no'
+    ) {
+      return {
+        passes: true,
+        value: value == 'true' || value == '1' || value == 'yes' ? true : false,
+      };
+    }
+  }
+  return {
+    passes: false,
+    value: value,
+  };
 };
 /**
  * Checks if the input is between the specified minimum and maximum values.
@@ -155,52 +155,52 @@ export const isBoolean: RuleCallBack = (value) => {
  * ```
  */
 export const between: RuleCallBack = (input, min_max, type) => {
-	if (typeof min_max !== 'number' && typeof min_max !== 'string') {
-		throwEmptyArgsException('between');
-	}
-	let [min, max] = spliteParam(min_max as string);
-	//for file
-	if (type === 'file') {
-		return {
-			passes: fileBetween(input, min_max, type).passes,
-			value: input,
-			alias: 'file_between',
-		};
-	}
-	// for date
-	if (type == 'date' || type == 'date-local') {
-		return {
-			passes: dateBetween(input, min_max).passes,
-			value: input,
-			alias: 'date_between',
-		};
-	}
+  if (typeof min_max !== 'number' && typeof min_max !== 'string') {
+    throwEmptyArgsException('between');
+  }
+  let [min, max] = spliteParam(min_max as string);
+  //for file
+  if (type === 'file') {
+    return {
+      passes: fileBetween(input, min_max, type).passes,
+      value: input,
+      alias: 'file_between',
+    };
+  }
+  // for date
+  if (type == 'date' || type == 'date-local') {
+    return {
+      passes: dateBetween(input, min_max).passes,
+      value: input,
+      alias: 'date_between',
+    };
+  }
 
-	if (type == 'number') {
-		min = Number(min);
-		max = Number(max);
-		if (input !== undefined && input !== '') {
-			if (isNumber(min).passes && isNumber(max).passes) {
-				if (!isNumber(input).passes) {
-					return {
-						passes: false,
-						value: input,
-					};
-				}
-				return {
-					passes: maxRule(input, max).passes && minRule(input, min).passes,
-					value: Number(input),
-					alias: 'number_between',
-				};
-			}
-		}
-	}
+  if (type == 'number') {
+    min = Number(min);
+    max = Number(max);
+    if (input !== undefined && input !== '') {
+      if (isNumber(min).passes && isNumber(max).passes) {
+        if (!isNumber(input).passes) {
+          return {
+            passes: false,
+            value: input,
+          };
+        }
+        return {
+          passes: maxRule(input, max).passes && minRule(input, min).passes,
+          value: Number(input),
+          alias: 'number_between',
+        };
+      }
+    }
+  }
 
-	return {
-		passes: stringBetween(input, min_max).passes,
-		value: input,
-		alias: 'string_between',
-	};
+  return {
+    passes: stringBetween(input, min_max).passes,
+    value: input,
+    alias: 'string_between',
+  };
 };
 /**
  * Checks if the input matches the specified regular expression.
@@ -213,15 +213,15 @@ export const between: RuleCallBack = (input, min_max, type) => {
  * ```
  */
 export const regex: RuleCallBack = (input, pattern) => {
-	if (!pattern || typeof pattern !== 'string') {
-		throw new Error('The regex rule argument must not be empty');
-	}
-	const parser = new ArgumentParser(pattern);
-	const regex = new RegExp(parser.replacePipes());
-	return {
-		passes: regex.test(input as string),
-		value: input,
-	};
+  if (!pattern || typeof pattern !== 'string') {
+    throw new Error('The regex rule argument must not be empty');
+  }
+  const parser = new ArgumentParser(pattern);
+  const regex = new RegExp(parser.replacePipes());
+  return {
+    passes: regex.test(input as string),
+    value: input,
+  };
 };
 
 /**
@@ -234,23 +234,23 @@ export const regex: RuleCallBack = (input, pattern) => {
  * ```
  */
 export const only: RuleCallBack = (input, param) => {
-	let passes = false;
-	if (param === 'string') {
-		if (typeof input !== 'string' || input.length === 0) {
-			passes = false;
-		} else {
-			passes = !/\d/.test(input);
-		}
-	} else {
-		if (param === 'digit') {
-			passes = isNumber(input).passes;
-		}
-	}
+  let passes = false;
+  if (param === 'string') {
+    if (typeof input !== 'string' || input.length === 0) {
+      passes = false;
+    } else {
+      passes = !/\d/.test(input);
+    }
+  } else {
+    if (param === 'digit') {
+      passes = isNumber(input).passes;
+    }
+  }
 
-	return {
-		passes: passes,
-		value: input,
-	}; // Invalid parameter, return false
+  return {
+    passes: passes,
+    value: input,
+  }; // Invalid parameter, return false
 };
 
 /**
@@ -264,20 +264,20 @@ export const only: RuleCallBack = (input, param) => {
  * ```
  */
 export const digitRule: RuleCallBack = (input, digitCount) => {
-	if (!isNumber(digitCount).passes) {
-		throw new Error('Digit rule parameter must be a number');
-	}
-	let passes = false;
-	if (isNumber(input).passes) {
-		const inputralue = String(input);
-		passes =
-			/^\d+$/.test(inputralue) && inputralue.length === Number(digitCount);
-	}
+  if (!isNumber(digitCount).passes) {
+    throw new Error('Digit rule parameter must be a number');
+  }
+  let passes = false;
+  if (isNumber(input).passes) {
+    const inputralue = String(input);
+    passes =
+      /^\d+$/.test(inputralue) && inputralue.length === Number(digitCount);
+  }
 
-	return {
-		passes: passes,
-		value: input,
-	};
+  return {
+    passes: passes,
+    value: input,
+  };
 };
 
 /**
@@ -291,21 +291,21 @@ export const digitRule: RuleCallBack = (input, digitCount) => {
  * ```
  */
 export const maxDigitRule: RuleCallBack = (input, maxDigitCount) => {
-	if (!isNumber(maxDigitCount).passes) {
-		throw new Error('Max_digit rule parameter must be a number');
-	}
+  if (!isNumber(maxDigitCount).passes) {
+    throw new Error('Max_digit rule parameter must be a number');
+  }
 
-	let passes = false;
-	if (isNumber(input).passes) {
-		const inputralue = String(input);
-		passes =
-			/^\d+$/.test(inputralue) && inputralue.length <= Number(maxDigitCount);
-	}
+  let passes = false;
+  if (isNumber(input).passes) {
+    const inputralue = String(input);
+    passes =
+      /^\d+$/.test(inputralue) && inputralue.length <= Number(maxDigitCount);
+  }
 
-	return {
-		passes: passes,
-		value: input,
-	};
+  return {
+    passes: passes,
+    value: input,
+  };
 };
 
 /**
@@ -319,21 +319,21 @@ export const maxDigitRule: RuleCallBack = (input, maxDigitCount) => {
  * ```
  */
 export const minDigitRule: RuleCallBack = (input, minDigitCount) => {
-	if (!isNumber(minDigitCount).passes) {
-		throw new Error('Min_digit rule parameter must be a number');
-	}
+  if (!isNumber(minDigitCount).passes) {
+    throw new Error('Min_digit rule parameter must be a number');
+  }
 
-	let passes = false;
-	if (isNumber(input).passes) {
-		const inputralue = String(input);
-		passes =
-			/^\d+$/.test(inputralue) && inputralue.length >= Number(minDigitCount);
-	}
+  let passes = false;
+  if (isNumber(input).passes) {
+    const inputralue = String(input);
+    passes =
+      /^\d+$/.test(inputralue) && inputralue.length >= Number(minDigitCount);
+  }
 
-	return {
-		passes: passes,
-		value: input,
-	};
+  return {
+    passes: passes,
+    value: input,
+  };
 };
 
 /**
@@ -348,21 +348,21 @@ export const minDigitRule: RuleCallBack = (input, minDigitCount) => {
  * ```
  */
 export const equals: RuleCallBack = (input, expected) => {
-	if (typeof expected !== 'number' && typeof expected !== 'string') {
-		throwEmptyArgsException('equals');
-	}
+  if (typeof expected !== 'number' && typeof expected !== 'string') {
+    throwEmptyArgsException('equals');
+  }
 
-	let passes = false;
-	if (isNumber(input).passes && isNumber(expected).passes) {
-		passes = Number(input) === Number(expected);
-	} else {
-		passes = String(input) === String(expected);
-	}
+  let passes = false;
+  if (isNumber(input).passes && isNumber(expected).passes) {
+    passes = Number(input) === Number(expected);
+  } else {
+    passes = String(input) === String(expected);
+  }
 
-	return {
-		passes,
-		value: input,
-	};
+  return {
+    passes,
+    value: input,
+  };
 };
 
 /**
@@ -377,19 +377,19 @@ export const equals: RuleCallBack = (input, expected) => {
  * ```
  */
 export const notEquals: RuleCallBack = (input, unexpected) => {
-	if (typeof unexpected !== 'number' && typeof unexpected !== 'string') {
-		throwEmptyArgsException('notEquals');
-	}
+  if (typeof unexpected !== 'number' && typeof unexpected !== 'string') {
+    throwEmptyArgsException('notEquals');
+  }
 
-	let equalsValue = false;
-	if (isNumber(input).passes && isNumber(unexpected).passes) {
-		equalsValue = Number(input) === Number(unexpected);
-	} else {
-		equalsValue = String(input) === String(unexpected);
-	}
+  let equalsValue = false;
+  if (isNumber(input).passes && isNumber(unexpected).passes) {
+    equalsValue = Number(input) === Number(unexpected);
+  } else {
+    equalsValue = String(input) === String(unexpected);
+  }
 
-	return {
-		passes: !equalsValue,
-		value: input,
-	};
+  return {
+    passes: !equalsValue,
+    value: input,
+  };
 };

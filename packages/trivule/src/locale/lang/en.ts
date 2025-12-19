@@ -37,8 +37,7 @@ export const en_messages: RulesMessages = {
   same: 'This field must be identical to the value of the :arg0 field',
   requiredIf:
     'The :field field is required when :arg0 field has the current value',
-  requiredWhen:
-    'The :field field is required when :arg0 fields are present',
+  requiredWhen: 'The :field field is required when :arg0 fields are present',
   time: 'This field must be a valid time.',
   start_with_string: 'The :field field must start with a letter',
   end_with_string: 'The :field field must end with a letter',
@@ -57,8 +56,10 @@ export const en_messages: RulesMessages = {
   only: 'The format of this field is not accepted, as it contains non-allowed characters',
   mimes: 'This file format is not supported',
   digit: 'This field must be a numeric value with exactly :arg0 digits',
-  min_digit: 'This field must be a numeric value with a minimum of :arg0 digits',
-  max_digit: 'This field must be a numeric value with a maximum of :arg0 digits',
+  min_digit:
+    'This field must be a numeric value with a minimum of :arg0 digits',
+  max_digit:
+    'This field must be a numeric value with a maximum of :arg0 digits',
   less_than: 'This field must be a numeric value less than :arg0',
   lthan: 'This field must be a numeric value less than :arg0',
   greater_than: 'This field must be a numeric value greater than :arg0',

@@ -1,10 +1,10 @@
 import { RuleCallBack } from '../types';
 import {
-	convertFileSize,
-	explodeFileParam,
-	fileToArray,
-	spliteParam,
-	throwEmptyArgsException,
+  convertFileSize,
+  explodeFileParam,
+  fileToArray,
+  spliteParam,
+  throwEmptyArgsException,
 } from '../utils';
 
 /**
@@ -17,23 +17,23 @@ import {
  * ```
  */
 export const isFile: RuleCallBack = (value) => {
-	const _isFile = (f: unknown) => {
-		return f instanceof File || f instanceof Blob || f instanceof FileList;
-	};
-	let passes = false;
-	if (
-		Array.isArray(value) &&
-		!!value.length &&
-		value.every((f) => _isFile(f))
-	) {
-		passes = true;
-	}
-	passes = _isFile(value) || passes;
+  const _isFile = (f: unknown) => {
+    return f instanceof File || f instanceof Blob || f instanceof FileList;
+  };
+  let passes = false;
+  if (
+    Array.isArray(value) &&
+    !!value.length &&
+    value.every((f) => _isFile(f))
+  ) {
+    passes = true;
+  }
+  passes = _isFile(value) || passes;
 
-	return {
-		passes: passes,
-		value: value,
-	};
+  return {
+    passes: passes,
+    value: value,
+  };
 };
 
 /**
@@ -48,35 +48,35 @@ export const isFile: RuleCallBack = (value) => {
  * @throws If the `maxSize` parameter is not in a valid format, an error is thrown.
  */
 export const maxFileSize: RuleCallBack = (input, maxSize) => {
-	const files = fileToArray(input);
+  const files = fileToArray(input);
 
-	if (!files.length) {
-		return {
-			value: input,
-			passes: false,
-		};
-	}
-	const passes = files.every((input) => {
-		if (isFile(input).passes) {
-			let numericValue, unit;
-			// eslint-disable-next-line no-useless-catch
-			try {
-				[numericValue, unit] = explodeFileParam(maxSize as string);
-			} catch (error) {
-				throw error;
-			}
-			return (
-				input.size <= convertFileSize(numericValue as number, unit as string)
-			);
-		} else {
-			return true;
-		}
-	});
+  if (!files.length) {
+    return {
+      value: input,
+      passes: false,
+    };
+  }
+  const passes = files.every((input) => {
+    if (isFile(input).passes) {
+      let numericValue, unit;
+      // eslint-disable-next-line no-useless-catch
+      try {
+        [numericValue, unit] = explodeFileParam(maxSize as string);
+      } catch (error) {
+        throw error;
+      }
+      return (
+        input.size <= convertFileSize(numericValue as number, unit as string)
+      );
+    } else {
+      return true;
+    }
+  });
 
-	return {
-		passes: passes,
-		value: files,
-	};
+  return {
+    passes: passes,
+    value: files,
+  };
 };
 /**
  * A validation rule that checks if the size of a file is greater than or equal to the specified minimum size.
@@ -91,39 +91,39 @@ export const maxFileSize: RuleCallBack = (input, maxSize) => {
  * @throws An error if the minSize parameter is not a valid string in the format '<number><unit>'.
  */
 export const minFileSize: RuleCallBack = (input, minSize) => {
-	const files = fileToArray(input);
-	if (!files.length) {
-		return {
-			value: input,
-			passes: false,
-		};
-	}
-	if (typeof minSize !== 'number' && typeof minSize !== 'string') {
-		throwEmptyArgsException(
-			'minFileSize',
-			'The minimum size rule argument is required',
-		);
-	}
-	const passses = files.every((input) => {
-		if (isFile(input).passes) {
-			let numericValue, unit;
-			// eslint-disable-next-line no-useless-catch
-			try {
-				[numericValue, unit] = explodeFileParam(minSize as string);
-			} catch (error) {
-				throw error;
-			}
-			return (
-				input.size >= convertFileSize(numericValue as number, unit as string)
-			);
-		} else {
-			return false;
-		}
-	});
-	return {
-		passes: passses,
-		value: files,
-	};
+  const files = fileToArray(input);
+  if (!files.length) {
+    return {
+      value: input,
+      passes: false,
+    };
+  }
+  if (typeof minSize !== 'number' && typeof minSize !== 'string') {
+    throwEmptyArgsException(
+      'minFileSize',
+      'The minimum size rule argument is required',
+    );
+  }
+  const passses = files.every((input) => {
+    if (isFile(input).passes) {
+      let numericValue, unit;
+      // eslint-disable-next-line no-useless-catch
+      try {
+        [numericValue, unit] = explodeFileParam(minSize as string);
+      } catch (error) {
+        throw error;
+      }
+      return (
+        input.size >= convertFileSize(numericValue as number, unit as string)
+      );
+    } else {
+      return false;
+    }
+  });
+  return {
+    passes: passses,
+    value: files,
+  };
 };
 
 /**
@@ -137,24 +137,24 @@ export const minFileSize: RuleCallBack = (input, minSize) => {
  * ```
  */
 export const fileBetween: RuleCallBack = (input, min_max) => {
-	if (typeof min_max !== 'string') {
-		throwEmptyArgsException('between');
-	}
-	const [min, max] = spliteParam(min_max as string);
-	const files = fileToArray(input);
-	if (!files.length) {
-		return {
-			value: input,
-			passes: false,
-		};
-	}
-	const passes = files.every((input) => {
-		return maxFileSize(input, max).passes && minFileSize(input, min).passes;
-	});
-	return {
-		passes: passes,
-		value: input,
-	};
+  if (typeof min_max !== 'string') {
+    throwEmptyArgsException('between');
+  }
+  const [min, max] = spliteParam(min_max as string);
+  const files = fileToArray(input);
+  if (!files.length) {
+    return {
+      value: input,
+      passes: false,
+    };
+  }
+  const passes = files.every((input) => {
+    return maxFileSize(input, max).passes && minFileSize(input, min).passes;
+  });
+  return {
+    passes: passes,
+    value: input,
+  };
 };
 
 /**
@@ -169,54 +169,54 @@ export const fileBetween: RuleCallBack = (input, min_max) => {
  * ```
  */
 export const isMimes: RuleCallBack = (input, param) => {
-	if (typeof param !== 'string') {
-		throwEmptyArgsException('mimes');
-	}
-	if (param === '') {
-		throwEmptyArgsException('mimes');
-	}
+  if (typeof param !== 'string') {
+    throwEmptyArgsException('mimes');
+  }
+  if (param === '') {
+    throwEmptyArgsException('mimes');
+  }
 
-	const files = fileToArray(input);
-	if (!files.length) {
-		return {
-			value: input,
-			passes: false,
-		};
-	}
+  const files = fileToArray(input);
+  if (!files.length) {
+    return {
+      value: input,
+      passes: false,
+    };
+  }
 
-	const passes = files.every((input) => {
-		if (isFile(input).passes) {
-			const file = input as File;
+  const passes = files.every((input) => {
+    if (isFile(input).passes) {
+      const file = input as File;
 
-			const allowedMimes =
-				(param as string).split(',').map((m: string) => m.trim()) ?? [];
+      const allowedMimes =
+        (param as string).split(',').map((m: string) => m.trim()) ?? [];
 
-			const passes = allowedMimes.some((allowedMime) => {
-				allowedMime = allowedMime.replace(/\s/g, '');
-				if (
-					allowedMime === '*' ||
-					file.name.endsWith(allowedMime) ||
-					allowedMime == '' ||
-					file.type == ''
-				) {
-					return true; // Wildcard (*) matches any MIME type
-				} else if (allowedMime.endsWith('/*')) {
-					const group = allowedMime.slice(0, -2); // Remove the trailing /*
-					return file.type.startsWith(group);
-				} else if (allowedMime.startsWith('*.')) {
-					const ext = allowedMime.substring(2); // get extension without the "*."
-					return file.name.endsWith(ext);
-				} else {
-					return file.type === allowedMime;
-				}
-			});
-			return passes;
-		} else {
-			return false;
-		}
-	});
-	return {
-		passes: passes,
-		value: input,
-	};
+      const passes = allowedMimes.some((allowedMime) => {
+        allowedMime = allowedMime.replace(/\s/g, '');
+        if (
+          allowedMime === '*' ||
+          file.name.endsWith(allowedMime) ||
+          allowedMime == '' ||
+          file.type == ''
+        ) {
+          return true; // Wildcard (*) matches any MIME type
+        } else if (allowedMime.endsWith('/*')) {
+          const group = allowedMime.slice(0, -2); // Remove the trailing /*
+          return file.type.startsWith(group);
+        } else if (allowedMime.startsWith('*.')) {
+          const ext = allowedMime.substring(2); // get extension without the "*."
+          return file.name.endsWith(ext);
+        } else {
+          return file.type === allowedMime;
+        }
+      });
+      return passes;
+    } else {
+      return false;
+    }
+  });
+  return {
+    passes: passes,
+    value: input,
+  };
 };
