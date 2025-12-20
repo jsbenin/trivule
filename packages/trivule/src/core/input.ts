@@ -9,6 +9,7 @@ import {
   ValidatableInput,
 } from '../types';
 import { getHTMLElementBySelector, ruleKey } from '../utils';
+import { TR_ATTRIBUTES } from '../constants';
 import { InputRule } from './utils/input-rule';
 import { TrParameter } from './utils/parameter';
 import { validate } from './validate';
@@ -540,8 +541,14 @@ export class TrivuleInput {
     this.invalidClass = this.param.invalidClass ?? this.invalidClass;
     this.validClass = this.param.validClass ?? this.validClass;
 
-    this.invalidClass = this.getAttrData('invalid-class', this.invalidClass);
-    this.validClass = this.getAttrData('valid-class', this.validClass);
+    this.invalidClass = this.getAttrData(
+      TR_ATTRIBUTES.INVALID_CLASS,
+      this.invalidClass,
+    );
+    this.validClass = this.getAttrData(
+      TR_ATTRIBUTES.VALID_CLASS,
+      this.validClass,
+    );
   }
 
   protected setValidationClass() {
@@ -626,13 +633,16 @@ export class TrivuleInput {
     this._setTrValidationClass();
 
     // Read debounce from HTML attribute
-    const debounce = this.getAttrData<string | number>('debounce');
+    const debounce = this.getAttrData<string | number>(TR_ATTRIBUTES.DEBOUNCE);
     if (debounce !== null) {
       this.param.debounce = Number(debounce);
     }
 
     //Set the validation rules
-    const rules: string = this.getAttrData('rules', this.param.rules);
+    const rules: string = this.getAttrData(
+      TR_ATTRIBUTES.RULES,
+      this.param.rules as string | string[],
+    );
 
     if (rules) {
       const customMessages: Record<string, string> | null = {};
@@ -658,7 +668,10 @@ export class TrivuleInput {
    * Parses @v:events="submit|input|blur" format
    */
   private _initTriggerEvents() {
-    const attrEvents: string | null = this.getAttrData('events', null);
+    const attrEvents: string | null = this.getAttrData(
+      TR_ATTRIBUTES.EVENTS,
+      null,
+    );
 
     if (attrEvents) {
       const events = this.eventToArray(attrEvents).filter(

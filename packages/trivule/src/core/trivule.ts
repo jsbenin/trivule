@@ -11,6 +11,7 @@ import { TrParameter } from './utils/parameter';
 import { TrivuleForm } from './form';
 import { TrivuleInput } from './input';
 import { attrSelector } from '../utils';
+import { TR_ATTRIBUTES } from '../constants';
 /**
  *
  * Initializes Trivule and applies form validation to all forms in the document.
@@ -62,7 +63,7 @@ export class Trivule {
     Trivule._instance.parameter.configure(finalConfig);
 
     Trivule._instance._trForms = [];
-    const formAttributeSelector = `form${attrSelector('form')}`;
+    const formAttributeSelector = `form${attrSelector(TR_ATTRIBUTES.FORM)}`;
 
     const formsToValidate = document.querySelectorAll<HTMLFormElement>(
       `${formAttributeSelector}`,

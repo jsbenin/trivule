@@ -18,10 +18,11 @@ import {
 } from '../types';
 import { isNumber } from '../rules';
 import {
+  attrSelector,
   getHTMLElementBySelector,
   transformToArray,
-  attrSelector,
 } from '../utils';
+import { TR_ATTRIBUTES, TR_EVENTS } from '../constants';
 import { TrivuleInput } from './input';
 import { TrParameter } from './utils/parameter';
 
@@ -128,7 +129,7 @@ export class TrivuleForm {
     }
     if (!submitButton && this.container) {
       submitButton = this.container?.querySelector<HTMLButtonElement>(
-        attrSelector('submit'),
+        attrSelector(TR_ATTRIBUTES.SUBMIT),
       );
     }
 
@@ -206,7 +207,7 @@ export class TrivuleForm {
         //add class en disabled dataset
         this._trDisabledClass = this.getAttrData(
           this.submitButton,
-          'disabled-class',
+          TR_ATTRIBUTES.DISABLED_CLASS,
           this._trDisabledClass,
         );
         const classArray: string[] = this._trDisabledClass.split(' ');
@@ -246,7 +247,7 @@ export class TrivuleForm {
         //add class en enabled dataset
         this._trEnabledClass = this.getAttrData(
           this.submitButton,
-          'enabled-class',
+          TR_ATTRIBUTES.ENABLED_CLASS,
           this._trEnabledClass,
         );
         const classArray: string[] = this._trEnabledClass.split(' ');
@@ -337,28 +338,30 @@ export class TrivuleForm {
    * Handle validation before process submtion
    */
   private _onSubmit() {
-    const validateCallback = () => {
+    const validateCallback = (e?: Event) => {
       const results: boolean[] = [];
       this.each((trInput) => {
         results.push(trInput.validate());
       });
 
-      // Test whether each rule passed
-      if (!results.every((passed) => passed)) {
-        //submitEvent.preventDefault();
+      // Update form validity state
+      const isPasses = results.every((passed) => passed);
+      this.valid = isPasses;
+
+      if (!isPasses && e) {
+        e.preventDefault();
       }
 
-      return this._passed;
+      return isPasses;
     };
+
     if (this.submitButton) {
-      this.submitButton.addEventListener('click', () => {
-        validateCallback();
+      this.submitButton.addEventListener('click', (e) => {
+        validateCallback(e);
       });
     }
     this.on('submit', (e: Event) => {
-      if (!validateCallback()) {
-        e.preventDefault();
-      }
+      validateCallback(e);
     });
   }
 
@@ -434,7 +437,7 @@ export class TrivuleForm {
    * ```
    */
   onError(fn: (data: FormErrorData) => void): this {
-    this.on('tr.form.fails', () => {
+    this.on(TR_EVENTS.FORM.FAILS, () => {
       const data = this._getErrorData();
       fn(data);
     });
@@ -452,7 +455,7 @@ export class TrivuleForm {
    * ```
    */
   onSuccess(fn: (data: FormSuccessData) => void): this {
-    this.on('tr.form.passes', () => {
+    this.on(TR_EVENTS.FORM.PASSES, () => {
       const data = this._getSuccessData();
       fn(data);
     });
@@ -460,20 +463,9 @@ export class TrivuleForm {
   }
 
   /**
-   * Get success data for callback
+   * Get form data for callbacks
    */
-  private _getSuccessData(): FormSuccessData {
-    const values: Record<string, InputValueType> = {};
-    this.each((input) => {
-      values[input.name] = input.value;
-    });
-    return { values };
-  }
-
-  /**
-   * Get error data for callback
-   */
-  private _getErrorData(): FormErrorData {
+  private _getFormData() {
     const values: Record<string, InputValueType> = {};
     const errors: FormFieldError[] = [];
 
@@ -489,6 +481,23 @@ export class TrivuleForm {
       }
     });
 
+    return { values, errors };
+  }
+
+  /**
+   * Get success data for callback
+   */
+  private _getSuccessData(): FormSuccessData {
+    const { values } = this._getFormData();
+    return { values };
+  }
+
+  /**
+   * Get error data for callback
+   */
+  private _getErrorData(): FormErrorData {
+    const { values, errors } = this._getFormData();
+
     return {
       errors,
       firstError: errors[0],
@@ -500,7 +509,7 @@ export class TrivuleForm {
    * @deprecated Use onError instead
    */
   onFails(fn: TrivuleFormHandler<TrivuleForm>): void {
-    this.on('tr.form.fails', (e) => {
+    this.on(TR_EVENTS.FORM.FAILS, (e) => {
       this.__call(fn, (e as CustomEvent).detail);
     });
   }
@@ -509,7 +518,7 @@ export class TrivuleForm {
    * @deprecated Use onSuccess instead
    */
   onPasses(fn: TrivuleFormHandler<TrivuleForm>): void {
-    this.on('tr.form.passes', (e) => {
+    this.on(TR_EVENTS.FORM.PASSES, (e) => {
       this.__call(fn, (e as CustomEvent).detail);
     });
   }
@@ -526,7 +535,7 @@ export class TrivuleForm {
    * ```
    */
   onValidate(fn: TrivuleFormHandler<TrivuleForm>): void {
-    this.on('tr.form.validate', (e) => {
+    this.on(TR_EVENTS.FORM.VALIDATE, (e) => {
       this.__call(fn, (e as CustomEvent).detail);
     });
   }
@@ -545,7 +554,7 @@ export class TrivuleForm {
    * ```
    */
   observeChanges(fn?: EventCallback): void {
-    this.on('tr.form.updated', () => {
+    this.on(TR_EVENTS.FORM.UPDATED, () => {
       this._initTrivuleInputs();
       this.__call(fn, this);
     });
@@ -559,7 +568,7 @@ export class TrivuleForm {
    * ```
    */
   update() {
-    this.emit('tr.form.updated', this);
+    this.emit(TR_EVENTS.FORM.UPDATED, this);
   }
 
   /**
@@ -570,7 +579,9 @@ export class TrivuleForm {
       inputs = inputs
         ? inputs
         : Array.from(
-            this.container.querySelectorAll<HTMLElement>(attrSelector('rules')),
+            this.container.querySelectorAll<HTMLElement>(
+              attrSelector(TR_ATTRIBUTES.RULES),
+            ),
           );
       inputs.forEach((el, index) => this._bootInputs({ selector: el }, index));
     }
@@ -691,7 +702,12 @@ export class TrivuleForm {
       this._passed = boolean;
       this.__calledCount++;
     }
-    this.emit('tr.form.validate', this);
+    if (this._passed) {
+      this.emit(TR_EVENTS.FORM.PASSES);
+    } else {
+      this.emit(TR_EVENTS.FORM.FAILS);
+    }
+    this.emit(TR_EVENTS.FORM.VALIDATE, this);
   }
   /**
    * Get the current validity state of the TrivuleForm.
@@ -773,7 +789,7 @@ export class TrivuleForm {
   private _initTriggerEvents() {
     const attrEvents: string | null = this.getAttrData(
       this.container,
-      'events',
+      TR_ATTRIBUTES.EVENTS,
       null,
     );
 
