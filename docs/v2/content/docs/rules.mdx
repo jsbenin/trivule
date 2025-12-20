@@ -359,6 +359,22 @@ This rule checks if the input is not empty (not null, not undefined, not empty s
 ``` 
 
 ---
+
+### `same`
+
+The `same` rule verifies that the input value is identical to the value of another field in the same form.
+
+**Usage:** Ensure that two fields match, such as a password and its confirmation.
+
+**Example:**
+```html
+<form>
+  <input name="password" type="password" />
+  <input name="password_confirmation" type="password" @v:rules="same:password" />
+</form>
+```
+
+---
  
 ### `in`
  

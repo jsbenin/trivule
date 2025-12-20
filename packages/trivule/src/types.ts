@@ -57,7 +57,8 @@ export type Rule =
   | 'date_between'
   | 'number_between'
   | 'equals'
-  | 'not_equals';
+  | 'not_equals'
+  | 'same';
 
 export type ITrivuleInputCallback<P> = (param: P) => void;
 
@@ -127,10 +128,15 @@ export interface InputChangeEvent {
   details: InputEventDetails;
 }
 
+export type ValidatableElement =
+  | HTMLInputElement
+  | HTMLTextAreaElement
+  | HTMLSelectElement;
+
 /**
  * Rule callback
  */
-export interface RuleCallBack<E = unknown> {
+export interface RuleCallBack<E = ValidatableElement> {
   (
     input: unknown,
     param?: RuleParam,
@@ -140,7 +146,7 @@ export interface RuleCallBack<E = unknown> {
 }
 
 export type RulesBag = {
-  [ruleName in Rule]: RuleCallBack;
+  [ruleName in Rule]: RuleCallBack<ValidatableElement>;
 };
 
 export type RulesMessages = {

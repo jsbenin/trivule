@@ -43,6 +43,7 @@ import {
   maxDigitRule,
   greaterthan,
   numberBetween,
+  same,
 } from '../rules';
 import { dateAfter, dateBefore, isDate, isTime } from '../rules/date';
 import { en_messages } from '../locale/lang/en';
@@ -105,6 +106,7 @@ export class RuleRegistry {
     file_between: fileBetween,
     date_between: dateBetween,
     number_between: numberBetween,
+    same: same,
   };
 
   private _messages: RulesMessages = { ...en_messages };

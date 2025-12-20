@@ -4,6 +4,7 @@ import {
   Rule,
   RulesMessages,
   RuleType,
+  ValidatableElement,
 } from '../types';
 
 import { I18nResolver } from './i18n';
@@ -21,6 +22,10 @@ export type ValidationOptions = {
    * The attribute name used in error messages
    */
   attribute?: string;
+  /**
+   * The input element being validated
+   */
+  element?: ValidatableElement;
 };
 
 type ReturnType = { valid: boolean; errors: Record<string, string> };
@@ -66,7 +71,7 @@ export function validate(
       throw new Error(`The rule ${ruleName} is not defined`);
     }
 
-    const state = ruleCallback(value, params, inputType);
+    const state = ruleCallback(value, params, inputType, options?.element);
 
     value = state.value as InputValueType;
     inputType = state.type ?? inputType;

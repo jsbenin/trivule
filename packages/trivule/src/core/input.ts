@@ -7,6 +7,7 @@ import {
   TrivuleAttribute,
   TrivuleInputParms,
   ValidatableInput,
+  ValidatableElement,
 } from '../types';
 import { getHTMLElementBySelector, ruleKey } from '../utils';
 import { TR_ATTRIBUTES } from '../constants';
@@ -36,7 +37,7 @@ export class TrivuleInput {
    */
   protected _passed = false;
   /** Input element which must be validate */
-  protected inputElement!: HTMLInputElement;
+  protected inputElement!: ValidatableElement;
   /** Error feedback element */
   protected feedbackElement: HTMLElement | null = null;
 
@@ -266,6 +267,7 @@ export class TrivuleInput {
     const { valid, errors } = validate(this.rules.all(), this.value, {
       type: this._type,
       attribute: this._messageAttribute,
+      element: this.inputElement,
     });
 
     this.errors = errors;
@@ -422,7 +424,7 @@ export class TrivuleInput {
       );
     }
 
-    this.inputElement = inputElement as HTMLInputElement;
+    this.inputElement = inputElement as ValidatableElement;
     this.param.type = this.inputElement.type;
     if (this.inputElement.tagName.toLowerCase() === 'textarea') {
       this.param.type = 'text';
@@ -437,7 +439,7 @@ export class TrivuleInput {
 
   get value() {
     if (this.inputElement.type.toLowerCase() === 'file') {
-      return this.inputElement.files ?? null;
+      return (this.inputElement as HTMLInputElement).files ?? null;
     }
     return this.inputElement.value;
   }
@@ -712,7 +714,7 @@ export class TrivuleInput {
    * Gets the input element associated with this TrivuleInput
    * @returns The HTML input element
    */
-  getInputElement(): HTMLInputElement {
+  getInputElement(): ValidatableElement {
     return this.inputElement;
   }
 }

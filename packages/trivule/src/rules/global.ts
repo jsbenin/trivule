@@ -393,3 +393,42 @@ export const notEquals: RuleCallBack = (input, unexpected) => {
     value: input,
   };
 };
+
+/**
+ * Checks if the input is identical to another field.
+ *
+ * @param input - The input to check.
+ * @param otherField - The name of the other field to compare against.
+ * @param type - The input type.
+ * @param element - The current input element (passed by TrivuleInput).
+ * @example
+ * ```html
+ * <input name="password_confirmation" @v:rules="same:password" />
+ * ```
+ */
+export const same: RuleCallBack<ValidatableElement> = (
+  input,
+  otherField,
+  type,
+  element,
+) => {
+  if (!otherField || typeof otherField !== 'string') {
+    throwEmptyArgsException('same');
+  }
+
+  let passes = false;
+  if (element && element.form) {
+    const target = element.form.elements.namedItem(otherField) as
+      | HTMLInputElement
+      | HTMLTextAreaElement
+      | HTMLSelectElement;
+    if (target) {
+      passes = String(input) === String(target.value);
+    }
+  }
+
+  return {
+    passes,
+    value: input,
+  };
+};
