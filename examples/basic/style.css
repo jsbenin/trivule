@@ -1,0 +1,32 @@
+@import "tailwindcss";
+@plugin "tailwindcss-animate";
+
+
+@layer base {
+    body {
+        @apply bg-slate-50 text-slate-900 font-sans;
+    }
+}
+
+@layer components {
+    input, textarea, select {
+        @apply block w-full px-4 py-3 rounded-xl border border-slate-200 transition-all duration-200 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none bg-white;
+    }
+
+    button {
+        @apply w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-200 shadow-lg shadow-indigo-100 active:scale-[0.98];
+    }
+
+    /* Trivule specific styles */
+    .is-invalid {
+        @apply border-red-500 focus:ring-red-200 focus:border-red-500;
+    }
+
+    .is-valid {
+        @apply border-emerald-500 focus:ring-emerald-200 focus:border-emerald-500;
+    }
+
+    .feedback-message {
+        @apply text-red-500 text-sm mt-1.5 ml-1 animate-in fade-in slide-in-from-top-1 duration-200;
+    }
+}

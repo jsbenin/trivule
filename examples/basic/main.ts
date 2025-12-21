@@ -1,3 +1,4 @@
+import './style.css';
 import { Trivule, FormErrorData } from 'trivule';
 
 declare global {
@@ -8,7 +9,6 @@ declare global {
 
 window.Trivule = Trivule;
 Trivule.init();
-console.log('Trivule initialized successfully!');
 
 const form = Trivule.form('form');
 
