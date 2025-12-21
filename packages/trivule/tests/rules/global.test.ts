@@ -1,3 +1,4 @@
+import { describe, it, expect, beforeEach, test } from 'vitest';
 import {
   size,
   between,
@@ -10,7 +11,10 @@ import {
   digitRule,
   equals,
   notEquals,
+  same,
+  requiredIf,
 } from '../../src/rules';
+import { JSDOM } from 'jsdom';
 
 describe('required', () => {
   it('should return false for undefined input', () => {
@@ -263,5 +267,121 @@ describe('digitRule', () => {
     expect(() => digitRule(123, 'abc')).toThrowError(
       'Digit rule parameter must be a number',
     );
+  });
+});
+
+describe('same rule', () => {
+  let dom: JSDOM;
+  let form: HTMLFormElement;
+  let input1: HTMLInputElement;
+  let input2: HTMLInputElement;
+
+  beforeEach(() => {
+    dom = new JSDOM('<!DOCTYPE html><html><body></body></html>');
+    global.document = dom.window.document as any;
+    global.window = dom.window as any;
+    global.HTMLElement = dom.window.HTMLElement as any;
+
+    form = document.createElement('form');
+    input1 = document.createElement('input');
+    input1.name = 'password';
+    input1.value = 'secret123';
+
+    input2 = document.createElement('input');
+    input2.name = 'password_confirmation';
+
+    form.appendChild(input1);
+    form.appendChild(input2);
+    document.body.appendChild(form);
+  });
+
+  it('should pass when values are identical', () => {
+    const result = same('secret123', 'password', 'text', input2);
+    expect(result.passes).toBe(true);
+  });
+
+  it('should fail when values are different', () => {
+    const result = same('different', 'password', 'text', input2);
+    expect(result.passes).toBe(false);
+  });
+
+  it('should fail when target element does not exist', () => {
+    const result = same('secret123', 'non_existent', 'text', input2);
+    expect(result.passes).toBe(false);
+  });
+
+  it('should throw error when otherField argument is missing', () => {
+    expect(() => same('secret123', undefined as any, 'text', input2)).toThrow();
+  });
+});
+
+describe('required_if rule', () => {
+  let dom: JSDOM;
+  let form: HTMLFormElement;
+  let otherInput: HTMLInputElement;
+  let mainInput: HTMLInputElement;
+
+  beforeEach(() => {
+    dom = new JSDOM('<!DOCTYPE html><html><body></body></html>');
+    global.document = dom.window.document as any;
+    global.window = dom.window as any;
+    global.HTMLElement = dom.window.HTMLElement as any;
+
+    form = document.createElement('form');
+
+    otherInput = document.createElement('input');
+    otherInput.name = 'type';
+    otherInput.value = 'company';
+
+    mainInput = document.createElement('input');
+    mainInput.name = 'vat_number';
+
+    form.appendChild(otherInput);
+    form.appendChild(mainInput);
+    document.body.appendChild(form);
+  });
+
+  it('should fail if condition is met and input is empty', () => {
+    const result = requiredIf('', 'type,company', 'text', mainInput);
+    expect(result.passes).toBe(false);
+  });
+
+  it('should pass if condition is met and input is not empty', () => {
+    const result = requiredIf(
+      'CHE-123.456.789',
+      'type,company',
+      'text',
+      mainInput,
+    );
+    expect(result.passes).toBe(true);
+  });
+
+  it('should pass if condition is NOT met and input is empty', () => {
+    otherInput.value = 'individual';
+    const result = requiredIf('', 'type,company', 'text', mainInput);
+    expect(result.passes).toBe(true);
+  });
+
+  it('should support multiple values for the condition', () => {
+    // Test with first value
+    otherInput.value = 'val1';
+    let result = requiredIf('', 'type,val1,val2', 'text', mainInput);
+    expect(result.passes).toBe(false);
+
+    // Test with second value
+    otherInput.value = 'val2';
+    result = requiredIf('', 'type,val1,val2', 'text', mainInput);
+    expect(result.passes).toBe(false);
+
+    // Test with non-matching value
+    otherInput.value = 'other';
+    result = requiredIf('', 'type,val1,val2', 'text', mainInput);
+    expect(result.passes).toBe(true);
+  });
+
+  it('should throw error if params are missing', () => {
+    expect(() =>
+      requiredIf('', undefined as any, 'text', mainInput),
+    ).toThrow();
   });
 });

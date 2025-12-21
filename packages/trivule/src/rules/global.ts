@@ -7,7 +7,7 @@ import {
   stringBetween,
   fileBetween,
 } from '.';
-import { RuleCallBack } from '../types';
+import { RuleCallBack, ValidatableElement } from '../types';
 import {
   calculateFileSize,
   convertFileSize,
@@ -429,6 +429,54 @@ export const same: RuleCallBack<ValidatableElement> = (
 
   return {
     passes,
+    value: input,
+  };
+};
+
+/**
+ * Checks if the input is required if another field has a specific value.
+ *
+ * @param input - The input to check.
+ * @param params - The name of the other field and the value(s) it should have, separated by commas.
+ * @param type - The input type.
+ * @param element - The current input element (passed by TrivuleInput).
+ * @example
+ * ```html
+ * <input name="other_field" id="other_field" />
+ * <input name="my_field" @v:rules="required_if:other_field,value1,value2" />
+ * ```
+ */
+export const requiredIf: RuleCallBack<ValidatableElement> = (
+  input,
+  params,
+  type,
+  element,
+) => {
+  if (!params || typeof params !== 'string') {
+    throwEmptyArgsException('required_if');
+  }
+
+  const [otherFieldName, ...values] = spliteParam(params) as string[];
+
+  let isRequired = false;
+  if (element && element.form) {
+    const target = element.form.elements.namedItem(otherFieldName) as
+      | HTMLInputElement
+      | HTMLTextAreaElement
+      | HTMLSelectElement;
+
+    if (target) {
+      const targetValue = String(target.value);
+      isRequired = values.includes(targetValue);
+    }
+  }
+
+  if (isRequired) {
+    return required(input, undefined, type, element);
+  }
+
+  return {
+    passes: true,
     value: input,
   };
 };

@@ -360,6 +360,31 @@ This rule checks if the input is not empty (not null, not undefined, not empty s
 
 ---
 
+### `required_if`
+
+The `required_if` rule checks if the input is required only if another field has a specific value.
+
+**Usage:** Make a field required conditionally based on another field's value.
+
+**Example:**
+```html
+<form>
+  <select name="type">
+    <option value="individual">Individual</option>
+    <option value="company">Company</option>
+  </select>
+  <!-- vat_number is required only if type is 'company' -->
+  <input name="vat_number" @v:rules="required_if:type,company" />
+</form>
+```
+
+You can also specify multiple values:
+```html
+<input name="field" @v:rules="required_if:other_field,val1,val2" />
+```
+
+---
+
 ### `same`
 
 The `same` rule verifies that the input value is identical to the value of another field in the same form.

@@ -44,6 +44,7 @@ import {
   greaterthan,
   numberBetween,
   same,
+  requiredIf,
 } from '../rules';
 import { dateAfter, dateBefore, isDate, isTime } from '../rules/date';
 import { en_messages } from '../locale/lang/en';
@@ -107,6 +108,7 @@ export class RuleRegistry {
     date_between: dateBetween,
     number_between: numberBetween,
     same: same,
+    required_if: requiredIf,
   };
 
   private _messages: RulesMessages = { ...en_messages };

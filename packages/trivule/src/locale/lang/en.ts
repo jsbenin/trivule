@@ -35,7 +35,7 @@ export const en_messages: RulesMessages = {
   before: 'The date must be before (:arg0)',
   after: 'The date must be after (:arg0)',
   same: 'This field must be identical to the value of the :arg0 field',
-  requiredIf:
+  required_if:
     'The :field field is required when :arg0 field has the current value',
   requiredWhen: 'The :field field is required when :arg0 fields are present',
   time: 'This field must be a valid time.',

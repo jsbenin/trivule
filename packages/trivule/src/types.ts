@@ -58,7 +58,8 @@ export type Rule =
   | 'number_between'
   | 'equals'
   | 'not_equals'
-  | 'same';
+  | 'same'
+  | 'required_if';
 
 export type ITrivuleInputCallback<P> = (param: P) => void;
 
