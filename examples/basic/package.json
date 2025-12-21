@@ -3,16 +3,22 @@
     "version": "1.0.0",
     "private": true,
     "description": "Basic Trivule form validation example",
+    "type": "module",
     "scripts": {
         "dev": "vite",
         "build": "vite build",
         "preview": "vite preview"
     },
     "dependencies": {
+        "@tailwindcss/vite": "^4.1.18",
+        "tailwindcss": "^4.1.18",
         "trivule": "workspace:*"
     },
     "devDependencies": {
-        "vite": "^4.3.2",
-        "typescript": "^5.4.5"
+        "autoprefixer": "^10.4.19",
+        "postcss": "^8.4.38",
+        "tailwindcss-animate": "^1.0.7",
+        "typescript": "^5.4.5",
+        "vite": "^7"
     }
 }
