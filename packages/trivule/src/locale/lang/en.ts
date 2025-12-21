@@ -37,7 +37,6 @@ export const en_messages: RulesMessages = {
   same: 'This field must be identical to the value of the :arg0 field',
   required_if:
     'The :field field is required when :arg0 field has the current value',
-  requiredWhen: 'The :field field is required when :arg0 fields are present',
   time: 'This field must be a valid time.',
   start_with_string: 'The :field field must start with a letter',
   end_with_string: 'The :field field must end with a letter',
