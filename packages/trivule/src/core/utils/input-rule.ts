@@ -76,12 +76,11 @@ export class InputRule {
     message?: string | null,
     param?: RuleParam,
     validate?: RuleCallBack,
-    local?: string,
   ) {
     if (this.has(rule)) {
       this.remove(rule);
     }
-    this.items.push(this.createRule(rule, message, param, validate, local));
+    this.items.push(this.createRule(rule, message, param, validate));
     return this;
   }
   has(rule: string | Rule): boolean {

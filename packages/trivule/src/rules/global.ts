@@ -17,6 +17,7 @@ import {
 } from '../utils';
 import { ArgumentParser } from '../core/utils/argument-parser';
 import { dateBetween } from './date';
+
 /**
  * Checks if the input is required.
  *
@@ -418,7 +419,7 @@ export const same: RuleCallBack<ValidatableElement> = (
 
   let passes = false;
   if (element && element.form) {
-    const target = element.form.elements.namedItem(otherField) as
+    const target = element.form.elements.namedItem(otherField as string) as
       | HTMLInputElement
       | HTMLTextAreaElement
       | HTMLSelectElement;
@@ -456,7 +457,7 @@ export const requiredIf: RuleCallBack<ValidatableElement> = (
     throwEmptyArgsException('required_if');
   }
 
-  const [otherFieldName, ...values] = spliteParam(params) as string[];
+  const [otherFieldName, ...values] = spliteParam(params as string) as string[];
 
   let isRequired = false;
   if (element && element.form) {
