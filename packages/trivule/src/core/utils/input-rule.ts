@@ -9,10 +9,9 @@ export class InputRule {
   constructor(
     rules: Rule[] | string[] | Rule | string,
     messages?: string | string[] | Record<string, string> | null,
-    local?: string,
     private ruleRegistry?: RuleRegistry,
   ) {
-    this.set(rules, messages, local);
+    this.set(rules, messages);
   }
 
   /**
@@ -68,7 +67,6 @@ export class InputRule {
    * @param {string | null} message - Optional. The custom error message for the rule.
    * @param {RuleParam} param - Optional. The parameters for the rule.
    * @param {RuleCallBack} validate - Optional. The validation callback function for the rule.
-   * @param {string} local - Optional. The locale to use for retrieving localized error messages.
    * @returns - Returns the current InputRule instance after adding the rule.
    */
   add(
@@ -158,14 +156,12 @@ export class InputRule {
    * Sets validation rules and associated messages for the InputRule instance.
    * @param {Rule[] | string[] | Rule | string} rules - The validation rules to set.
    * @param {string | string[] | Record<string, string> | null} messages - Optional. Custom error messages for the validation rules.
-   * @param {string} local - Optional. The locale to use for retrieving localized error messages.
    * @returns - Returns the current InputRule instance after setting the rules.
    */
 
   set(
     rules: Rule[] | string[] | Rule | string,
     messages?: string | string[] | Record<string, string> | null,
-    local?: string,
   ) {
     rules = Array.isArray(rules)
       ? rules.map((r) => r.trim())
@@ -186,7 +182,7 @@ export class InputRule {
         message = this._sanitizeMessage(messages[ruleName]) ?? null;
       }
 
-      this.add(ruleName, message, params, undefined, local);
+      this.add(ruleName, message, params);
     }
     return this;
   }
@@ -213,7 +209,6 @@ export class InputRule {
    * @param {string | null} message - Optional. The custom error message for the rule.
    * @param {RuleParam} param - Optional. The parameters for the rule.
    * @param {RuleCallBack} validate - Optional. The validation callback function for the rule.
-   * @param {string} local - Optional. The locale to use for retrieving localized error messages.
    * @returns - Returns the current InputRule instance after adding the rule.
    */
   push(
@@ -221,9 +216,8 @@ export class InputRule {
     message?: string | null,
     param?: RuleParam,
     validate?: RuleCallBack,
-    local?: string,
   ): this {
-    this.add(rule, message, param, validate, local);
+    this.add(rule, message, param, validate);
     return this;
   }
   /**

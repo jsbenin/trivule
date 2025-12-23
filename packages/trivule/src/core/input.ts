@@ -93,12 +93,7 @@ export class TrivuleInput {
 
   private constructor(param: TrivuleInputParms, parameter: TrParameter) {
     this.parameter = parameter;
-    this.rules = new InputRule(
-      [],
-      undefined,
-      undefined,
-      this.parameter.ruleRegistry,
-    );
+    this.rules = new InputRule([], undefined, this.parameter.ruleRegistry);
 
     this.setParams(param);
     this._init();

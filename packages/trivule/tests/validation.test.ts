@@ -14,7 +14,6 @@ describe('TrValidation', () => {
         required: 'This field is required',
         email: 'Invalid email format',
       },
-      undefined,
       parameter.ruleRegistry,
     );
   });
@@ -41,7 +40,6 @@ describe('TrValidation', () => {
       {
         min_length: 'The input must be at least 8 characters long',
       },
-      undefined,
       parameter.ruleRegistry,
     );
     const {valid, errors } = validate(newInputRule.all(), 'short');

@@ -13,7 +13,6 @@ describe('InputRule', () => {
         required: 'This field is required',
         min_length: 'This field must be at least 8 characters',
       },
-      undefined,
       parameter.ruleRegistry,
     );
   });
@@ -92,7 +91,7 @@ describe('InputRule', () => {
 
 describe('convertAcoladeGroupToArray', () => {
   it('should return an array of numbers contained in the acolade group', () => {
-    const inputRule = new InputRule([], [], undefined, parameter.ruleRegistry);
+    const inputRule = new InputRule([], [], parameter.ruleRegistry);
 
     const result = inputRule.convertAcoladeGroupToArray('{0,1,2,3}');
 
@@ -100,7 +99,7 @@ describe('convertAcoladeGroupToArray', () => {
   });
 
   it('should return an empty array if the acolade group is empty', () => {
-    const inputRule = new InputRule([], [], undefined, parameter.ruleRegistry);
+    const inputRule = new InputRule([], [], parameter.ruleRegistry);
 
     const result = inputRule.convertAcoladeGroupToArray('{}');
 
@@ -108,7 +107,7 @@ describe('convertAcoladeGroupToArray', () => {
   });
 
   it('should return an empty array if the acolade group is not well-formed', () => {
-    const inputRule = new InputRule([], [], undefined, parameter.ruleRegistry);
+    const inputRule = new InputRule([], [], parameter.ruleRegistry);
 
     const result = inputRule.convertAcoladeGroupToArray('{0, 1, 2');
 
