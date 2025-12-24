@@ -16,7 +16,23 @@
         "Other"
     ],
     "activationEvents": [
-        "onLanguage:html"
+        "onLanguage:html",
+        "onLanguage:php",
+        "onLanguage:blade",
+        "onLanguage:vue",
+        "onLanguage:svelte",
+        "onLanguage:astro",
+        "onLanguage:ejs",
+        "onLanguage:handlebars",
+        "onLanguage:mustache",
+        "onLanguage:nunjucks",
+        "onLanguage:pug",
+        "onLanguage:twig",
+        "onLanguage:erb",
+        "onLanguage:edge",
+        "onLanguage:eex",
+        "onLanguage:jinja",
+        "onLanguage:gotemplate"
     ],
     "main": "./out/extension.js",
     "contributes": {
@@ -24,7 +40,103 @@
             {
                 "id": "html",
                 "extensions": [
-                    ".html", ".blade.php", ".php"
+                    ".html", ".htm"
+                ]
+            },
+            {
+                "id": "php",
+                "extensions": [
+                    ".php"
+                ]
+            },
+            {
+                "id": "blade",
+                "extensions": [
+                    ".blade.php"
+                ]
+            },
+            {
+                "id": "vue",
+                "extensions": [
+                    ".vue"
+                ]
+            },
+            {
+                "id": "svelte",
+                "extensions": [
+                    ".svelte"
+                ]
+            },
+            {
+                "id": "astro",
+                "extensions": [
+                    ".astro"
+                ]
+            },
+            {
+                "id": "ejs",
+                "extensions": [
+                    ".ejs"
+                ]
+            },
+            {
+                "id": "handlebars",
+                "extensions": [
+                    ".hbs", ".handlebars"
+                ]
+            },
+            {
+                "id": "mustache",
+                "extensions": [
+                    ".mustache"
+                ]
+            },
+            {
+                "id": "nunjucks",
+                "extensions": [
+                    ".njk"
+                ]
+            },
+            {
+                "id": "pug",
+                "extensions": [
+                    ".pug", ".jade"
+                ]
+            },
+            {
+                "id": "twig",
+                "extensions": [
+                    ".twig"
+                ]
+            },
+            {
+                "id": "erb",
+                "extensions": [
+                    ".erb", ".html.erb"
+                ]
+            },
+            {
+                "id": "edge",
+                "extensions": [
+                    ".edge"
+                ]
+            },
+            {
+                "id": "eex",
+                "extensions": [
+                    ".eex", ".html.eex", ".heex", ".html.heex"
+                ]
+            },
+            {
+                "id": "jinja",
+                "extensions": [
+                    ".j2", ".jinja", ".jinja2", ".html.j2", ".html.jinja", ".html.jinja2"
+                ]
+            },
+            {
+                "id": "gotemplate",
+                "extensions": [
+                    ".tmpl", ".tpl", ".gohtml", ".html.tmpl", ".html.tpl"
                 ]
             }
         ]
