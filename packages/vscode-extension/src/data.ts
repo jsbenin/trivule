@@ -67,6 +67,8 @@ export const TRIVULE_RULES = [
     'password',
     'regex',
     'required',
+    'required_if',
+    'same',
     'size',
     'start_with',
     'start_with_lower',
